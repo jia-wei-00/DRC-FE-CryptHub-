@@ -2,9 +2,13 @@ import React from "react";
 import Chart from "./chart";
 
 const Home = () => {
+  const [currency, setcurrency] = React.useState("cryBTCUSD");
+
+  // cryETHUSD
+
   return (
     <div>
-      <Chart />
+      <Chart currency={currency} />
     </div>
   );
 };
