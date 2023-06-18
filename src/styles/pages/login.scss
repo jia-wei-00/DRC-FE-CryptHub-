@@ -1,0 +1,78 @@
+@import "../variables";
+
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // transform: translateY(50%);
+  height: 100vh;
+  color: white;
+  overflow: hidden;
+
+  .form-body {
+    z-index: 10;
+  }
+
+  .icon {
+    padding: 0 10px 4px 0;
+  }
+
+  & > div > .card {
+    position: relative;
+    padding: 10px;
+    max-width: 350px;
+
+    & > .content {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .btn-group {
+    display: flex;
+    position: relative;
+
+    & > button {
+      flex: 1;
+      z-index: 10;
+    }
+
+    & > .indicator {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.9);
+      height: 100%;
+      border-radius: 5px;
+      width: 50%;
+      left: 0;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+  }
+
+  .box {
+    display: flex;
+  }
+
+  .flex-end {
+    align-items: flex-end;
+  }
+
+  .flex-center {
+    align-items: center;
+  }
+
+  .form-control {
+    flex-grow: 1;
+  }
+}
+
+#light {
+  .indicator {
+    background-color: #f6e6cb;
+  }
+}

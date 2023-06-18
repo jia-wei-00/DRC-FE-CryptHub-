@@ -11,25 +11,49 @@ const tickHistory = (currency: String) =>
   api.subscribe({
     ticks_history: currency,
     adjust_start_time: 1,
-    count: 19,
+    count: 49,
     end: "latest",
     start: 1,
     style: "ticks",
   });
 
 class ApiStoreImplementation {
-  chart_data: String[] = [];
+  chart_data: any[] = [];
   chart_labels: String[] = [];
+  t_chart_data: any[] = [];
+  t_chart_labels: String[] = [];
 
   constructor() {
     makeObservable(this, {
       chart_data: observable,
+      t_chart_data: observable,
       chart_labels: observable,
+      t_chart_labels: observable,
       tickResponse: action.bound,
       subscribeTicks: action.bound,
       unsubscribeTicks: action.bound,
+      formattedTimes: action.bound,
+      resetData: action.bound,
     });
   }
+
+  resetData = () => {
+    this.chart_data = [];
+    this.chart_labels = [];
+    this.t_chart_data = [];
+    this.t_chart_labels = [];
+  };
+
+  formattedTimes = (times: EpochTimeStamp) => {
+    const date = new Date(times * 1000);
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    return `${hours.padStart(2, "0")}:${minutes.padStart(
+      2,
+      "0"
+    )}:${seconds.padStart(2, "0")}`;
+  };
 
   tickResponse = async (res: any) => {
     const data = JSON.parse(res.data);
@@ -41,36 +65,42 @@ class ApiStoreImplementation {
     }
 
     if (data.msg_type === "history") {
+      const formattedTimes = data.history.times.map((times: EpochTimeStamp) => {
+        return this.formattedTimes(times);
+      });
+
+      const convertedData = data.history.prices.map(
+        (price: number, index: number) => ({
+          price: price,
+          time: formattedTimes[index],
+        })
+      );
       runInAction(() => {
-        const formattedTimes = data.history.times.map(
-          (timestamp: EpochTimeStamp) => {
-            const date = new Date(timestamp * 1000); // Convert epoch to milliseconds
-            const hours = date.getHours(); // Get minutes from timestamp
-            const minutes = date.getMinutes(); // Get minutes from timestamp
-            const seconds = date.getSeconds(); // Get seconds from timestamp
-            return `${hours}:${minutes}:${seconds}`;
-          }
-        );
-        this.chart_data = data.history.prices;
-        this.chart_labels = formattedTimes;
+        this.chart_data = convertedData;
+        this.t_chart_data = data.history.prices;
+        this.t_chart_labels = formattedTimes;
+        // this.chart_labels = formattedTimes;
       });
     }
 
     if (data.msg_type === "tick") {
       runInAction(() => {
-        const updatedData = [...this.chart_data, data.tick.quote];
-        const timestamp = new Date(data.tick.epoch * 1000); // Convert epoch to milliseconds
-        const hours = timestamp.getHours();
-        const minutes = timestamp.getMinutes(); // Get minutes from timestamp
-        const seconds = timestamp.getSeconds(); // Get seconds from timestamp
-        const formattedTime = `${hours}:${minutes}:${seconds}`; // Format minutes and seconds
-        const updatedLabels = [...this.chart_labels, formattedTime];
-        if (updatedData.length > 20) {
+        const formattedTime = this.formattedTimes(data.tick.epoch);
+        this.chart_data = [
+          ...this.chart_data,
+          { price: data.tick.quote, time: formattedTime },
+        ];
+        if (this.chart_data.length > 50) {
+          this.chart_data.shift();
+        }
+        const updatedData = [...this.t_chart_data, data.tick.quote];
+        const updatedLabels = [...this.t_chart_labels, formattedTime];
+        if (updatedData.length > 50) {
           updatedData.shift();
           updatedLabels.shift();
         }
-        this.chart_data = updatedData;
-        this.chart_labels = updatedLabels;
+        this.t_chart_data = updatedData;
+        this.t_chart_labels = updatedLabels;
       });
     }
   };

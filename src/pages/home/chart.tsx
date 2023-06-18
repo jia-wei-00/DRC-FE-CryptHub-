@@ -23,39 +23,45 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-      title: {
-        display: true,
-        text: "USD",
-      },
-    },
-    x: {
-      title: {
-        display: true,
-        text: "TIME",
-      },
-    },
-  },
-};
-
 const Chart: React.FC<{ currency: string }> = (props) => {
-  const labels = apiStore.chart_labels;
+  const labels = apiStore.t_chart_labels;
+
+  console.log(labels);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: true,
+        text: props.currency === "cryBTCUSD" ? "BTC" : "ETH",
+      },
+    },
+    scales: {
+      y: {
+        // beginAtZero: true,
+        title: {
+          display: true,
+          text: "USD",
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          text: "TIME",
+        },
+      },
+    },
+  };
 
   const data = {
     labels,
     datasets: [
       {
         label: "BTC",
-        data: apiStore.chart_data,
+        data: apiStore.t_chart_data,
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
@@ -64,7 +70,7 @@ const Chart: React.FC<{ currency: string }> = (props) => {
 
   React.useEffect(() => {
     apiStore.subscribeTicks(props.currency);
-  }, []);
+  }, [props.currency]);
 
   return <Line options={options} data={data} />;
 };

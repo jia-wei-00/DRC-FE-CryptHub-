@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@faker-js/faker": "^8.0.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.1.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.13.2",
     "chart.js": "^4.3.0",
+    "firebase": "^9.22.2",
     "framer-motion": "^10.12.16",
     "mobx": "^6.9.0",
     "mobx-persist-store": "^1.1.3",
@@ -22,6 +27,7 @@
     "react-hook-form": "^7.44.3",
     "react-router-dom": "^6.13.0",
     "react-toastify": "^9.1.3",
+    "recharts": "^2.7.1",
     "sass": "^1.63.4",
     "zod": "^3.21.4"
   },

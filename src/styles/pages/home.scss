@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+
+  @media only screen and (max-width: 1023px) {
+    flex-direction: column;
+  }
+}
+
+.chart-column {
+  flex: 1;
+}
+
+.action-column {
+  // flex-shrink: 0;
+  margin-left: 20px; /* Adjust this value as needed */
+  min-width: 200px; /* Adjust this value as needed */
+}
