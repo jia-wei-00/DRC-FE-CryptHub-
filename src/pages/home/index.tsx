@@ -3,7 +3,7 @@ import Chart from "./chart";
 import Action from "./action";
 import "../../styles/pages/home.scss";
 import Testing from "./testing";
-import FinancialChart from "./finantial-charts";
+import { PriceChart } from "./financial-charts";
 
 const Home = () => {
   const [currency, setCurrency] = React.useState("cryBTCUSD");
@@ -11,16 +11,22 @@ const Home = () => {
   // cryETHUSD
 
   return (
-    <div className="wrapper container">
+    <div className="container">
       {/* <div className="chart-column">
         <Chart currency={currency} />
       </div> */}
       {/* <FinancialChart data={financialData} width={800} height={400} ratio={1} /> */}
       {/* <Testing /> */}
-      <FinancialChart />
-      <div className="action-column">
+      {/* <div style={{ height: "200vh" }}> */}
+      {/* <div style={{ position: "relative" }}>
+        <div style={{ position: "absolute", left: 0 }}> */}
+      <PriceChart />
+      {/* </div>
+      </div> */}
+
+      {/* <div className="action-column">
         <Action currency={currency} setcurrency={setCurrency} />
-      </div>
+      </div> */}
     </div>
   );
 };

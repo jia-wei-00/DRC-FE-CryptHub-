@@ -8,14 +8,23 @@ const connection = new WebSocket(
 const api = new DerivAPIBasic({ connection });
 
 const tickHistory = (currency: String) =>
-  api.subscribe({
-    ticks_history: currency,
-    adjust_start_time: 1,
-    count: 49,
-    end: "latest",
-    start: 1,
-    style: "ticks",
-  });
+  api.subscribe(
+    {
+      ticks_history: currency,
+      adjust_start_time: 1,
+      count: 49,
+      end: "latest",
+      start: 1,
+      style: "ticks",
+    }
+    // {
+    //   ticks_history: "cryETHUSD",
+    //   adjust_start_time: 1,
+    //   end: "latest",
+    //   start: 1,
+    //   style: "candles",
+    // }
+  );
 
 class ApiStoreImplementation {
   chart_data: any[] = [];
