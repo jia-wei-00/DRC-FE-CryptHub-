@@ -34,7 +34,13 @@ const Testing = () => {
       <YAxis type="number" domain={["auto", "auto"]} />
       <Tooltip />
       <Legend />
-      <Line type="monotone" dataKey="price" stroke="#82ca9d" strokeWidth={2} />
+      <Line
+        isAnimationActive={false}
+        type="monotone"
+        dataKey="price"
+        stroke="#82ca9d"
+        strokeWidth={2}
+      />
     </LineChart>
   );
 };

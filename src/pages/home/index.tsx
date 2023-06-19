@@ -1,8 +1,9 @@
 import React from "react";
 import Chart from "./chart";
-import Action from "./Action";
+import Action from "./action";
 import "../../styles/pages/home.scss";
 import Testing from "./testing";
+import FinancialChart from "./finantial-charts";
 
 const Home = () => {
   const [currency, setCurrency] = React.useState("cryBTCUSD");
@@ -14,7 +15,9 @@ const Home = () => {
       {/* <div className="chart-column">
         <Chart currency={currency} />
       </div> */}
-      <Testing />
+      {/* <FinancialChart data={financialData} width={800} height={400} ratio={1} /> */}
+      {/* <Testing /> */}
+      <FinancialChart />
       <div className="action-column">
         <Action currency={currency} setcurrency={setCurrency} />
       </div>

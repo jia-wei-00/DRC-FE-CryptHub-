@@ -75,6 +75,8 @@ class ApiStoreImplementation {
           time: formattedTimes[index],
         })
       );
+
+      console.log(convertedData);
       runInAction(() => {
         this.chart_data = convertedData;
         this.t_chart_data = data.history.prices;

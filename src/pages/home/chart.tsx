@@ -72,7 +72,9 @@ const Chart: React.FC<{ currency: string }> = (props) => {
     apiStore.subscribeTicks(props.currency);
   }, [props.currency]);
 
-  return <Line options={options} data={data} />;
+  return (
+    <Line width={"500px"} height={"500px"} options={options} data={data} />
+  );
 };
 
 export default observer(Chart);
