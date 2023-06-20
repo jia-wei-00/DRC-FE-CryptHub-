@@ -3,10 +3,15 @@ import Chart from "./chart";
 import Action from "./action";
 import "../../styles/pages/home.scss";
 import Testing from "./testing";
-import { PriceChart } from "./financial-charts";
+import CategoryChartHighFrequency from "./financial-charts";
+import { apiStore } from "../../stores";
 
 const Home = () => {
   const [currency, setCurrency] = React.useState("cryBTCUSD");
+
+  React.useEffect(() => {
+    apiStore.subscribeTicks(currency);
+  }, []);
 
   // cryETHUSD
 
@@ -20,7 +25,7 @@ const Home = () => {
       {/* <div style={{ height: "200vh" }}> */}
       {/* <div style={{ position: "relative" }}>
         <div style={{ position: "absolute", left: 0 }}> */}
-      <PriceChart />
+      <CategoryChartHighFrequency />
       {/* </div>
       </div> */}
 
