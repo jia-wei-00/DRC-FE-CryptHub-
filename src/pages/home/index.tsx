@@ -5,6 +5,8 @@ import "../../styles/pages/home.scss";
 import Testing from "./testing";
 import CategoryChartHighFrequency from "./financial-charts";
 import { apiStore } from "../../stores";
+import FinancialCharts from "./financial-charts";
+import NumericAxisStockChart from "./chart";
 
 const Home = () => {
   const [currency, setCurrency] = React.useState("cryBTCUSD");
@@ -17,15 +19,13 @@ const Home = () => {
 
   return (
     <div className="container">
-      {/* <div className="chart-column">
-        <Chart currency={currency} />
-      </div> */}
       {/* <FinancialChart data={financialData} width={800} height={400} ratio={1} /> */}
       {/* <Testing /> */}
       {/* <div style={{ height: "200vh" }}> */}
       {/* <div style={{ position: "relative" }}>
         <div style={{ position: "absolute", left: 0 }}> */}
-      <CategoryChartHighFrequency />
+      <NumericAxisStockChart />
+      {/* <CategoryChartHighFrequency /> */}
       {/* </div>
       </div> */}
 
