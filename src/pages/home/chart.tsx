@@ -1,100 +1,104 @@
-import React, { Component } from "react";
-import CanvasJSReact from "@canvasjs/react-stockcharts";
-import { observer } from "mobx-react-lite";
+import React, { useRef } from "react";
+import Highcharts from "highcharts/highstock";
+import HighchartsReact from "highcharts-react-official";
 import { apiStore } from "../../stores";
-var CanvasJSStockChart = CanvasJSReact.CanvasJSStockChart;
+import { observer } from "mobx-react-lite";
 
-interface DataPoint {
-  x: number;
-  y: number;
-}
+// The wrapper exports only a default component that at the same time is a
+// namespace for the related Props interface (HighchartsReact.Props) and
+// RefObject interface (HighchartsReact.RefObject). All other interfaces
+// like Options come from the Highcharts module itself.
 
-const NumericAxisStockChart = () => {
-  const generateDataPoints = (noOfDps: number): DataPoint[] => {
-    var xVal = 1,
-      yVal = 100;
-    var dps = [];
-    for (var i = 0; i < noOfDps; i++) {
-      yVal = yVal + Math.round(5 + Math.random() * (-5 - 5));
-      dps.push({ x: xVal, y: yVal });
-      xVal++;
-    }
-    return dps;
-  };
+// React supports function components as a simple way to write components that
+// only contain a render method without any state (the App component in this
+// example).
 
-  const options = {
-    title: {
-      text: "React StockChart with Numeric Axis",
+const Chart = (props: HighchartsReact.Props) => {
+  const options: Highcharts.Options = {
+    chart: {
+      events: {
+        // load: function () {
+        //   // set up the updating of the chart each second
+        //   var series = this.series[0];
+        //   setInterval(function () {
+        //     var x = new Date().getTime(), // current time
+        //       y = Math.round(Math.random() * 100);
+        //     series.addPoint([x, y], true, true);
+        //   }, 1000);
+        // },
+      },
     },
-    animationEnabled: false,
-    exportEnabled: true,
-    charts: [
-      {
-        axisX: {
-          crosshair: {
-            enabled: true,
-            snapToDataPoint: false,
-          },
-        },
-        axisY: {
-          crosshair: {
-            enabled: true,
-            //snapToDataPoint: true
-          },
-        },
-        data: [
-          {
-            type: "spline",
-            dataPoints: apiStore.chart_data,
-          },
-        ],
-      },
-    ],
-    rangeSelector: {
-      inputFields: {
-        startValue: 4000,
-        endValue: 6000,
-        valueFormatString: "###0",
-      },
+    navigator: {
+      enabled: true,
+    },
+    accessibility: {
+      enabled: false,
+    },
 
+    time: {
+      useUTC: false,
+    },
+
+    rangeSelector: {
       buttons: [
         {
-          label: "1000",
-          range: 1000,
-          rangeType: "number",
+          count: 1,
+          type: "minute",
+          text: "1M",
         },
         {
-          label: "2000",
-          range: 2000,
-          rangeType: "number",
+          count: 5,
+          type: "minute",
+          text: "5M",
         },
         {
-          label: "5000",
-          range: 5000,
-          rangeType: "number",
-        },
-        {
-          label: "All",
-          rangeType: "all",
+          type: "all",
+          text: "All",
         },
       ],
+      inputEnabled: false,
+      selected: 0,
     },
+
+    title: {
+      text: "Live random data",
+    },
+
+    exporting: {
+      enabled: false,
+    },
+
+    series: [
+      {
+        type: "line",
+        data: (function () {
+          // generate an array of random data
+          var data = [],
+            time = new Date().getTime(),
+            i;
+
+          for (i = -999; i <= 0; i += 1) {
+            data.push([time + i * 1000, Math.round(Math.random() * 100)]);
+          }
+          console.log(data);
+          return data;
+        })(),
+      },
+    ],
   };
-  const containerProps = {
-    width: "100%",
-    height: "450px",
-    margin: "auto",
-  };
+
+  const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
+
   return (
-    <div>
-      <h1>React StockChart with Numberic Axis</h1>
-      <CanvasJSStockChart
-        containerProps={containerProps}
-        options={options}
-        /* onRef = {ref => this.chart = ref} */
-      />
-    </div>
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={options}
+      constructorType={"stockChart"}
+      navigator={true}
+      ref={chartComponentRef}
+      {...props}
+    />
   );
 };
 
-export default observer(NumericAxisStockChart);
+export default observer(Chart);

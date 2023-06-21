@@ -80,9 +80,9 @@ class ApiStoreImplementation {
 
       const convertedData = data.history.prices.map(
         (price: number, index: number) => ({
-          previous: data.history.prices[index - 1],
-          time: data.history.times[index],
+          // previous: data.history.prices[index - 1],
           price: price,
+          time: data.history.times[index],
           // time: formattedTimes[index],
         })
       );
@@ -102,9 +102,9 @@ class ApiStoreImplementation {
         this.chart_data = [
           ...this.chart_data,
           {
-            previous: this.chart_data[this.chart_data.length - 2].price,
-            time: formattedTime,
+            // previous: this.chart_data[this.chart_data.length - 2].price,
             price: data.tick.quote,
+            time: data.tick.epoch,
           },
         ];
         if (this.chart_data.length > 500) {

@@ -2,11 +2,9 @@ import React from "react";
 import Chart from "./chart";
 import Action from "./action";
 import "../../styles/pages/home.scss";
-import Testing from "./testing";
-import CategoryChartHighFrequency from "./financial-charts";
 import { apiStore } from "../../stores";
-import FinancialCharts from "./financial-charts";
-import NumericAxisStockChart from "./chart";
+import StockChart from "./chart";
+import FinancialChartMultipleData from "./financial-charts";
 
 const Home = () => {
   const [currency, setCurrency] = React.useState("cryBTCUSD");
@@ -24,10 +22,10 @@ const Home = () => {
       {/* <div style={{ height: "200vh" }}> */}
       {/* <div style={{ position: "relative" }}>
         <div style={{ position: "absolute", left: 0 }}> */}
-      <NumericAxisStockChart />
-      {/* <CategoryChartHighFrequency /> */}
+      <Chart />
+      {/* <FinancialChartMultipleData /> */}
       {/* </div>
-      </div> */}
+          </div> */}
 
       {/* <div className="action-column">
         <Action currency={currency} setcurrency={setCurrency} />

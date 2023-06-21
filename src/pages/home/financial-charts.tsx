@@ -1,8 +1,8 @@
 import React from "react";
 import { IgrFinancialChart } from "igniteui-react-charts";
 import { IgrFinancialChartModule } from "igniteui-react-charts";
-import { observer } from "mobx-react-lite";
 import { apiStore } from "../../stores";
+import { observer } from "mobx-react-lite";
 
 IgrFinancialChartModule.register();
 
