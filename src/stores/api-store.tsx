@@ -12,7 +12,7 @@ const tickHistory = (currency: String) =>
     {
       ticks_history: currency,
       adjust_start_time: 1,
-      count: 500,
+      count: 2000,
       end: "latest",
       start: 1,
       style: "ticks",
@@ -80,7 +80,7 @@ class ApiStoreImplementation {
 
       const convertedData = data.history.prices.map(
         (price: number, index: number) => ({
-          // previous: data.history.prices[index - 1],
+          previous: data.history.prices[index - 1],
           price: price,
           time: data.history.times[index],
           // time: formattedTimes[index],
@@ -102,18 +102,18 @@ class ApiStoreImplementation {
         this.chart_data = [
           ...this.chart_data,
           {
-            // previous: this.chart_data[this.chart_data.length - 2].price,
+            previous: this.chart_data[this.chart_data.length - 2].price,
             price: data.tick.quote,
             time: data.tick.epoch,
           },
         ];
-        if (this.chart_data.length > 500) {
+        if (this.chart_data.length > 2000) {
           this.chart_data.shift();
         }
 
         const updatedData = [...this.t_chart_data, data.tick.quote];
         const updatedLabels = [...this.t_chart_labels, formattedTime];
-        if (updatedData.length > 500) {
+        if (updatedData.length > 2000) {
           updatedData.shift();
           updatedLabels.shift();
         }
