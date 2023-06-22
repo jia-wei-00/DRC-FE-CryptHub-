@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import { apiStore, modeStore } from "../../stores";
@@ -26,7 +26,7 @@ const Chart = () => {
     title: {
       text: "ETH",
       style: {
-        color: modeStore.mode === "dark" && "white",
+        color: modeStore.mode === "dark" ? "white" : "",
       },
     },
     exporting: {
@@ -37,25 +37,26 @@ const Chart = () => {
     },
     xAxis: {
       type: "datetime",
-      // max: apiStore.chart_data[apiStore.chart_data.length - 1].time + 60 * 1000,
       labels: {
         style: {
-          color: modeStore.mode === "dark" && "white",
+          color: modeStore.mode === "dark" ? "white" : "",
           gridLines: {
-            zeroLineColor: modeStore.mode === "dark" && "white",
+            zeroLineColor: modeStore.mode === "dark" ? "white" : "",
           },
         },
       },
+      lineColor: modeStore.mode === "dark" ? "white" : "",
+      tickColor: modeStore.mode === "dark" ? "white" : "",
     },
     yAxis: {
       gridLineColor: modeStore.mode === "dark" ? "grey" : "lightgrey",
       labels: {
         style: {
-          color: modeStore.mode === "dark" && "white",
+          color: modeStore.mode === "dark" ? "white" : "",
         },
-        formatter: function () {
-          return "$" + this.value;
-        },
+        // formatter: function () {
+        //   return "$" + this.value;
+        // },
       },
     },
     credits: {
@@ -72,11 +73,13 @@ const Chart = () => {
   };
 
   return (
-    <HighchartsReact
-      highcharts={Highcharts}
-      options={options}
-      constructorType={"stockChart"}
-    />
+    <div className="f-1">
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={options}
+        constructorType={"stockChart"}
+      />
+    </div>
   );
 };
 

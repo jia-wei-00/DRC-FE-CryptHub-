@@ -4,7 +4,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { auth, provider } from "../firebase";
 import {
   User,
-  onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -12,9 +11,11 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { makePersistable } from "mobx-persist-store";
+import axios from "axios";
+import { InputData } from "../types";
 
 export class AuthStoreImplementation {
-  user: User | null = null;
+  user: any | null = null;
   username: string | null = null;
   login_modal = false;
 
@@ -33,22 +34,6 @@ export class AuthStoreImplementation {
       properties: ["user"],
       storage: window.localStorage,
     });
-
-    // auth.onAuthStateChanged(
-    //   (user) => {
-    //     if (user) {
-    //       this.setUser(user);
-    //     } else {
-    //       this.setUser(null);
-    //     }
-    //   },
-    //   (error) => {
-    //     // Handle error if needed
-    //   },
-    //   () => {
-    //     // Completion callback if needed
-    //   }
-    // );
   }
 
   setUser = (authUser: User | null): void => {
@@ -130,28 +115,26 @@ export class AuthStoreImplementation {
   }
 
   async signUp(
-    email: string,
-    password: string,
+    values: InputData,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<void> {
     const id = toast.loading("Please wait...");
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    toast.update(id, {
-      render: `Welcome ${userCredential.user.email}`,
-      type: "success",
-      isLoading: false,
-      autoClose: 5000,
-    });
-    this.user = userCredential.user;
-    setOpen(false);
     try {
+      const userCredential = await axios.post(
+        "http://localhost:5000/user/registerUser",
+        values
+      );
+      console.log(userCredential);
+      toast.update(id, {
+        render: `Check your email to activate account`,
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+      });
+      setOpen(false);
     } catch (error: any) {
       toast.update(id, {
-        render: error.message,
+        render: error.response.data.message,
         type: "error",
         isLoading: false,
         autoClose: 5000,

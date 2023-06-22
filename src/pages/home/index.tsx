@@ -16,7 +16,6 @@ const Home = () => {
   return (
     <div className="container">
       <Chart />
-
       <div className="action-column">
         <Action currency={currency} setcurrency={setCurrency} />
       </div>

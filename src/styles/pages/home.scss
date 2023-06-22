@@ -1,5 +1,7 @@
+@import "../variables";
+
 .container {
-  // display: flex;
+  display: flex;
   height: 800px;
 
   @media only screen and (max-width: 1023px) {
@@ -7,12 +9,27 @@
   }
 }
 
-.chart-column {
-  flex: 1;
+.action-column {
+  flex-shrink: 0;
+  background-color: $main-color-d;
+  box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.6);
+  margin: 20px;
+  padding: 10px;
+  border-radius: 20px;
+  margin-left: 20px;
+  min-width: 300px;
 }
 
-.action-column {
-  // flex-shrink: 0;
-  margin-left: 20px; /* Adjust this value as needed */
-  min-width: 200px; /* Adjust this value as needed */
+.red {
+  color: red;
+}
+
+.green {
+  color: lightgreen;
+}
+
+.price-item {
+  :nth-child(2) {
+    width: 200px;
+  }
 }

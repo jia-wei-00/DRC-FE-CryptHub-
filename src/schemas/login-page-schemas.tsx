@@ -1,6 +1,10 @@
 import { object, string, ZodType } from "zod";
 
 export const registerSchema: ZodType = object({
+  name: string()
+    .nonempty("Username is required")
+    .min(5, "Username must be more than 5 characters")
+    .max(12, "Username must be less than 12 characters"),
   email: string().nonempty("Email is required").email("Email is invalid"),
   password: string()
     .nonempty("Password is required")

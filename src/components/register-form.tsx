@@ -3,6 +3,7 @@ import {
   Visibility,
   VisibilityOff,
   Lock,
+  Person,
 } from "@mui/icons-material";
 import {
   Box,
@@ -55,17 +56,29 @@ const RegisterForm: React.FC<LoginFormProps> = (props) => {
   }, [isSubmitSuccessful]);
 
   const onSubmitHandler: SubmitHandler<InputData> = (values) => {
-    authStore.signUp(values.email, values.passwordConfirm!, props.setOpen);
+    authStore.signUp(values, props.setOpen);
   };
 
   return (
     <motion.form className="mt-10" onSubmit={handleSubmit(onSubmitHandler)}>
-      {/* Email Input */}
+      {/* Username Input */}
       <Box
-        className={`${
-          !!errors["email"] ? "flex-center" : "flex-end"
-        } box mt-10`}
+        className={`${!!errors["name"] ? "flex-center" : "flex-end"} box mt-10`}
       >
+        <Person className="icon" />
+        <FormControl variant="standard" className="form-control">
+          <InputLabel error={!!errors["name"]} htmlFor="standard-email">
+            Username
+          </InputLabel>
+          <Input error={!!errors["name"]} type="text" {...register("name")} />
+          <FormHelperText error={!!errors["name"]}>
+            {errors["name"] ? errors["name"].message : ""}
+          </FormHelperText>
+        </FormControl>
+      </Box>
+
+      {/* Email Input */}
+      <Box className={`${!!errors["email"] ? "flex-center" : "flex-end"} box`}>
         <EmailRounded className="icon" />
         <FormControl variant="standard" className="form-control">
           <InputLabel error={!!errors["email"]} htmlFor="standard-email">
@@ -116,7 +129,6 @@ const RegisterForm: React.FC<LoginFormProps> = (props) => {
       </Box>
 
       {/* Repeat Password Input */}
-
       <Box
         className={`${
           !!errors["passwordConfirm"] ? "flex-center" : "flex-end"
