@@ -1,5 +1,5 @@
 import * as React from "react";
-import { authStore, modeStore } from "../stores";
+import { apiStore, authStore, modeStore } from "../stores";
 import { pages, settings } from "../constant";
 import { Link } from "react-router-dom";
 import "../styles/components/nav.scss";
@@ -25,26 +25,18 @@ import { motion } from "framer-motion";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
 import { observer } from "mobx-react-lite";
+import ResetPasswordForm from "./forget-password";
 
 function Nav() {
   const [active, setActive] = React.useState<string>("login");
-  const [open, setOpen] = React.useState(false);
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [resetPassword, setResetPassword] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = (index: number) => {
-    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = (value: string) => {
@@ -105,9 +97,15 @@ function Nav() {
                   </Tooltip>
                 </>
               ) : (
-                <Button onClick={() => setOpen(!open)} variant="contained">
+                <Button
+                  onClick={() => apiStore.subscribeTicks()}
+                  variant="contained"
+                >
                   Login
                 </Button>
+                // <Button onClick={() => setOpen(!open)} variant="contained">
+                //   Login
+                // </Button>
               )}
             </div>
 
@@ -178,7 +176,10 @@ function Nav() {
                           : { height: 0, opacity: 0 }
                       }
                     >
-                      <LoginForm setOpen={setOpen} />
+                      <LoginForm
+                        setOpen={setOpen}
+                        setResetPassword={setResetPassword}
+                      />
                     </motion.div>
                     <motion.div
                       animate={
@@ -197,6 +198,30 @@ function Nav() {
                   openResetModal={openResetModal}
                   setOpenResetModal={setOpenResetModal}
                 /> */}
+              </div>
+            </Dialog>
+
+            <Dialog
+              open={resetPassword}
+              onClose={() => setResetPassword(false)}
+              PaperProps={{
+                style: {
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              <div className="wrapper">
+                {/* <motion.div
+                  initial={{ y: 400 }}
+                  animate={{ y: 0 }}
+                  className="form-body"
+                > */}
+                <Card className="card">
+                  <CardContent>
+                    <ResetPasswordForm setResetPassword={setResetPassword} />
+                  </CardContent>
+                </Card>
               </div>
             </Dialog>
           </Box>

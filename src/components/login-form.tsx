@@ -21,9 +21,11 @@ import {
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
+import "../styles/components/login-form.scss";
 
 interface LoginFormProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setResetPassword: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const LoginForm: React.FC<LoginFormProps> = (props) => {
@@ -50,7 +52,10 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
   };
 
   return (
-    <motion.form className="mt-10" onSubmit={handleSubmit(onSubmitHandler)}>
+    <motion.form
+      className="mt-10 form"
+      onSubmit={handleSubmit(onSubmitHandler)}
+    >
       {/* Email Input */}
       <Box
         className={`${
@@ -72,7 +77,6 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
           </FormHelperText>
         </FormControl>
       </Box>
-
       {/* Password Input */}
       <Box
         className={`${!!errors["password"] ? "flex-center" : "flex-end"} box`}
@@ -103,9 +107,15 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
           <FormHelperText error={!!errors["password"]}>
             {errors["password"] ? errors["password"].message : ""}
           </FormHelperText>
+          <div className="forget-password">
+            <span>
+              <span onClick={() => props.setResetPassword(true)}>
+                Forget Password
+              </span>
+            </span>
+          </div>
         </FormControl>
       </Box>
-
       <Button type="submit" variant="contained" className="mt-10">
         LOGIN
       </Button>

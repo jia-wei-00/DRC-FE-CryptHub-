@@ -12,7 +12,7 @@ import {
 } from "firebase/auth";
 import { makePersistable } from "mobx-persist-store";
 import axios from "axios";
-import { InputData } from "../types";
+import { InputData, ResetPassword } from "../types";
 
 export class AuthStoreImplementation {
   user: any | null = null;
@@ -142,16 +142,20 @@ export class AuthStoreImplementation {
     }
   }
 
-  async resetPassword(email: string): Promise<void> {
+  async resetPassword(
+    values: ResetPassword,
+    setResetPassword: React.Dispatch<React.SetStateAction<boolean>>
+  ): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      await sendPasswordResetEmail(auth, email);
+      await sendPasswordResetEmail(auth, values.email);
       toast.update(id, {
         render: `Check your email to reset password`,
         type: "success",
         isLoading: false,
         autoClose: 5000,
       });
+      setResetPassword(false);
     } catch (error: any) {
       toast.update(id, {
         render: error.message,

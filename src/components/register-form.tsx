@@ -60,7 +60,10 @@ const RegisterForm: React.FC<LoginFormProps> = (props) => {
   };
 
   return (
-    <motion.form className="mt-10" onSubmit={handleSubmit(onSubmitHandler)}>
+    <motion.form
+      className="mt-10 form"
+      onSubmit={handleSubmit(onSubmitHandler)}
+    >
       {/* Username Input */}
       <Box
         className={`${!!errors["name"] ? "flex-center" : "flex-end"} box mt-10`}
@@ -135,7 +138,7 @@ const RegisterForm: React.FC<LoginFormProps> = (props) => {
         } box`}
       >
         <Lock className="icon" />
-        <FormControl variant="standard">
+        <FormControl variant="standard" className="f-1">
           <InputLabel
             error={!!errors["passwordConfirm"]}
             htmlFor="standard-adornment-password"

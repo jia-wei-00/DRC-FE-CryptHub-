@@ -5,12 +5,7 @@ import { observer } from "mobx-react-lite";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 
-interface ActionProps {
-  currency: string;
-  setcurrency: React.Dispatch<React.SetStateAction<string>>;
-}
-
-const Action: React.FC<ActionProps> = ({ currency, setcurrency }) => {
+const Action: React.FC = () => {
   let beforePreviousPrice = 0;
   let previousPrice = 0;
   let currentPrice = 0;
@@ -26,24 +21,21 @@ const Action: React.FC<ActionProps> = ({ currency, setcurrency }) => {
     <>
       {apiStore.chart_data.length > 0 && (
         <>
-          <FormControl sx={{ m: 1, minWidth: 80, display: "flex" }}>
+          <FormControl sx={{ display: "flex" }}>
             <InputLabel id="demo-simple-select-autowidth-label">
               Currency
             </InputLabel>
             <Select
               labelId="demo-simple-select-autowidth-label"
               id="demo-simple-select-autowidth"
-              value={currency}
+              value={apiStore.subscribeCurrency}
               onChange={(e) => {
-                setcurrency(e.target.value);
-                apiStore.unsubscribeTicks(currency);
-                apiStore.resetData();
+                apiStore.changeSubscribedCurrency(e.target.value);
               }}
-              autoWidth
               label="Currency"
             >
-              <MenuItem value="cryBTCUSD">cryBTCUSD</MenuItem>
-              <MenuItem value="cryETHUSD">cryETHUSD</MenuItem>
+              <MenuItem value="BTC">BTC</MenuItem>
+              <MenuItem value="ETH">ETH</MenuItem>
             </Select>
           </FormControl>
           <div className="d-flex">
@@ -78,6 +70,9 @@ const Action: React.FC<ActionProps> = ({ currency, setcurrency }) => {
                 )}
               </span>
             </div>
+            <button onClick={() => apiStore.changeSubscribedCurrency("ETH")}>
+              Unsubscribe
+            </button>
           </div>
         </>
       )}

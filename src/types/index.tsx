@@ -8,3 +8,7 @@ export type InputData = {
 export type ChildrenProps = {
   children: React.ReactNode;
 };
+
+export type ResetPassword = {
+  email: string;
+};

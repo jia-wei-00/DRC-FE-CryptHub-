@@ -4,7 +4,15 @@ import HighchartsReact from "highcharts-react-official";
 import { apiStore, modeStore } from "../../stores";
 import { observer } from "mobx-react-lite";
 
-const Chart = () => {
+const Chart: React.FC = () => {
+  React.useEffect(() => {
+    apiStore.subscribeTicks();
+
+    return () => {
+      apiStore.unsubscribeTicks();
+    };
+  }, [apiStore.subscribeCurrency]);
+
   const options: Highcharts.Options = {
     chart: {
       height: "800px",
@@ -24,7 +32,7 @@ const Chart = () => {
       useUTC: false,
     },
     title: {
-      text: "ETH",
+      text: apiStore.subscribeCurrency,
       style: {
         color: modeStore.mode === "dark" ? "white" : "",
       },
@@ -64,7 +72,7 @@ const Chart = () => {
     },
     series: [
       {
-        name: "ETH / USD",
+        name: `${apiStore.subscribeCurrency} / USD`,
         type: "line",
         color: modeStore.mode === "dark" ? "white" : "#A27B5C",
         data: apiStore.chart_data.map((item) => [item.time * 1000, item.price]),

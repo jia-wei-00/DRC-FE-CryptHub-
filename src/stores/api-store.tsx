@@ -1,5 +1,6 @@
 import { makeObservable, action, observable, runInAction } from "mobx";
 import DerivAPIBasic from "https://cdn.skypack.dev/@deriv/deriv-api/dist/DerivAPIBasic";
+import { makePersistable } from "mobx-persist-store";
 
 const app_id = 1089; // Replace with your app_id or leave as 1089 for testing.
 const connection = new WebSocket(
@@ -7,61 +8,47 @@ const connection = new WebSocket(
 );
 const api = new DerivAPIBasic({ connection });
 
-const tickHistory = (currency: String) =>
-  api.subscribe(
-    {
-      ticks_history: currency,
+class ApiStoreImplementation {
+  chart_data: any[] = [];
+  subscribeCurrency: string = "BTC";
+
+  constructor() {
+    makeObservable(this, {
+      chart_data: observable,
+      subscribeCurrency: observable,
+      tickResponse: action.bound,
+      subscribeTicks: action.bound,
+      unsubscribeTicks: action.bound,
+      resetData: action.bound,
+      tickHistory: action.bound,
+      setSubscribeCurrency: action.bound,
+      changeSubscribedCurrency: action.bound,
+    });
+
+    makePersistable(this, {
+      name: "subscribeCurrency",
+      properties: ["subscribeCurrency"],
+      storage: window.localStorage,
+    });
+  }
+
+  tickHistory = () =>
+    api.subscribe({
+      ticks_history:
+        this.subscribeCurrency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
       adjust_start_time: 1,
       count: 2000,
       end: "latest",
       start: 1,
       style: "ticks",
-    }
-    // {
-    //   ticks_history: "cryETHUSD",
-    //   adjust_start_time: 1,
-    //   end: "latest",
-    //   start: 1,
-    //   style: "candles",
-    // }
-  );
-
-class ApiStoreImplementation {
-  chart_data: any[] = [];
-  chart_labels: String[] = [];
-  t_chart_data: any[] = [];
-  t_chart_labels: String[] = [];
-
-  constructor() {
-    makeObservable(this, {
-      chart_data: observable,
-      t_chart_data: observable,
-      chart_labels: observable,
-      t_chart_labels: observable,
-      tickResponse: action.bound,
-      subscribeTicks: action.bound,
-      unsubscribeTicks: action.bound,
-      formattedTimes: action.bound,
-      resetData: action.bound,
     });
-  }
+
+  setSubscribeCurrency = (currency: string) => {
+    this.subscribeCurrency = currency;
+  };
 
   resetData = () => {
     this.chart_data = [];
-    this.chart_labels = [];
-    this.t_chart_data = [];
-    this.t_chart_labels = [];
-  };
-
-  formattedTimes = (times: EpochTimeStamp) => {
-    const date = new Date(times * 1000);
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const seconds = date.getSeconds().toString().padStart(2, "0");
-    return `${hours.padStart(2, "0")}:${minutes.padStart(
-      2,
-      "0"
-    )}:${seconds.padStart(2, "0")}`;
   };
 
   tickResponse = async (res: any) => {
@@ -74,31 +61,22 @@ class ApiStoreImplementation {
     }
 
     if (data.msg_type === "history") {
-      const formattedTimes = data.history.times.map((times: EpochTimeStamp) => {
-        return this.formattedTimes(times);
-      });
-
       const convertedData = data.history.prices.map(
         (price: number, index: number) => ({
           previous: data.history.prices[index - 1],
           price: price,
           time: data.history.times[index],
-          // time: formattedTimes[index],
         })
       );
 
       convertedData.shift();
       runInAction(() => {
         this.chart_data = convertedData;
-        this.t_chart_data = data.history.prices;
-        this.t_chart_labels = formattedTimes;
-        // this.chart_labels = formattedTimes;
       });
     }
 
     if (data.msg_type === "tick") {
       runInAction(() => {
-        const formattedTime = this.formattedTimes(data.tick.epoch);
         this.chart_data = [
           ...this.chart_data,
           {
@@ -110,28 +88,25 @@ class ApiStoreImplementation {
         if (this.chart_data.length > 2000) {
           this.chart_data.shift();
         }
-
-        const updatedData = [...this.t_chart_data, data.tick.quote];
-        const updatedLabels = [...this.t_chart_labels, formattedTime];
-        if (updatedData.length > 2000) {
-          updatedData.shift();
-          updatedLabels.shift();
-        }
-        this.t_chart_data = updatedData;
-        this.t_chart_labels = updatedLabels;
       });
     }
   };
 
-  subscribeTicks = async (currency: String) => {
-    await tickHistory(currency);
+  changeSubscribedCurrency = async (currency: string) => {
+    await this.unsubscribeTicks();
+    // this.resetData();
+    this.setSubscribeCurrency(currency);
+    // this.subscribeTicks();
+  };
+
+  subscribeTicks = async () => {
+    await this.tickHistory();
     connection.addEventListener("message", this.tickResponse);
   };
 
-  unsubscribeTicks = (currency: String) => {
+  unsubscribeTicks = async () => {
     connection.removeEventListener("message", this.tickResponse, false);
-    // tickStream().unsubscribe();
-    tickHistory(currency).unsubscribe();
+    await this.tickHistory().unsubscribe();
   };
 }
 

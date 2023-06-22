@@ -49,9 +49,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  // transform: translateY(50%);
   color: white;
   overflow: hidden;
+  max-width: 450px;
 
   .form-body {
     z-index: 10;
@@ -64,7 +64,6 @@
   & > div > .card {
     position: relative;
     padding: 10px;
-    max-width: 350px;
 
     & > .content {
       display: flex;
