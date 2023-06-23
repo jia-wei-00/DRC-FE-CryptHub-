@@ -12,3 +12,17 @@ export type ChildrenProps = {
 export type ResetPassword = {
   email: string;
 };
+
+export type ChartData = {
+  previous: number;
+  price: number;
+  time: EpochTimeStamp;
+};
+
+export type Candles = {
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  time: EpochTimeStamp;
+};

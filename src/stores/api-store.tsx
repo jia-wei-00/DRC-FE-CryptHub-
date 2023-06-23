@@ -1,21 +1,23 @@
 import { makeObservable, action, observable, runInAction } from "mobx";
 import DerivAPIBasic from "https://cdn.skypack.dev/@deriv/deriv-api/dist/DerivAPIBasic";
 import { makePersistable } from "mobx-persist-store";
-
-const app_id = 1089; // Replace with your app_id or leave as 1089 for testing.
-const connection = new WebSocket(
-  `wss://ws.binaryws.com/websockets/v3?app_id=${app_id}`
-);
-const api = new DerivAPIBasic({ connection });
+import { Candles, ChartData } from "../types";
 
 class ApiStoreImplementation {
-  chart_data: any[] = [];
-  subscribeCurrency: string = "BTC";
+  chart_data: ChartData[] = [];
+  candles: Candles[] = [];
+  subscribe_currency: string = "BTC";
+  chart_type: string = "line";
+  interval: string = "1t";
 
   constructor() {
     makeObservable(this, {
       chart_data: observable,
-      subscribeCurrency: observable,
+      subscribe_currency: observable,
+      chart_type: observable,
+      interval: observable,
+      setInterval: action.bound,
+      setChartType: action.bound,
       tickResponse: action.bound,
       subscribeTicks: action.bound,
       unsubscribeTicks: action.bound,
@@ -26,16 +28,24 @@ class ApiStoreImplementation {
     });
 
     makePersistable(this, {
-      name: "subscribeCurrency",
-      properties: ["subscribeCurrency"],
+      name: "chart_store",
+      properties: ["subscribe_currency", "chart_type", "interval"],
       storage: window.localStorage,
     });
   }
 
+  app_id = 1089;
+
+  connection: WebSocket = new WebSocket(
+    `wss://ws.binaryws.com/websockets/v3?app_id=${this.app_id}`
+  );
+
+  api = new DerivAPIBasic({ connection: this.connection });
+
   tickHistory = () =>
-    api.subscribe({
+    this.api.subscribe({
       ticks_history:
-        this.subscribeCurrency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
+        this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
       adjust_start_time: 1,
       count: 2000,
       end: "latest",
@@ -44,7 +54,15 @@ class ApiStoreImplementation {
     });
 
   setSubscribeCurrency = (currency: string) => {
-    this.subscribeCurrency = currency;
+    this.subscribe_currency = currency;
+  };
+
+  setChartType = (type: string) => {
+    this.chart_type = type;
+  };
+
+  setInterval = (interval: string) => {
+    this.interval = interval;
   };
 
   resetData = () => {
@@ -56,8 +74,8 @@ class ApiStoreImplementation {
 
     if (data.error !== undefined) {
       console.log("Error: ", data.error.message);
-      connection.removeEventListener("message", this.tickResponse, false);
-      await api.disconnect();
+      this.connection?.removeEventListener("message", this.tickResponse, false);
+      await this.api.disconnect();
     }
 
     if (data.msg_type === "history") {
@@ -92,21 +110,36 @@ class ApiStoreImplementation {
     }
   };
 
-  changeSubscribedCurrency = async (currency: string) => {
-    await this.unsubscribeTicks();
-    // this.resetData();
+  changeSubscribedCurrency = (currency: string) => {
+    this.resetData();
     this.setSubscribeCurrency(currency);
-    // this.subscribeTicks();
+    this.subscribeTicks();
+  };
+
+  changeSubscribedInterval = (interval: string) => {
+    this.resetData();
+    this.setInterval(interval);
+    this.subscribeTicks();
   };
 
   subscribeTicks = async () => {
-    await this.tickHistory();
-    connection.addEventListener("message", this.tickResponse);
+    this.unsubscribeTicks(); // Disconnect previous connection
+    this.resetData();
+
+    this.connection = new WebSocket(
+      `wss://ws.binaryws.com/websockets/v3?app_id=${this.app_id}`
+    );
+    this.api = new DerivAPIBasic({ connection: this.connection });
+
+    await this.tickHistory(); // Subscribe to ticks
+
+    this.connection.addEventListener("message", this.tickResponse);
   };
 
   unsubscribeTicks = async () => {
-    connection.removeEventListener("message", this.tickResponse, false);
+    this.connection!.removeEventListener("message", this.tickResponse, false);
     await this.tickHistory().unsubscribe();
+    this.resetData();
   };
 }
 

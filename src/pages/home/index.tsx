@@ -7,6 +7,7 @@ const Home = () => {
   return (
     <div className="container">
       <Chart />
+
       <div className="action-column">
         <Action />
       </div>

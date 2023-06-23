@@ -97,15 +97,9 @@ function Nav() {
                   </Tooltip>
                 </>
               ) : (
-                <Button
-                  onClick={() => apiStore.subscribeTicks()}
-                  variant="contained"
-                >
+                <Button onClick={() => setOpen(!open)} variant="contained">
                   Login
                 </Button>
-                // <Button onClick={() => setOpen(!open)} variant="contained">
-                //   Login
-                // </Button>
               )}
             </div>
 

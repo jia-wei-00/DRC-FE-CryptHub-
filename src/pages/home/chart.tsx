@@ -11,7 +11,7 @@ const Chart: React.FC = () => {
     return () => {
       apiStore.unsubscribeTicks();
     };
-  }, [apiStore.subscribeCurrency]);
+  }, [apiStore.subscribe_currency]);
 
   const options: Highcharts.Options = {
     chart: {
@@ -32,7 +32,7 @@ const Chart: React.FC = () => {
       useUTC: false,
     },
     title: {
-      text: apiStore.subscribeCurrency,
+      text: apiStore.subscribe_currency,
       style: {
         color: modeStore.mode === "dark" ? "white" : "",
       },
@@ -72,7 +72,7 @@ const Chart: React.FC = () => {
     },
     series: [
       {
-        name: `${apiStore.subscribeCurrency} / USD`,
+        name: `${apiStore.subscribe_currency} / USD`,
         type: "line",
         color: modeStore.mode === "dark" ? "white" : "#A27B5C",
         data: apiStore.chart_data.map((item) => [item.time * 1000, item.price]),

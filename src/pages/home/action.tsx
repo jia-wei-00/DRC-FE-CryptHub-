@@ -1,20 +1,90 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import React from "react";
 import { apiStore } from "../../stores";
 import { observer } from "mobx-react-lite";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+import "../../styles/components/action.scss";
+import { CandlestickChart, Timeline } from "@mui/icons-material";
 
 const Action: React.FC = () => {
-  let beforePreviousPrice = 0;
-  let previousPrice = 0;
-  let currentPrice = 0;
+  const handleChangeChart = (
+    event: React.MouseEvent<HTMLElement>,
+    type: string
+  ) => {
+    if (type === null) return;
+    apiStore.setChartType(type);
+  };
+
+  const handleChangeInterval = (
+    event: React.MouseEvent<HTMLElement>,
+    interval: string
+  ) => {
+    if (interval === null) return;
+    apiStore.changeSubscribedInterval(interval);
+  };
+
+  const chart = [
+    <ToggleButton value="line" key="line">
+      <Timeline />
+      Line
+    </ToggleButton>,
+    <ToggleButton
+      value="candle"
+      key="candle"
+      disabled={apiStore.interval === "1t"}
+    >
+      <CandlestickChart />
+      Candle
+    </ToggleButton>,
+  ];
+
+  const interval = [
+    <ToggleButton value="1t" key="1t" disabled={apiStore.chart_type !== "line"}>
+      1 tick
+    </ToggleButton>,
+    <ToggleButton value="1m" key="1m">
+      1 minute
+    </ToggleButton>,
+    <ToggleButton value="30m" key="30m">
+      30 minute
+    </ToggleButton>,
+    <ToggleButton value="1h" key="1h">
+      1 hour
+    </ToggleButton>,
+    <ToggleButton value="1d" key="1d">
+      1 day
+    </ToggleButton>,
+  ];
+
+  const controlChart = {
+    value: apiStore.chart_type,
+    onChange: handleChangeChart,
+    exclusive: true,
+  };
+
+  const controlInterval = {
+    value: apiStore.interval,
+    onChange: handleChangeInterval,
+    exclusive: true,
+  };
+
+  let before_previous_price = 0;
+  let previous_price = 0;
+  let current_price = 0;
 
   if (apiStore.chart_data.length > 10) {
-    beforePreviousPrice =
+    before_previous_price =
       apiStore.chart_data[apiStore.chart_data.length - 3].price;
-    previousPrice = apiStore.chart_data[apiStore.chart_data.length - 2].price;
-    currentPrice = apiStore.chart_data[apiStore.chart_data.length - 1].price;
+    previous_price = apiStore.chart_data[apiStore.chart_data.length - 2].price;
+    current_price = apiStore.chart_data[apiStore.chart_data.length - 1].price;
   }
 
   return (
@@ -28,7 +98,7 @@ const Action: React.FC = () => {
             <Select
               labelId="demo-simple-select-autowidth-label"
               id="demo-simple-select-autowidth"
-              value={apiStore.subscribeCurrency}
+              value={apiStore.subscribe_currency}
               onChange={(e) => {
                 apiStore.changeSubscribedCurrency(e.target.value);
               }}
@@ -38,16 +108,35 @@ const Action: React.FC = () => {
               <MenuItem value="ETH">ETH</MenuItem>
             </Select>
           </FormControl>
+
+          <div className="chart">
+            Chart Types
+            <ToggleButtonGroup {...controlChart} aria-label="Medium sizes">
+              {chart}
+            </ToggleButtonGroup>
+          </div>
+
+          <div className="chart">
+            Time Interval
+            <ToggleButtonGroup
+              {...controlInterval}
+              aria-label="Medium sizes"
+              sx={{ flexWrap: "wrap" }}
+            >
+              {interval}
+            </ToggleButtonGroup>
+          </div>
+
           <div className="d-flex">
             <div className="price-items">
               <span>Previous Price: </span>
               <span
                 className={`d-flex align-center mr-5 ${
-                  currentPrice > previousPrice ? "green" : "red"
+                  previous_price > before_previous_price ? "green" : "red"
                 }`}
               >
-                ${previousPrice}
-                {currentPrice > previousPrice ? (
+                ${previous_price}
+                {previous_price > before_previous_price ? (
                   <TrendingUpIcon />
                 ) : (
                   <TrendingDownIcon />
@@ -59,20 +148,17 @@ const Action: React.FC = () => {
               <span>Current Price:</span>
               <span
                 className={`d-flex align-center ${
-                  currentPrice > previousPrice ? "green" : "red"
+                  current_price > previous_price ? "green" : "red"
                 }`}
               >
-                ${currentPrice}{" "}
-                {currentPrice > previousPrice ? (
+                ${current_price}{" "}
+                {current_price > previous_price ? (
                   <TrendingUpIcon />
                 ) : (
                   <TrendingDownIcon />
                 )}
               </span>
             </div>
-            <button onClick={() => apiStore.changeSubscribedCurrency("ETH")}>
-              Unsubscribe
-            </button>
           </div>
         </>
       )}
