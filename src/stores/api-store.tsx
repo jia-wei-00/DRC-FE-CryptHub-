@@ -1,11 +1,11 @@
 import { makeObservable, action, observable, runInAction } from "mobx";
 import DerivAPIBasic from "https://cdn.skypack.dev/@deriv/deriv-api/dist/DerivAPIBasic";
 import { makePersistable } from "mobx-persist-store";
-import { Candles, ChartData } from "../types";
+import { Candlesticks, ChartData } from "../types";
 
 class ApiStoreImplementation {
   chart_data: ChartData[] = [];
-  candles: Candles[] = [];
+  candlesticks: Candlesticks[] = [];
   subscribe_currency: string = "BTC";
   chart_type: string = "line";
   interval: string = "1t";
@@ -16,6 +16,7 @@ class ApiStoreImplementation {
       subscribe_currency: observable,
       chart_type: observable,
       interval: observable,
+      candlesticks: observable,
       setInterval: action.bound,
       setChartType: action.bound,
       tickResponse: action.bound,
@@ -43,15 +44,38 @@ class ApiStoreImplementation {
   api = new DerivAPIBasic({ connection: this.connection });
 
   tickHistory = () =>
-    this.api.subscribe({
-      ticks_history:
-        this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
-      adjust_start_time: 1,
-      count: 2000,
-      end: "latest",
-      start: 1,
-      style: "ticks",
-    });
+    this.api.subscribe(
+      {
+        ticks_history:
+          this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
+        adjust_start_time: 1,
+        count: 2000,
+        end: "latest",
+        granularity: this.interval,
+        start: this.interval === "1m" ? 1 : 1671811200,
+        style: "candles",
+      }
+      // this.chart_type === "line"
+      //   ? {
+      //       ticks_history:
+      //         this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
+      //       adjust_start_time: 1,
+      //       count: 2000,
+      //       end: "latest",
+      //       start: 1624000000,
+      //       style: this.chart_type,
+      //     }
+      //   : {
+      //       ticks_history:
+      //         this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
+      //       adjust_start_time: 1,
+      //       count: 2000,
+      //       end: "latest",
+      //       granularity: this.interval,
+      //       start: 1624000000,
+      //       style: this.chart_type,
+      //     }
+    );
 
   setSubscribeCurrency = (currency: string) => {
     this.subscribe_currency = currency;
@@ -67,6 +91,7 @@ class ApiStoreImplementation {
 
   resetData = () => {
     this.chart_data = [];
+    this.candlesticks = [];
   };
 
   tickResponse = async (res: any) => {
@@ -105,6 +130,35 @@ class ApiStoreImplementation {
         ];
         if (this.chart_data.length > 2000) {
           this.chart_data.shift();
+        }
+      });
+    }
+
+    if (data.msg_type === "candles") {
+      runInAction(() => {
+        this.candlesticks = data.candles;
+      });
+    }
+
+    if (data.msg_type === "ohlc") {
+      runInAction(() => {
+        if (
+          this.candlesticks[this.candlesticks.length - 1].epoch ===
+          data.ohlc.epoch - data.ohlc.granularity + 1
+        ) {
+          console.log("before push", this.candlesticks);
+          this.candlesticks = [
+            ...this.candlesticks,
+            {
+              close: Number(data.ohlc.close),
+              epoch: data.ohlc.epoch + 1,
+              high: Number(data.ohlc.high),
+              low: Number(data.ohlc.low),
+              open: Number(data.ohlc.open),
+            },
+          ];
+          console.log("after push", this.candlesticks);
+          console.log("data", data.ohlc);
         }
       });
     }

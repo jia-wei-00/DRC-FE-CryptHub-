@@ -19,10 +19,10 @@ export type ChartData = {
   time: EpochTimeStamp;
 };
 
-export type Candles = {
+export type Candlesticks = {
   open: number;
   high: number;
   low: number;
   close: number;
-  time: EpochTimeStamp;
+  epoch: EpochTimeStamp;
 };

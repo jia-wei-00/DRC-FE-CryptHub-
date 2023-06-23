@@ -13,6 +13,14 @@ const Chart: React.FC = () => {
     };
   }, [apiStore.subscribe_currency]);
 
+  const candlestickData = apiStore.candlesticks.map((candle) => ({
+    x: candle.epoch * 1000,
+    open: candle.open,
+    high: candle.high,
+    low: candle.low,
+    close: candle.close,
+  }));
+
   const options: Highcharts.Options = {
     chart: {
       height: "800px",
@@ -67,15 +75,23 @@ const Chart: React.FC = () => {
         // },
       },
     },
+    plotOptions: {
+      series: {
+        turboThreshold: 5000, // Adjust this value as needed
+      },
+    },
     credits: {
       enabled: false,
     },
     series: [
       {
         name: `${apiStore.subscribe_currency} / USD`,
-        type: "line",
-        color: modeStore.mode === "dark" ? "white" : "#A27B5C",
-        data: apiStore.chart_data.map((item) => [item.time * 1000, item.price]),
+        type: apiStore.chart_type === "line" ? "line" : "candlestick",
+        color: modeStore.mode === "dark" ? "grey" : "#A27B5C",
+        data:
+          apiStore.chart_type === "line"
+            ? apiStore.chart_data.map((item) => [item.time * 1000, item.price])
+            : candlestickData,
       },
     ],
   };

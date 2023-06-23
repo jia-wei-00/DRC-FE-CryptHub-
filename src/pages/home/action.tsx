@@ -37,8 +37,8 @@ const Action: React.FC = () => {
       Line
     </ToggleButton>,
     <ToggleButton
-      value="candle"
-      key="candle"
+      value="candles"
+      key="candles"
       disabled={apiStore.interval === "1t"}
     >
       <CandlestickChart />
@@ -50,16 +50,16 @@ const Action: React.FC = () => {
     <ToggleButton value="1t" key="1t" disabled={apiStore.chart_type !== "line"}>
       1 tick
     </ToggleButton>,
-    <ToggleButton value="1m" key="1m">
+    <ToggleButton value="60" key="1m">
       1 minute
     </ToggleButton>,
-    <ToggleButton value="30m" key="30m">
+    <ToggleButton value="1800" key="30m">
       30 minute
     </ToggleButton>,
-    <ToggleButton value="1h" key="1h">
+    <ToggleButton value="3600" key="1h">
       1 hour
     </ToggleButton>,
-    <ToggleButton value="1d" key="1d">
+    <ToggleButton value="86400" key="1d">
       1 day
     </ToggleButton>,
   ];
@@ -89,78 +89,76 @@ const Action: React.FC = () => {
 
   return (
     <>
+      <FormControl sx={{ display: "flex" }}>
+        <InputLabel id="demo-simple-select-autowidth-label">
+          Currency
+        </InputLabel>
+        <Select
+          labelId="demo-simple-select-autowidth-label"
+          id="demo-simple-select-autowidth"
+          value={apiStore.subscribe_currency}
+          onChange={(e) => {
+            apiStore.changeSubscribedCurrency(e.target.value);
+          }}
+          label="Currency"
+        >
+          <MenuItem value="BTC">BTC</MenuItem>
+          <MenuItem value="ETH">ETH</MenuItem>
+        </Select>
+      </FormControl>
+
+      <div className="chart">
+        Chart Types
+        <ToggleButtonGroup {...controlChart} aria-label="Medium sizes">
+          {chart}
+        </ToggleButtonGroup>
+      </div>
+
+      <div className="chart">
+        Time Interval
+        <ToggleButtonGroup
+          {...controlInterval}
+          aria-label="Medium sizes"
+          sx={{ flexWrap: "wrap" }}
+        >
+          {interval}
+        </ToggleButtonGroup>
+      </div>
+
       {apiStore.chart_data.length > 0 && (
-        <>
-          <FormControl sx={{ display: "flex" }}>
-            <InputLabel id="demo-simple-select-autowidth-label">
-              Currency
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-autowidth-label"
-              id="demo-simple-select-autowidth"
-              value={apiStore.subscribe_currency}
-              onChange={(e) => {
-                apiStore.changeSubscribedCurrency(e.target.value);
-              }}
-              label="Currency"
+        <div className="d-flex">
+          <div className="price-items">
+            <span>Previous Price: </span>
+            <span
+              className={`d-flex align-center mr-5 ${
+                previous_price > before_previous_price ? "green" : "red"
+              }`}
             >
-              <MenuItem value="BTC">BTC</MenuItem>
-              <MenuItem value="ETH">ETH</MenuItem>
-            </Select>
-          </FormControl>
-
-          <div className="chart">
-            Chart Types
-            <ToggleButtonGroup {...controlChart} aria-label="Medium sizes">
-              {chart}
-            </ToggleButtonGroup>
+              ${previous_price}
+              {previous_price > before_previous_price ? (
+                <TrendingUpIcon />
+              ) : (
+                <TrendingDownIcon />
+              )}
+            </span>
           </div>
 
-          <div className="chart">
-            Time Interval
-            <ToggleButtonGroup
-              {...controlInterval}
-              aria-label="Medium sizes"
-              sx={{ flexWrap: "wrap" }}
+          <div className="price-items">
+            <span>Current Price:</span>
+            <span
+              className={`d-flex align-center ${
+                current_price > previous_price ? "green" : "red"
+              }`}
             >
-              {interval}
-            </ToggleButtonGroup>
+              ${current_price}{" "}
+              {current_price > previous_price ? (
+                <TrendingUpIcon />
+              ) : (
+                <TrendingDownIcon />
+              )}
+            </span>
           </div>
-
-          <div className="d-flex">
-            <div className="price-items">
-              <span>Previous Price: </span>
-              <span
-                className={`d-flex align-center mr-5 ${
-                  previous_price > before_previous_price ? "green" : "red"
-                }`}
-              >
-                ${previous_price}
-                {previous_price > before_previous_price ? (
-                  <TrendingUpIcon />
-                ) : (
-                  <TrendingDownIcon />
-                )}
-              </span>
-            </div>
-
-            <div className="price-items">
-              <span>Current Price:</span>
-              <span
-                className={`d-flex align-center ${
-                  current_price > previous_price ? "green" : "red"
-                }`}
-              >
-                ${current_price}{" "}
-                {current_price > previous_price ? (
-                  <TrendingUpIcon />
-                ) : (
-                  <TrendingDownIcon />
-                )}
-              </span>
-            </div>
-          </div>
-        </>
+        </div>
       )}
     </>
   );
