@@ -1,6 +1,7 @@
 // Global Color
 $main-color: #f6e6cb;
 $third-color: #e9e0d1;
+$light-bg: #a27b5c;
 $main-color-d: #3f4e4f;
 $white: #ffffff;
 $black: black;
@@ -10,7 +11,6 @@ $red: red;
 // Global transition
 $transition-all: all 0.35s cubic-bezier(0.645, 0.045, 0.355, 1);
 $transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
-// $transition-background: background 0.5s ease-in-out;
 
 // Global Font Size
 $text-extra-small: 0.8rem;

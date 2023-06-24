@@ -9,6 +9,13 @@ class ApiStoreImplementation {
   subscribe_currency: string = "BTC";
   chart_type: string = "line";
   interval: string = "1t";
+  ohlc: Candlesticks = {
+    close: 0,
+    epoch: 0,
+    high: 0,
+    low: 0,
+    open: 0,
+  };
 
   constructor() {
     makeObservable(this, {
@@ -16,6 +23,7 @@ class ApiStoreImplementation {
       subscribe_currency: observable,
       chart_type: observable,
       interval: observable,
+      ohlc: observable,
       candlesticks: observable,
       setInterval: action.bound,
       setChartType: action.bound,
@@ -45,36 +53,26 @@ class ApiStoreImplementation {
 
   tickHistory = () =>
     this.api.subscribe(
-      {
-        ticks_history:
-          this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
-        adjust_start_time: 1,
-        count: 2000,
-        end: "latest",
-        granularity: this.interval,
-        start: this.interval === "1m" ? 1 : 1671811200,
-        style: "candles",
-      }
-      // this.chart_type === "line"
-      //   ? {
-      //       ticks_history:
-      //         this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
-      //       adjust_start_time: 1,
-      //       count: 2000,
-      //       end: "latest",
-      //       start: 1624000000,
-      //       style: this.chart_type,
-      //     }
-      //   : {
-      //       ticks_history:
-      //         this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
-      //       adjust_start_time: 1,
-      //       count: 2000,
-      //       end: "latest",
-      //       granularity: this.interval,
-      //       start: 1624000000,
-      //       style: this.chart_type,
-      //     }
+      this.interval === "1t"
+        ? {
+            ticks_history:
+              this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
+            adjust_start_time: 1,
+            count: 2000,
+            end: "latest",
+            start: 1,
+            style: "ticks",
+          }
+        : {
+            ticks_history:
+              this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
+            adjust_start_time: 1,
+            count: 2000,
+            end: "latest",
+            granularity: this.interval,
+            start: this.interval === "1m" ? 1 : 1671811200,
+            style: "candles",
+          }
     );
 
   setSubscribeCurrency = (currency: string) => {
@@ -92,6 +90,13 @@ class ApiStoreImplementation {
   resetData = () => {
     this.chart_data = [];
     this.candlesticks = [];
+    this.ohlc = {
+      close: 0,
+      epoch: 0,
+      high: 0,
+      low: 0,
+      open: 0,
+    };
   };
 
   tickResponse = async (res: any) => {
@@ -142,6 +147,14 @@ class ApiStoreImplementation {
 
     if (data.msg_type === "ohlc") {
       runInAction(() => {
+        console.log(data.ohlc);
+        this.ohlc = {
+          close: Number(data.ohlc.close),
+          epoch: data.ohlc.epoch,
+          high: Number(data.ohlc.high),
+          low: Number(data.ohlc.low),
+          open: Number(data.ohlc.open),
+        };
         if (
           this.candlesticks[this.candlesticks.length - 1].epoch ===
           data.ohlc.epoch - data.ohlc.granularity + 1

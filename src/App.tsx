@@ -10,8 +10,8 @@ import { pages } from "./constant";
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider theme={modeStore.mode === "dark" ? darkTheme : lightTheme}>
-      <div id={modeStore.mode}>
+    <div id={modeStore.mode}>
+      <ThemeProvider theme={modeStore.mode === "dark" ? darkTheme : lightTheme}>
         <Nav />
         <Routes>
           {pages.map((page, index) => {
@@ -20,9 +20,10 @@ const App: React.FC = () => {
             );
           })}
         </Routes>
-      </div>
-      <ToastContainer theme={modeStore.mode === "dark" ? "dark" : "light"} />
-    </ThemeProvider>
+
+        <ToastContainer theme={modeStore.mode === "dark" ? "dark" : "light"} />
+      </ThemeProvider>
+    </div>
   );
 };
 

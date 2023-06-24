@@ -80,7 +80,7 @@ const Action: React.FC = () => {
   let previous_price = 0;
   let current_price = 0;
 
-  if (apiStore.chart_data.length > 10) {
+  if (apiStore.chart_data.length > 0) {
     before_previous_price =
       apiStore.chart_data[apiStore.chart_data.length - 3].price;
     previous_price = apiStore.chart_data[apiStore.chart_data.length - 2].price;
@@ -88,7 +88,7 @@ const Action: React.FC = () => {
   }
 
   return (
-    <>
+    <div className="side-bar">
       <FormControl sx={{ display: "flex" }}>
         <InputLabel id="demo-simple-select-autowidth-label">
           Currency
@@ -109,7 +109,11 @@ const Action: React.FC = () => {
 
       <div className="chart">
         Chart Types
-        <ToggleButtonGroup {...controlChart} aria-label="Medium sizes">
+        <ToggleButtonGroup
+          {...controlChart}
+          aria-label="Medium sizes"
+          className="button-group"
+        >
           {chart}
         </ToggleButtonGroup>
       </div>
@@ -119,6 +123,7 @@ const Action: React.FC = () => {
         <ToggleButtonGroup
           {...controlInterval}
           aria-label="Medium sizes"
+          className="button-group"
           sx={{ flexWrap: "wrap" }}
         >
           {interval}
@@ -126,7 +131,7 @@ const Action: React.FC = () => {
       </div>
 
       {apiStore.chart_data.length > 0 && (
-        <div className="d-flex">
+        <div className="details">
           <div className="price-items">
             <span>Previous Price: </span>
             <span
@@ -150,7 +155,7 @@ const Action: React.FC = () => {
                 current_price > previous_price ? "green" : "red"
               }`}
             >
-              ${current_price}{" "}
+              ${current_price}
               {current_price > previous_price ? (
                 <TrendingUpIcon />
               ) : (
@@ -160,7 +165,72 @@ const Action: React.FC = () => {
           </div>
         </div>
       )}
-    </>
+
+      {apiStore.interval !== "1t" && (
+        <div className="details">
+          <div className="price-items">
+            <span>Open:</span>
+            <span
+              className={`d-flex align-center ${
+                current_price > previous_price ? "green" : "red"
+              }`}
+            >
+              ${apiStore.ohlc.open}
+              {current_price > previous_price ? (
+                <TrendingUpIcon />
+              ) : (
+                <TrendingDownIcon />
+              )}
+            </span>
+          </div>
+          <div className="price-items">
+            <span>High:</span>
+            <span
+              className={`d-flex align-center ${
+                current_price > previous_price ? "green" : "red"
+              }`}
+            >
+              ${apiStore.ohlc.high}
+              {current_price > previous_price ? (
+                <TrendingUpIcon />
+              ) : (
+                <TrendingDownIcon />
+              )}
+            </span>
+          </div>
+          <div className="price-items">
+            <span>Low:</span>
+            <span
+              className={`d-flex align-center ${
+                current_price > previous_price ? "green" : "red"
+              }`}
+            >
+              ${apiStore.ohlc.low}
+              {current_price > previous_price ? (
+                <TrendingUpIcon />
+              ) : (
+                <TrendingDownIcon />
+              )}
+            </span>
+          </div>
+          <div className="price-items">
+            <span>Close:</span>
+            <span
+              className={`d-flex align-center ${
+                current_price > previous_price ? "green" : "red"
+              }`}
+            >
+              ${apiStore.ohlc.close}
+              {current_price > previous_price ? (
+                <TrendingUpIcon />
+              ) : (
+                <TrendingDownIcon />
+              )}
+            </span>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

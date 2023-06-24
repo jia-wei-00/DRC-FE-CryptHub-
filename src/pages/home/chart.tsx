@@ -3,6 +3,8 @@ import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import { apiStore, modeStore } from "../../stores";
 import { observer } from "mobx-react-lite";
+import ReactLoading from "react-loading";
+import Action from "./action";
 
 const Chart: React.FC = () => {
   React.useEffect(() => {
@@ -13,19 +15,43 @@ const Chart: React.FC = () => {
     };
   }, [apiStore.subscribe_currency]);
 
-  const candlestickData = apiStore.candlesticks.map((candle) => ({
-    x: candle.epoch * 1000,
-    open: candle.open,
-    high: candle.high,
-    low: candle.low,
-    close: candle.close,
-  }));
+  const candlestickData = apiStore.candlesticks.map((candle) =>
+    apiStore.chart_type === "line"
+      ? [candle.epoch * 1000, candle.close]
+      : {
+          x: candle.epoch * 1000,
+          open: candle.open,
+          high: candle.high,
+          low: candle.low,
+          close: candle.close,
+        }
+  );
 
   const options: Highcharts.Options = {
     chart: {
-      height: "800px",
       backgroundColor: "transparent",
     },
+    tooltip:
+      apiStore.interval === "1t" || apiStore.chart_type === "candles"
+        ? {}
+        : {
+            shared: true,
+            formatter: function () {
+              const index = this.point.index; // Accessing the index of the data point
+
+              const data = apiStore.candlesticks[index];
+
+              // Generate the tooltip HTML content including the index
+              const tooltipContent = `
+            Open: ${data.open}<br>
+            High: ${data.high}<br>
+            Low: ${data.low}<br>
+            Close: ${data.close}<br>
+          `;
+
+              return tooltipContent;
+            },
+          },
     navigator: {
       enabled: true,
       maskFill:
@@ -87,9 +113,14 @@ const Chart: React.FC = () => {
       {
         name: `${apiStore.subscribe_currency} / USD`,
         type: apiStore.chart_type === "line" ? "line" : "candlestick",
-        color: modeStore.mode === "dark" ? "grey" : "#A27B5C",
+        color:
+          modeStore.mode === "dark"
+            ? apiStore.chart_type === "line"
+              ? "white"
+              : "grey"
+            : "#A27B5C",
         data:
-          apiStore.chart_type === "line"
+          apiStore.interval === "1t"
             ? apiStore.chart_data.map((item) => [item.time * 1000, item.price])
             : candlestickData,
       },
@@ -97,12 +128,22 @@ const Chart: React.FC = () => {
   };
 
   return (
-    <div className="f-1">
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={options}
-        constructorType={"stockChart"}
-      />
+    <div className="chart-container">
+      {apiStore.chart_data.length === 0 &&
+      apiStore.candlesticks.length === 0 ? (
+        <div className="loading">
+          <ReactLoading type="bars" height={"80px"} width={"80px"} />
+        </div>
+      ) : (
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={options}
+          constructorType={"stockChart"}
+        />
+      )}
+      <div className="action-column">
+        <Action />
+      </div>
     </div>
   );
 };
