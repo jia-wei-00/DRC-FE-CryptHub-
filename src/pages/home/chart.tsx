@@ -82,9 +82,6 @@ const Chart: React.FC = () => {
       labels: {
         style: {
           color: modeStore.mode === "dark" ? "white" : "",
-          gridLines: {
-            zeroLineColor: modeStore.mode === "dark" ? "white" : "",
-          },
         },
       },
       lineColor: modeStore.mode === "dark" ? "white" : "",
