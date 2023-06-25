@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type InputData = {
   name?: string;
   email: string;
@@ -25,4 +27,22 @@ export type Candlesticks = {
   low: number;
   close: number;
   epoch: EpochTimeStamp;
+};
+
+export type ResetPasswordDialogT = {
+  resetPassword: boolean;
+  setResetPassword: Dispatch<SetStateAction<boolean>>;
+};
+
+export type AuthDialogT = {
+  open: boolean;
+  active: string;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  setActive: Dispatch<SetStateAction<string>>;
+  setResetPassword: Dispatch<SetStateAction<boolean>>;
+};
+
+export type ChartSettingsT = {
+  openSettings: boolean;
+  setOpenSettings: Dispatch<SetStateAction<boolean>>;
 };

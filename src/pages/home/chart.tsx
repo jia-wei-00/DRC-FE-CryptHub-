@@ -4,7 +4,6 @@ import HighchartsReact from "highcharts-react-official";
 import { apiStore, modeStore } from "../../stores";
 import { observer } from "mobx-react-lite";
 import ReactLoading from "react-loading";
-import Action from "./action";
 
 const Chart: React.FC = () => {
   React.useEffect(() => {
@@ -80,6 +79,7 @@ const Chart: React.FC = () => {
     xAxis: {
       type: "datetime",
       labels: {
+        enabled: true,
         style: {
           color: modeStore.mode === "dark" ? "white" : "",
         },
@@ -100,7 +100,7 @@ const Chart: React.FC = () => {
     },
     plotOptions: {
       series: {
-        turboThreshold: 5000, // Adjust this value as needed
+        turboThreshold: 5000,
       },
     },
     credits: {
@@ -125,7 +125,7 @@ const Chart: React.FC = () => {
   };
 
   return (
-    <div className="chart-container">
+    <>
       {apiStore.chart_data.length === 0 &&
       apiStore.candlesticks.length === 0 ? (
         <div className="loading">
@@ -138,10 +138,7 @@ const Chart: React.FC = () => {
           constructorType={"stockChart"}
         />
       )}
-      <div className="action-column">
-        <Action />
-      </div>
-    </div>
+    </>
   );
 };
 

@@ -9,13 +9,7 @@ class ApiStoreImplementation {
   subscribe_currency: string = "BTC";
   chart_type: string = "line";
   interval: string = "1t";
-  ohlc: Candlesticks = {
-    close: 0,
-    epoch: 0,
-    high: 0,
-    low: 0,
-    open: 0,
-  };
+  ohlc: Candlesticks[] = [];
 
   constructor() {
     makeObservable(this, {
@@ -90,13 +84,7 @@ class ApiStoreImplementation {
   resetData = () => {
     this.chart_data = [];
     this.candlesticks = [];
-    this.ohlc = {
-      close: 0,
-      epoch: 0,
-      high: 0,
-      low: 0,
-      open: 0,
-    };
+    this.ohlc = [];
   };
 
   tickResponse = async (res: any) => {
@@ -148,13 +136,19 @@ class ApiStoreImplementation {
     if (data.msg_type === "ohlc") {
       runInAction(() => {
         console.log(data.ohlc);
-        this.ohlc = {
-          close: Number(data.ohlc.close),
-          epoch: data.ohlc.epoch,
-          high: Number(data.ohlc.high),
-          low: Number(data.ohlc.low),
-          open: Number(data.ohlc.open),
-        };
+        this.ohlc = [
+          ...this.ohlc,
+          {
+            close: Number(data.ohlc.close),
+            epoch: data.ohlc.epoch,
+            high: Number(data.ohlc.high),
+            low: Number(data.ohlc.low),
+            open: Number(data.ohlc.open),
+          },
+        ];
+        if (this.ohlc.length > 2) {
+          this.ohlc.shift();
+        }
         if (
           this.candlesticks[this.candlesticks.length - 1].epoch ===
           data.ohlc.epoch - data.ohlc.granularity + 1

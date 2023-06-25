@@ -1,5 +1,5 @@
 import * as React from "react";
-import { apiStore, authStore, modeStore } from "../stores";
+import { authStore } from "../stores";
 import { pages, settings } from "../constant";
 import { Link } from "react-router-dom";
 import "../styles/components/nav.scss";
@@ -10,10 +10,7 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
   Container,
-  Dialog,
   IconButton,
   Menu,
   MenuItem,
@@ -21,11 +18,8 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { motion } from "framer-motion";
-import LoginForm from "./login-form";
-import RegisterForm from "./register-form";
 import { observer } from "mobx-react-lite";
-import ResetPasswordForm from "./forget-password";
+import { AuthDialog, ResetPasswordDialog } from "./dialog";
 
 function Nav() {
   const [active, setActive] = React.useState<string>("login");
@@ -128,96 +122,18 @@ function Nav() {
               ))}
             </Menu>
 
-            <Dialog
+            <AuthDialog
               open={open}
-              onClose={() => setOpen(false)}
-              PaperProps={{
-                style: {
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                },
-              }}
-            >
-              <div className="wrapper">
-                {/* <motion.div
-                  initial={{ y: 400 }}
-                  animate={{ y: 0 }}
-                  className="form-body"
-                > */}
-                <Card className="card">
-                  <CardContent>
-                    <motion.div className="btn-group">
-                      <Button onClick={() => setActive("login")}>Login</Button>
-                      <Button onClick={() => setActive("register")}>
-                        Register
-                      </Button>
-                      <motion.div
-                        animate={
-                          active === "register" ? { x: "100%" } : { x: 0 }
-                        }
-                        className="indicator"
-                        style={
-                          modeStore.mode === "dark"
-                            ? { backgroundColor: "rgba(255, 255, 255, 0.9)" }
-                            : { backgroundColor: "#f6e6cb" }
-                        }
-                      />
-                    </motion.div>
-                    <motion.div
-                      animate={
-                        active === "login"
-                          ? { height: "auto" }
-                          : { height: 0, opacity: 0 }
-                      }
-                    >
-                      <LoginForm
-                        setOpen={setOpen}
-                        setResetPassword={setResetPassword}
-                      />
-                    </motion.div>
-                    <motion.div
-                      animate={
-                        active === "register"
-                          ? { height: "auto", marginTop: "-15px" }
-                          : { height: 0, opacity: 0 }
-                      }
-                    >
-                      <RegisterForm setOpen={setOpen} />
-                    </motion.div>
-                  </CardContent>
-                </Card>
-                {/* </motion.div> */}
-                {/* <HomeParticle />
-                <ResetPassword
-                  openResetModal={openResetModal}
-                  setOpenResetModal={setOpenResetModal}
-                /> */}
-              </div>
-            </Dialog>
+              active={active}
+              setOpen={setOpen}
+              setActive={setActive}
+              setResetPassword={setResetPassword}
+            />
 
-            <Dialog
-              open={resetPassword}
-              onClose={() => setResetPassword(false)}
-              PaperProps={{
-                style: {
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                },
-              }}
-            >
-              <div className="wrapper">
-                {/* <motion.div
-                  initial={{ y: 400 }}
-                  animate={{ y: 0 }}
-                  className="form-body"
-                > */}
-                <Card className="card">
-                  <CardContent>
-                    <ResetPasswordForm setResetPassword={setResetPassword} />
-                  </CardContent>
-                </Card>
-              </div>
-            </Dialog>
+            <ResetPasswordDialog
+              resetPassword={resetPassword}
+              setResetPassword={setResetPassword}
+            />
           </Box>
         </Toolbar>
       </Container>
