@@ -150,15 +150,16 @@ class ApiStoreImplementation {
           this.ohlc.shift();
         }
         if (
-          this.candlesticks[this.candlesticks.length - 1].epoch ===
-          data.ohlc.epoch - data.ohlc.granularity + 1
+          data.ohlc.epoch -
+            this.candlesticks[this.candlesticks.length - 1].epoch ===
+          data.ohlc.granularity
         ) {
           console.log("before push", this.candlesticks);
           this.candlesticks = [
             ...this.candlesticks,
             {
               close: Number(data.ohlc.close),
-              epoch: data.ohlc.epoch + 1,
+              epoch: data.ohlc.epoch,
               high: Number(data.ohlc.high),
               low: Number(data.ohlc.low),
               open: Number(data.ohlc.open),
@@ -166,6 +167,14 @@ class ApiStoreImplementation {
           ];
           console.log("after push", this.candlesticks);
           console.log("data", data.ohlc);
+        } else {
+          this.candlesticks[this.candlesticks.length - 1] = {
+            close: Number(data.ohlc.close),
+            epoch: this.candlesticks[this.candlesticks.length - 1].epoch,
+            high: Number(data.ohlc.high),
+            low: Number(data.ohlc.low),
+            open: Number(data.ohlc.open),
+          };
         }
       });
     }

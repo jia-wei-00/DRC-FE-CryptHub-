@@ -117,10 +117,10 @@ const Action: React.FC = () => {
 
   if (apiStore.ohlc.length > 1) {
     previous_candles = {
-      open: apiStore.candlesticks[apiStore.candlesticks.length - 1].open,
-      high: apiStore.candlesticks[apiStore.candlesticks.length - 1].high,
-      low: apiStore.candlesticks[apiStore.candlesticks.length - 1].low,
-      close: apiStore.ohlc[apiStore.ohlc.length - 2].close,
+      open: apiStore.candlesticks[apiStore.candlesticks.length - 2].open,
+      high: apiStore.candlesticks[apiStore.candlesticks.length - 2].high,
+      low: apiStore.candlesticks[apiStore.candlesticks.length - 2].low,
+      close: apiStore.candlesticks[apiStore.candlesticks.length - 2].close,
     };
     current_candles = {
       open: apiStore.ohlc[apiStore.ohlc.length - 1].open,
