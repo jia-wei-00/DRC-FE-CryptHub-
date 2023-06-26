@@ -330,6 +330,7 @@ const Action: React.FC = () => {
             >
               <Remove />
             </IconButton>
+
             <TextField
               InputProps={{
                 endAdornment: (
@@ -340,7 +341,11 @@ const Action: React.FC = () => {
               type="number"
               variant="standard"
               value={inputPrice}
-              onChange={(e) => setInputPrice(Number(e.target.value))}
+              onChange={(e) => {
+                const pattern = /^0(?=\d)/;
+                e.target.value = e.target.value.replace(pattern, "");
+                setInputPrice(Number(e.target.value));
+              }}
               // error={}
               // helperText={}
             />

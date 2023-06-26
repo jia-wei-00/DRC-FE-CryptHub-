@@ -15,8 +15,8 @@ export const registerSchema: ZodType = object({
     .min(8, "Password must be more than 8 characters")
     .max(32, "Password must be less than 32 characters")
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/,
-      "Password must contain at least one lowercase letter, one uppercase letter, and one digit"
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).*$/,
+      "Password must contain at least one lowercase letter, one uppercase letter, one symbol, and one digit"
     ),
   passwordConfirm: string().nonempty("Please confirm your password"),
 }).refine((data) => data.password === data.passwordConfirm, {

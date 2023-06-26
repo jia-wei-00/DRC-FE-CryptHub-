@@ -29,6 +29,22 @@ function Nav() {
     null
   );
 
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const modalParam = urlParams.get("login");
+    const isModalOpen = modalParam === "true";
+
+    if (isModalOpen && authStore.user === null) {
+      setOpen(isModalOpen);
+
+      //remove url to open login modal
+      if (window.history && window.history.pushState) {
+        const newURL = window.location.href.split("?")[0];
+        window.history.pushState({}, document.title, newURL);
+      }
+    }
+  }, []);
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };

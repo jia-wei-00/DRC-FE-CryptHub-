@@ -38,11 +38,13 @@
       position: absolute;
       top: 0;
       left: 0;
-      transform: translate(5px, -120%);
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: $light-bg;
+
+      & > button {
+        background-color: $light-bg;
+      }
 
       &:focus {
         background-color: $light-bg;
@@ -86,7 +88,6 @@
     .show {
       display: grid;
       grid-template-columns: auto auto;
-      transition: $transition-all;
       padding-top: 10px;
     }
 

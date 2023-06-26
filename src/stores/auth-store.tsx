@@ -4,8 +4,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { auth, provider } from "../firebase";
 import {
   User,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   sendPasswordResetEmail,
@@ -139,8 +137,10 @@ export class AuthStoreImplementation {
       });
       setOpen(false);
     } catch (error: any) {
+      console.log("it comehere", error.message);
+
       toast.update(id, {
-        render: error.response.data.message,
+        render: error.message,
         type: "error",
         isLoading: false,
         autoClose: 5000,

@@ -2,6 +2,7 @@ import { makeObservable, action, observable, runInAction } from "mobx";
 import DerivAPIBasic from "https://cdn.skypack.dev/@deriv/deriv-api/dist/DerivAPIBasic";
 import { makePersistable } from "mobx-persist-store";
 import { Candlesticks, ChartData } from "../types";
+import { toast } from "react-toastify";
 
 class ApiStoreImplementation {
   chart_data: ChartData[] = [];
@@ -91,7 +92,9 @@ class ApiStoreImplementation {
     const data = JSON.parse(res.data);
 
     if (data.error !== undefined) {
-      console.log("Error: ", data.error.message);
+      toast.success(`Error: ${data.error.message}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
       this.connection?.removeEventListener("message", this.tickResponse, false);
       await this.api.disconnect();
     }
