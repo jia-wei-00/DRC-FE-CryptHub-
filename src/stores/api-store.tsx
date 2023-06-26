@@ -135,7 +135,6 @@ class ApiStoreImplementation {
 
     if (data.msg_type === "ohlc") {
       runInAction(() => {
-        console.log(data.ohlc);
         this.ohlc = [
           ...this.ohlc,
           {
@@ -154,7 +153,6 @@ class ApiStoreImplementation {
             this.candlesticks[this.candlesticks.length - 1].epoch ===
           data.ohlc.granularity
         ) {
-          console.log("before push", this.candlesticks);
           this.candlesticks = [
             ...this.candlesticks,
             {
@@ -165,8 +163,6 @@ class ApiStoreImplementation {
               open: Number(data.ohlc.open),
             },
           ];
-          console.log("after push", this.candlesticks);
-          console.log("data", data.ohlc);
         } else {
           this.candlesticks[this.candlesticks.length - 1] = {
             close: Number(data.ohlc.close),

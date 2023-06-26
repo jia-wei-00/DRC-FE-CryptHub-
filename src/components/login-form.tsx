@@ -48,7 +48,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
   }, [isSubmitSuccessful]);
 
   const onSubmitHandler: SubmitHandler<InputData> = (values) => {
-    authStore.signIn(values.email, values.password, props.setOpen);
+    authStore.signIn(values, props.setOpen);
   };
 
   return (

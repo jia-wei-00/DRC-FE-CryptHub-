@@ -45,24 +45,30 @@ export class AuthStoreImplementation {
   }
 
   async signIn(
-    email: string,
-    password: string,
+    values: InputData,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await axios.post(
+        "http://localhost:5000/user/loginUser",
+        values
+      );
       toast.update(id, {
-        render: "Welcome " + user.user.email,
+        render: "Welcome ",
         type: "success",
         isLoading: false,
         autoClose: 5000,
       });
-      this.user = user.user;
+      // this.user = user.user;
       setOpen(false);
     } catch (error: any) {
+      let message = error.message;
+      if (error.response.data.message === "ACCOUNT_NOT_VERIFIED") {
+        message = "Please check your email to verify your account";
+      }
       toast.update(id, {
-        render: error.message,
+        render: message,
         type: "error",
         isLoading: false,
         autoClose: 5000,
