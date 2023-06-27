@@ -29,9 +29,9 @@ export type Candlesticks = {
   epoch: EpochTimeStamp;
 };
 
-export type ResetPasswordDialogT = {
-  resetPassword: boolean;
-  setResetPassword: Dispatch<SetStateAction<boolean>>;
+export type ForgotPasswordDialogT = {
+  forgotPassword: boolean;
+  setForgotPassword: Dispatch<SetStateAction<boolean>>;
 };
 
 export type AuthDialogT = {
@@ -39,10 +39,24 @@ export type AuthDialogT = {
   active: string;
   setOpen: Dispatch<SetStateAction<boolean>>;
   setActive: Dispatch<SetStateAction<string>>;
-  setResetPassword: Dispatch<SetStateAction<boolean>>;
+  setForgotPassword: Dispatch<SetStateAction<boolean>>;
 };
 
 export type ChartSettingsT = {
   openSettings: boolean;
   setOpenSettings: Dispatch<SetStateAction<boolean>>;
+};
+
+export type ProfileT = {
+  openProfile: boolean;
+  setOpenProfile: Dispatch<SetStateAction<boolean>>;
+};
+
+export type User = {
+  BTC: number;
+  ETH: number;
+  USD: number;
+  email: string;
+  name: string;
+  token: string;
 };

@@ -19,12 +19,13 @@ import {
   Typography,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { AuthDialog, ResetPasswordDialog } from "./dialog";
+import { AuthDialog, ProfileDialog, ForgotPasswordDialog } from "./dialog";
 
 function Nav() {
   const [active, setActive] = React.useState<string>("login");
   const [open, setOpen] = React.useState<boolean>(false);
-  const [resetPassword, setResetPassword] = React.useState(false);
+  const [openProfile, setOpenProfile] = React.useState<boolean>(false);
+  const [forgotPassword, setForgotPassword] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -54,6 +55,10 @@ function Nav() {
 
     if (value === "Logout") {
       authStore.signOut();
+    }
+
+    if (value === "Profile") {
+      setOpenProfile(true);
     }
   };
 
@@ -130,10 +135,10 @@ function Nav() {
             >
               {settings.map((setting) => (
                 <MenuItem
-                  key={setting}
-                  onClick={() => handleCloseUserMenu(setting)}
+                  key={setting.title}
+                  onClick={() => handleCloseUserMenu(setting.title)}
                 >
-                  <Typography textAlign="center">{setting}</Typography>
+                  <Typography textAlign="center">{setting.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -143,12 +148,17 @@ function Nav() {
               active={active}
               setOpen={setOpen}
               setActive={setActive}
-              setResetPassword={setResetPassword}
+              setForgotPassword={setForgotPassword}
             />
 
-            <ResetPasswordDialog
-              resetPassword={resetPassword}
-              setResetPassword={setResetPassword}
+            <ForgotPasswordDialog
+              forgotPassword={forgotPassword}
+              setForgotPassword={setForgotPassword}
+            />
+
+            <ProfileDialog
+              openProfile={openProfile}
+              setOpenProfile={setOpenProfile}
             />
           </Box>
         </Toolbar>

@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -7,26 +8,35 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Tab,
+  Tabs,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
 } from "@mui/material";
-import ResetPasswordForm from "./forget-password";
-import { AuthDialogT, ChartSettingsT, ResetPasswordDialogT } from "../types";
+import {
+  AuthDialogT,
+  ChartSettingsT,
+  ForgotPasswordDialogT,
+  ProfileT,
+} from "../types";
 import { motion } from "framer-motion";
 import { apiStore, modeStore } from "../stores";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
 import { CandlestickChart, Timeline } from "@mui/icons-material";
 import { observer } from "mobx-react-lite";
+import React from "react";
+import ForgotPasswordForm from "./forget-password";
 
-export const ResetPasswordDialog: React.FC<ResetPasswordDialogT> = ({
-  resetPassword,
-  setResetPassword,
+export const ForgotPasswordDialog: React.FC<ForgotPasswordDialogT> = ({
+  forgotPassword,
+  setForgotPassword,
 }) => {
   return (
     <Dialog
-      open={resetPassword}
-      onClose={() => setResetPassword(false)}
+      open={forgotPassword}
+      onClose={() => setForgotPassword(false)}
       PaperProps={{
         style: {
           backgroundColor: "transparent",
@@ -42,7 +52,7 @@ export const ResetPasswordDialog: React.FC<ResetPasswordDialogT> = ({
                 > */}
         <Card className="card">
           <CardContent>
-            <ResetPasswordForm setResetPassword={setResetPassword} />
+            <ForgotPasswordForm setForgotPassword={setForgotPassword} />
           </CardContent>
         </Card>
       </div>
@@ -55,7 +65,7 @@ export const AuthDialog: React.FC<AuthDialogT> = ({
   setOpen,
   active,
   setActive,
-  setResetPassword,
+  setForgotPassword,
 }) => {
   return (
     <Dialog
@@ -98,7 +108,7 @@ export const AuthDialog: React.FC<AuthDialogT> = ({
             >
               <LoginForm
                 setOpen={setOpen}
-                setResetPassword={setResetPassword}
+                setResetPassword={setForgotPassword}
               />
             </motion.div>
             <motion.div
@@ -113,11 +123,6 @@ export const AuthDialog: React.FC<AuthDialogT> = ({
           </CardContent>
         </Card>
         {/* </motion.div> */}
-        {/* <HomeParticle />
-      <ResetPassword
-        openResetModal={openResetModal}
-        setOpenResetModal={setOpenResetModal}
-      /> */}
       </div>
     </Dialog>
   );
@@ -251,3 +256,109 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
     );
   }
 );
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `vertical-tab-${index}`,
+    "aria-controls": `vertical-tabpanel-${index}`,
+  };
+}
+
+export const ProfileDialog: React.FC<ProfileT> = ({
+  openProfile,
+  setOpenProfile,
+}) => {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Dialog
+      open={openProfile}
+      onClose={() => setOpenProfile(false)}
+      PaperProps={{
+        style: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        },
+      }}
+    >
+      <div className="wrapper">
+        {/* <motion.div
+                  initial={{ y: 400 }}
+                  animate={{ y: 0 }}
+                  className="form-body"
+                > */}
+        <Card className="card">
+          <CardContent>
+            <Tabs
+              orientation="vertical"
+              variant="scrollable"
+              value={value}
+              onChange={handleChange}
+              aria-label="Vertical tabs example"
+              sx={{ borderRight: 1, borderColor: "divider" }}
+            >
+              <Tab label="Item One" {...a11yProps(0)} />
+              <Tab label="Item Two" {...a11yProps(1)} />
+              <Tab label="Item Three" {...a11yProps(2)} />
+              <Tab label="Item Four" {...a11yProps(3)} />
+              <Tab label="Item Five" {...a11yProps(4)} />
+              <Tab label="Item Six" {...a11yProps(5)} />
+              <Tab label="Item Seven" {...a11yProps(6)} />
+            </Tabs>
+            <TabPanel value={value} index={0}>
+              Item One
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              Item Two
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              Item Three
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              Item Four
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+              Item Five
+            </TabPanel>
+            <TabPanel value={value} index={5}>
+              Item Six
+            </TabPanel>
+            <TabPanel value={value} index={6}>
+              Item Seven
+            </TabPanel>
+          </CardContent>
+        </Card>
+      </div>
+    </Dialog>
+  );
+};
