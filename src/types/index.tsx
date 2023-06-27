@@ -60,3 +60,9 @@ export type User = {
   name: string;
   token: string;
 };
+
+export type BuyTokenT = {
+  coin_currency: string;
+  current_price: number;
+  coin_amount: number;
+};

@@ -12,3 +12,5 @@ export const headers = (token: string) => {
     Authorization: "Bearer " + token,
   };
 };
+
+export const domain = "http://localhost:5000";

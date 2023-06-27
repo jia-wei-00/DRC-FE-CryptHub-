@@ -1,14 +1,12 @@
 import { makeObservable, action, observable } from "mobx";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { auth, provider } from "../firebase";
-import { signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 import { makePersistable } from "mobx-persist-store";
 import axios from "axios";
 import { InputData, ResetPassword, User } from "../types";
-import { headers } from "../constant";
+import { domain, headers } from "../constant";
 
-export class AuthStoreImplementation {
+class AuthStoreImplementation {
   user: User | null = null;
   login_modal = false;
 
@@ -39,7 +37,7 @@ export class AuthStoreImplementation {
     const id = toast.loading("Please wait...");
     try {
       const userCredential = await axios.post(
-        "http://localhost:5000/user/loginUser",
+        `${domain}/user/loginUser`,
         values
       );
       console.log(userCredential.data.details);
@@ -99,7 +97,7 @@ export class AuthStoreImplementation {
         headers: headers(this.user!.token),
       });
       await axios.post(
-        "http://localhost:5000/user/logoutUser",
+        `${domain}/user/logoutUser`,
         {}, //pass in empty body
         { headers: headers(this.user!.token) }
       );
@@ -129,7 +127,7 @@ export class AuthStoreImplementation {
     const id = toast.loading("Please wait...");
     try {
       const userCredential = await axios.post(
-        "http://localhost:5000/user/registerUser",
+        `${domain}/user/registerUser`,
         values
       );
       toast.update(id, {
@@ -160,7 +158,7 @@ export class AuthStoreImplementation {
   ): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      await axios.post("http://localhost:5000/user/forgotPassword", values);
+      await axios.post(`${domain}/user/forgotPassword`, values);
       toast.update(id, {
         render: `Check your email to reset password`,
         type: "success",
