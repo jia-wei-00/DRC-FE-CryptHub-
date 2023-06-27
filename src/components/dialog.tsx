@@ -21,7 +21,7 @@ import {
   ProfileT,
 } from "../types";
 import { motion } from "framer-motion";
-import { apiStore, modeStore } from "../stores";
+import { websocketStore, modeStore } from "../stores";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
 import { CandlestickChart, Timeline } from "@mui/icons-material";
@@ -135,7 +135,7 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
       type: string
     ) => {
       if (type === null) return;
-      apiStore.setChartType(type);
+      websocketStore.setChartType(type);
     };
 
     const handleChangeInterval = (
@@ -143,7 +143,7 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
       interval: string
     ) => {
       if (interval === null) return;
-      apiStore.changeSubscribedInterval(interval);
+      websocketStore.changeSubscribedInterval(interval);
     };
 
     const chart = [
@@ -154,7 +154,7 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
       <ToggleButton
         value="candles"
         key="candles"
-        disabled={apiStore.interval === "1t"}
+        disabled={websocketStore.interval === "1t"}
       >
         <CandlestickChart />
         Candle
@@ -165,7 +165,7 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
       <ToggleButton
         value="1t"
         key="1t"
-        disabled={apiStore.chart_type !== "line"}
+        disabled={websocketStore.chart_type !== "line"}
       >
         1 tick
       </ToggleButton>,
@@ -184,13 +184,13 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
     ];
 
     const controlChart = {
-      value: apiStore.chart_type,
+      value: websocketStore.chart_type,
       onChange: handleChangeChart,
       exclusive: true,
     };
 
     const controlInterval = {
-      value: apiStore.interval,
+      value: websocketStore.interval,
       onChange: handleChangeInterval,
       exclusive: true,
     };
@@ -216,9 +216,9 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
                 <Select
                   labelId="demo-simple-select-autowidth-label"
                   id="demo-simple-select-autowidth"
-                  value={apiStore.subscribe_currency}
+                  value={websocketStore.subscribe_currency}
                   onChange={(e) => {
-                    apiStore.changeSubscribedCurrency(e.target.value);
+                    websocketStore.changeSubscribedCurrency(e.target.value);
                   }}
                   label="Currency"
                 >

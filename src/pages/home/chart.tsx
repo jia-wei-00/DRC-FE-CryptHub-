@@ -1,21 +1,21 @@
 import React from "react";
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
-import { apiStore, modeStore } from "../../stores";
+import { websocketStore, modeStore } from "../../stores";
 import { observer } from "mobx-react-lite";
 import ReactLoading from "react-loading";
 
 const Chart: React.FC = () => {
   React.useEffect(() => {
-    apiStore.subscribeTicks();
+    websocketStore.subscribeTicks();
 
     return () => {
-      apiStore.unsubscribeTicks();
+      websocketStore.unsubscribeTicks();
     };
-  }, [apiStore.subscribe_currency]);
+  }, [websocketStore.subscribe_currency]);
 
-  const candlestickData = apiStore.candlesticks.map((candle) =>
-    apiStore.chart_type === "line"
+  const candlestickData = websocketStore.candlesticks.map((candle) =>
+    websocketStore.chart_type === "line"
       ? [candle.epoch * 1000, candle.close]
       : {
           x: candle.epoch * 1000,
@@ -31,14 +31,15 @@ const Chart: React.FC = () => {
       backgroundColor: "transparent",
     },
     tooltip:
-      apiStore.interval === "1t" || apiStore.chart_type === "candles"
+      websocketStore.interval === "1t" ||
+      websocketStore.chart_type === "candles"
         ? {}
         : {
             shared: true,
             formatter: function () {
               const index = this.point.index; // Accessing the index of the data point
 
-              const data = apiStore.candlesticks[index];
+              const data = websocketStore.candlesticks[index];
 
               // Generate the tooltip HTML content including the index
               const tooltipContent = `
@@ -65,7 +66,7 @@ const Chart: React.FC = () => {
       useUTC: false,
     },
     title: {
-      text: apiStore.subscribe_currency,
+      text: websocketStore.subscribe_currency,
       style: {
         color: modeStore.mode === "dark" ? "white" : "",
       },
@@ -108,17 +109,20 @@ const Chart: React.FC = () => {
     },
     series: [
       {
-        name: `${apiStore.subscribe_currency} / USD`,
-        type: apiStore.chart_type === "line" ? "line" : "candlestick",
+        name: `${websocketStore.subscribe_currency} / USD`,
+        type: websocketStore.chart_type === "line" ? "line" : "candlestick",
         color:
           modeStore.mode === "dark"
-            ? apiStore.chart_type === "line"
+            ? websocketStore.chart_type === "line"
               ? "white"
               : "grey"
             : "#A27B5C",
         data:
-          apiStore.interval === "1t"
-            ? apiStore.chart_data.map((item) => [item.time * 1000, item.price])
+          websocketStore.interval === "1t"
+            ? websocketStore.chart_data.map((item) => [
+                item.time * 1000,
+                item.price,
+              ])
             : candlestickData,
       },
     ],
@@ -126,8 +130,8 @@ const Chart: React.FC = () => {
 
   return (
     <>
-      {apiStore.chart_data.length === 0 &&
-      apiStore.candlesticks.length === 0 ? (
+      {websocketStore.chart_data.length === 0 &&
+      websocketStore.candlesticks.length === 0 ? (
         <div className="loading">
           <ReactLoading type="bars" height={"80px"} width={"80px"} />
         </div>

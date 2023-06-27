@@ -4,7 +4,7 @@ import { makePersistable } from "mobx-persist-store";
 import { Candlesticks, ChartData } from "../types";
 import { toast } from "react-toastify";
 
-class ApiStoreImplementation {
+class WebsocketStoreImplementation {
   chart_data: ChartData[] = [];
   candlesticks: Candlesticks[] = [];
   subscribe_currency: string = "BTC";
@@ -212,6 +212,6 @@ class ApiStoreImplementation {
   };
 }
 
-const apiStore = new ApiStoreImplementation();
+const websocketStore = new WebsocketStoreImplementation();
 
-export default apiStore;
+export default websocketStore;

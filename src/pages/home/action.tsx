@@ -12,7 +12,7 @@ import {
   ToggleButtonGroup,
 } from "@mui/material";
 import React from "react";
-import { apiStore } from "../../stores";
+import { websocketStore } from "../../stores";
 import { observer } from "mobx-react-lite";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
@@ -36,7 +36,7 @@ const Action: React.FC = () => {
     type: string
   ) => {
     if (type === null) return;
-    apiStore.setChartType(type);
+    websocketStore.setChartType(type);
   };
 
   const handleChangeInterval = (
@@ -44,7 +44,7 @@ const Action: React.FC = () => {
     interval: string
   ) => {
     if (interval === null) return;
-    apiStore.changeSubscribedInterval(interval);
+    websocketStore.changeSubscribedInterval(interval);
   };
 
   const chart = [
@@ -55,7 +55,7 @@ const Action: React.FC = () => {
     <ToggleButton
       value="candles"
       key="candles"
-      disabled={apiStore.interval === "1t"}
+      disabled={websocketStore.interval === "1t"}
     >
       <CandlestickChart />
       Candle
@@ -63,7 +63,11 @@ const Action: React.FC = () => {
   ];
 
   const interval = [
-    <ToggleButton value="1t" key="1t" disabled={apiStore.chart_type !== "line"}>
+    <ToggleButton
+      value="1t"
+      key="1t"
+      disabled={websocketStore.chart_type !== "line"}
+    >
       1 tick
     </ToggleButton>,
     <ToggleButton value="60" key="1m">
@@ -81,13 +85,13 @@ const Action: React.FC = () => {
   ];
 
   const controlChart = {
-    value: apiStore.chart_type,
+    value: websocketStore.chart_type,
     onChange: handleChangeChart,
     exclusive: true,
   };
 
   const controlInterval = {
-    value: apiStore.interval,
+    value: websocketStore.interval,
     onChange: handleChangeInterval,
     exclusive: true,
   };
@@ -108,25 +112,32 @@ const Action: React.FC = () => {
     close: 0,
   };
 
-  if (apiStore.chart_data.length > 0) {
+  if (websocketStore.chart_data.length > 0) {
     before_previous_price =
-      apiStore.chart_data[apiStore.chart_data.length - 3].price;
-    previous_price = apiStore.chart_data[apiStore.chart_data.length - 2].price;
-    current_price = apiStore.chart_data[apiStore.chart_data.length - 1].price;
+      websocketStore.chart_data[websocketStore.chart_data.length - 3].price;
+    previous_price =
+      websocketStore.chart_data[websocketStore.chart_data.length - 2].price;
+    current_price =
+      websocketStore.chart_data[websocketStore.chart_data.length - 1].price;
   }
 
-  if (apiStore.ohlc.length > 1) {
+  if (websocketStore.ohlc.length > 1) {
     previous_candles = {
-      open: apiStore.candlesticks[apiStore.candlesticks.length - 2].open,
-      high: apiStore.candlesticks[apiStore.candlesticks.length - 2].high,
-      low: apiStore.candlesticks[apiStore.candlesticks.length - 2].low,
-      close: apiStore.candlesticks[apiStore.candlesticks.length - 2].close,
+      open: websocketStore.candlesticks[websocketStore.candlesticks.length - 2]
+        .open,
+      high: websocketStore.candlesticks[websocketStore.candlesticks.length - 2]
+        .high,
+      low: websocketStore.candlesticks[websocketStore.candlesticks.length - 2]
+        .low,
+      close:
+        websocketStore.candlesticks[websocketStore.candlesticks.length - 2]
+          .close,
     };
     current_candles = {
-      open: apiStore.ohlc[apiStore.ohlc.length - 1].open,
-      high: apiStore.ohlc[apiStore.ohlc.length - 1].high,
-      low: apiStore.ohlc[apiStore.ohlc.length - 1].low,
-      close: apiStore.ohlc[apiStore.ohlc.length - 1].close,
+      open: websocketStore.ohlc[websocketStore.ohlc.length - 1].open,
+      high: websocketStore.ohlc[websocketStore.ohlc.length - 1].high,
+      low: websocketStore.ohlc[websocketStore.ohlc.length - 1].low,
+      close: websocketStore.ohlc[websocketStore.ohlc.length - 1].close,
     };
   }
 
@@ -141,9 +152,9 @@ const Action: React.FC = () => {
             <Select
               labelId="demo-simple-select-autowidth-label"
               id="demo-simple-select-autowidth"
-              value={apiStore.subscribe_currency}
+              value={websocketStore.subscribe_currency}
               onChange={(e) => {
-                apiStore.changeSubscribedCurrency(e.target.value);
+                websocketStore.changeSubscribedCurrency(e.target.value);
               }}
               label="Currency"
             >
@@ -176,7 +187,7 @@ const Action: React.FC = () => {
           </ToggleButtonGroup>
         </div>
 
-        {apiStore.chart_data.length > 0 && (
+        {websocketStore.chart_data.length > 0 && (
           <div className="details">
             <div
               className="arrow-up"
@@ -228,7 +239,7 @@ const Action: React.FC = () => {
           </div>
         )}
 
-        {apiStore.interval !== "1t" && apiStore.ohlc.length > 1 && (
+        {websocketStore.interval !== "1t" && websocketStore.ohlc.length > 1 && (
           <div className="details">
             <div
               className="arrow-up"
