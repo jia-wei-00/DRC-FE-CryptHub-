@@ -26,6 +26,7 @@ import {
   Timeline,
   TrendingFlat,
 } from "@mui/icons-material";
+import tradeStore from "../../stores/trade-store";
 
 const Action: React.FC = () => {
   const [inputPrice, setInputPrice] = React.useState<number>(0);
@@ -367,7 +368,11 @@ const Action: React.FC = () => {
               <Add />
             </IconButton>
           </div>
-          <Button variant="contained" color="success">
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => tradeStore.buyToken()}
+          >
             BUY
             <svg
               xmlns="http://www.w3.org/2000/svg"
