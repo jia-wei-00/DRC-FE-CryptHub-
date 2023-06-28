@@ -8,14 +8,15 @@ import { domain, headers } from "../constant";
 
 class AuthStoreImplementation {
   user: User | null = null;
-  login_modal = false;
+  auth_modal = false;
 
   constructor() {
     makeObservable(this, {
       user: observable,
-      login_modal: observable,
+      auth_modal: observable,
       setUser: action.bound,
       signOut: action.bound,
+      setAuthModal: action.bound,
     });
 
     // Make the store persistable
@@ -26,14 +27,15 @@ class AuthStoreImplementation {
     });
   }
 
+  setAuthModal(value: boolean) {
+    this.auth_modal = value;
+  }
+
   setUser = (authUser: User | null): void => {
     this.user = authUser;
   };
 
-  async signIn(
-    values: InputData,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  ): Promise<void> {
+  async signIn(values: InputData): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
       const userCredential = await axios.post(
@@ -43,7 +45,7 @@ class AuthStoreImplementation {
       console.log(userCredential.data.details);
       this.user = userCredential.data.details;
       console.log(this.user);
-      setOpen(false);
+      this.setAuthModal(false);
       toast.update(id, {
         render: `Welcome ${this.user!.name}`,
         type: "success",
@@ -120,10 +122,7 @@ class AuthStoreImplementation {
     }
   }
 
-  async signUp(
-    values: InputData,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  ): Promise<void> {
+  async signUp(values: InputData): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
       const userCredential = await axios.post(
@@ -136,7 +135,7 @@ class AuthStoreImplementation {
         isLoading: false,
         autoClose: 5000,
       });
-      setOpen(false);
+      this.setAuthModal(false);
     } catch (error: any) {
       let message = error.message;
       if (error.response) {

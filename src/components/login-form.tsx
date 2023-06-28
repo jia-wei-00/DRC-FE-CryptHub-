@@ -24,7 +24,6 @@ import {
 import "../styles/components/login-form.scss";
 
 interface LoginFormProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setResetPassword: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -48,7 +47,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
   }, [isSubmitSuccessful]);
 
   const onSubmitHandler: SubmitHandler<InputData> = (values) => {
-    authStore.signIn(values, props.setOpen);
+    authStore.signIn(values);
   };
 
   return (

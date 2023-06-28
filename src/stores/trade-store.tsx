@@ -14,13 +14,15 @@ class TradeStoreImplementation {
 
   //   {coin_currency, current_price, coin_amount}
 
-  async buyToken(amount: number): Promise<void> {
+  async buyToken(current_price: Number, input_price: Number): Promise<void> {
     const id = toast.loading("Please wait...");
 
+    // console.log(current_price, input_price);
+
     const values = {
-      // coin_currency: websocketStore.subscribe_currency,
-      // current_price: websocketStore.
-      // coin_amount:
+      coin_currency: websocketStore.subscribe_currency,
+      current_price: current_price,
+      coin_amount: input_price,
     };
 
     try {

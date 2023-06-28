@@ -3,3 +3,8 @@
   flex-direction: column;
   flex-wrap: wrap;
 }
+
+.buy-sell-btn {
+  display: flex !important;
+  justify-content: space-between !important;
+}

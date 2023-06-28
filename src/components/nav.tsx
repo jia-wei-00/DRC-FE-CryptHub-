@@ -23,7 +23,6 @@ import { AuthDialog, ProfileDialog, ForgotPasswordDialog } from "./dialog";
 
 function Nav() {
   const [active, setActive] = React.useState<string>("login");
-  const [open, setOpen] = React.useState<boolean>(false);
   const [openProfile, setOpenProfile] = React.useState<boolean>(false);
   const [forgotPassword, setForgotPassword] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -36,7 +35,7 @@ function Nav() {
     const isModalOpen = modalParam === "true";
 
     if (isModalOpen && authStore.user === null) {
-      setOpen(isModalOpen);
+      authStore.setAuthModal(true);
 
       //remove url to open login modal
       if (window.history && window.history.pushState) {
@@ -112,7 +111,10 @@ function Nav() {
                   </Tooltip>
                 </>
               ) : (
-                <Button onClick={() => setOpen(!open)} variant="contained">
+                <Button
+                  onClick={() => authStore.setAuthModal(!authStore.auth_modal)}
+                  variant="contained"
+                >
                   Login
                 </Button>
               )}
@@ -144,9 +146,7 @@ function Nav() {
             </Menu>
 
             <AuthDialog
-              open={open}
               active={active}
-              setOpen={setOpen}
               setActive={setActive}
               setForgotPassword={setForgotPassword}
             />

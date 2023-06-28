@@ -16,9 +16,9 @@ const Chart: React.FC = () => {
 
   const candlestickData = websocketStore.candlesticks.map((candle) =>
     websocketStore.chart_type === "line"
-      ? [candle.epoch * 1000, candle.close]
+      ? [candle.epoch! * 1000, candle.close]
       : {
-          x: candle.epoch * 1000,
+          x: candle.epoch! * 1000,
           open: candle.open,
           high: candle.high,
           low: candle.low,

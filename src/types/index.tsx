@@ -26,7 +26,7 @@ export type Candlesticks = {
   high: number;
   low: number;
   close: number;
-  epoch: EpochTimeStamp;
+  epoch?: EpochTimeStamp;
 };
 
 export type ForgotPasswordDialogT = {
@@ -35,9 +35,7 @@ export type ForgotPasswordDialogT = {
 };
 
 export type AuthDialogT = {
-  open: boolean;
   active: string;
-  setOpen: Dispatch<SetStateAction<boolean>>;
   setActive: Dispatch<SetStateAction<string>>;
   setForgotPassword: Dispatch<SetStateAction<boolean>>;
 };
@@ -65,4 +63,13 @@ export type BuyTokenT = {
   coin_currency: string;
   current_price: number;
   coin_amount: number;
+};
+
+export type PriceT = {
+  price: number;
+};
+
+export type BuySellBoxT = {
+  current_price: number;
+  current_candles: Candlesticks;
 };

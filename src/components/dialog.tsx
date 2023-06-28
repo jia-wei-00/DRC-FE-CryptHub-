@@ -21,7 +21,7 @@ import {
   ProfileT,
 } from "../types";
 import { motion } from "framer-motion";
-import { websocketStore, modeStore } from "../stores";
+import { websocketStore, modeStore, authStore } from "../stores";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
 import { CandlestickChart, Timeline } from "@mui/icons-material";
@@ -60,73 +60,66 @@ export const ForgotPasswordDialog: React.FC<ForgotPasswordDialogT> = ({
   );
 };
 
-export const AuthDialog: React.FC<AuthDialogT> = ({
-  open,
-  setOpen,
-  active,
-  setActive,
-  setForgotPassword,
-}) => {
-  return (
-    <Dialog
-      open={open}
-      onClose={() => setOpen(false)}
-      PaperProps={{
-        style: {
-          backgroundColor: "transparent",
-          boxShadow: "none",
-        },
-      }}
-    >
-      <div className="wrapper">
-        {/* <motion.div
+export const AuthDialog: React.FC<AuthDialogT> = observer(
+  ({ active, setActive, setForgotPassword }) => {
+    return (
+      <Dialog
+        open={authStore.auth_modal}
+        onClose={() => authStore.setAuthModal(false)}
+        PaperProps={{
+          style: {
+            backgroundColor: "transparent",
+            boxShadow: "none",
+          },
+        }}
+      >
+        <div className="wrapper">
+          {/* <motion.div
         initial={{ y: 400 }}
         animate={{ y: 0 }}
         className="form-body"
       > */}
-        <Card className="card">
-          <CardContent>
-            <motion.div className="btn-group">
-              <Button onClick={() => setActive("login")}>Login</Button>
-              <Button onClick={() => setActive("register")}>Register</Button>
+          <Card className="card">
+            <CardContent>
+              <motion.div className="btn-group">
+                <Button onClick={() => setActive("login")}>Login</Button>
+                <Button onClick={() => setActive("register")}>Register</Button>
+                <motion.div
+                  animate={active === "register" ? { x: "100%" } : { x: 0 }}
+                  className="indicator"
+                  style={
+                    modeStore.mode === "dark"
+                      ? { backgroundColor: "rgba(255, 255, 255, 0.9)" }
+                      : { backgroundColor: "#f6e6cb" }
+                  }
+                />
+              </motion.div>
               <motion.div
-                animate={active === "register" ? { x: "100%" } : { x: 0 }}
-                className="indicator"
-                style={
-                  modeStore.mode === "dark"
-                    ? { backgroundColor: "rgba(255, 255, 255, 0.9)" }
-                    : { backgroundColor: "#f6e6cb" }
+                animate={
+                  active === "login"
+                    ? { height: "auto" }
+                    : { height: 0, opacity: 0 }
                 }
-              />
-            </motion.div>
-            <motion.div
-              animate={
-                active === "login"
-                  ? { height: "auto" }
-                  : { height: 0, opacity: 0 }
-              }
-            >
-              <LoginForm
-                setOpen={setOpen}
-                setResetPassword={setForgotPassword}
-              />
-            </motion.div>
-            <motion.div
-              animate={
-                active === "register"
-                  ? { height: "auto", marginTop: "-15px" }
-                  : { height: 0, opacity: 0 }
-              }
-            >
-              <RegisterForm setOpen={setOpen} />
-            </motion.div>
-          </CardContent>
-        </Card>
-        {/* </motion.div> */}
-      </div>
-    </Dialog>
-  );
-};
+              >
+                <LoginForm setResetPassword={setForgotPassword} />
+              </motion.div>
+              <motion.div
+                animate={
+                  active === "register"
+                    ? { height: "auto", marginTop: "-15px" }
+                    : { height: 0, opacity: 0 }
+                }
+              >
+                <RegisterForm />
+              </motion.div>
+            </CardContent>
+          </Card>
+          {/* </motion.div> */}
+        </div>
+      </Dialog>
+    );
+  }
+);
 
 export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
   ({ openSettings, setOpenSettings }) => {

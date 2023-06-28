@@ -135,7 +135,7 @@
     row-gap: 20px;
   }
 
-  & > form > .side-bar-input {
+  & > .side-bar-input {
     display: grid;
     row-gap: 10px;
 
@@ -206,5 +206,53 @@
     svg {
       color: $third-color;
     }
+  }
+}
+
+.card {
+  background-color: $main-color-d;
+  padding: 15px;
+  border-radius: 20px;
+  box-shadow: $box-shadow;
+
+  & > .buy-sell-toggle {
+    position: relative;
+    display: flex;
+
+    & > button {
+      flex-grow: 1;
+      z-index: 2;
+    }
+  }
+
+  .amount {
+    display: flex;
+    margin: 20px 0 10px 0;
+
+    input {
+      text-align: center;
+    }
+  }
+
+  .side-bar-input {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    margin: 10px 0;
+  }
+
+  .indicator {
+    position: absolute;
+    // background-color: rgba(255, 255, 255, 0.9);
+    height: 100%;
+    border-radius: 5px;
+    width: 50%;
+    left: 0;
+  }
+}
+
+#light {
+  .card {
+    background-color: $light-bg;
   }
 }

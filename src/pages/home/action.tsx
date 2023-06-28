@@ -1,13 +1,8 @@
 import {
-  Box,
-  Button,
   FormControl,
-  IconButton,
-  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
@@ -18,20 +13,22 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import "../../styles/components/action.scss";
 import {
-  Add,
   CandlestickChart,
   KeyboardArrowDown,
   KeyboardArrowUp,
-  Remove,
   Timeline,
   TrendingFlat,
 } from "@mui/icons-material";
-import tradeStore from "../../stores/trade-store";
+import BuySellBox from "./buy-sell-box";
 
 const Action: React.FC = () => {
-  const [inputPrice, setInputPrice] = React.useState<number>(0);
   const [openDetails, setOpenDetails] = React.useState<boolean>(false);
 
+  let before_previous_price = 0;
+  let previous_price = 0;
+  let current_price = 0;
+
+  //function for change chart type
   const handleChangeChart = (
     event: React.MouseEvent<HTMLElement>,
     type: string
@@ -40,6 +37,7 @@ const Action: React.FC = () => {
     websocketStore.setChartType(type);
   };
 
+  //function for change chart interval
   const handleChangeInterval = (
     event: React.MouseEvent<HTMLElement>,
     interval: string
@@ -48,6 +46,7 @@ const Action: React.FC = () => {
     websocketStore.changeSubscribedInterval(interval);
   };
 
+  //toggle button for chart type
   const chart = [
     <ToggleButton value="line" key="line">
       <Timeline />
@@ -63,6 +62,7 @@ const Action: React.FC = () => {
     </ToggleButton>,
   ];
 
+  //toggle button for chart interval
   const interval = [
     <ToggleButton
       value="1t"
@@ -85,21 +85,20 @@ const Action: React.FC = () => {
     </ToggleButton>,
   ];
 
+  //chart type props settings
   const controlChart = {
     value: websocketStore.chart_type,
     onChange: handleChangeChart,
     exclusive: true,
   };
 
+  //chart interval props settings
   const controlInterval = {
     value: websocketStore.interval,
     onChange: handleChangeInterval,
     exclusive: true,
   };
 
-  let before_previous_price = 0;
-  let previous_price = 0;
-  let current_price = 0;
   let current_candles = {
     open: 0,
     high: 0,
@@ -113,6 +112,7 @@ const Action: React.FC = () => {
     close: 0,
   };
 
+  //get price for ticks
   if (websocketStore.chart_data.length > 0) {
     before_previous_price =
       websocketStore.chart_data[websocketStore.chart_data.length - 3].price;
@@ -122,6 +122,7 @@ const Action: React.FC = () => {
       websocketStore.chart_data[websocketStore.chart_data.length - 1].price;
   }
 
+  //get price for chart with interval
   if (websocketStore.ohlc.length > 1) {
     previous_candles = {
       open: websocketStore.candlesticks[websocketStore.candlesticks.length - 2]
@@ -330,79 +331,10 @@ const Action: React.FC = () => {
           </div>
         )}
       </div>
-      <form action="">
-        <div className="side-bar-input">
-          <div className="amount">
-            <IconButton
-              aria-label="delete"
-              onClick={() => {
-                if (inputPrice <= 0) return;
-                setInputPrice(inputPrice - 1);
-              }}
-            >
-              <Remove />
-            </IconButton>
-
-            <TextField
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">USD</InputAdornment>
-                ),
-              }}
-              sx={{ flex: 1 }}
-              type="number"
-              variant="standard"
-              value={inputPrice}
-              onChange={(e) => {
-                const pattern = /^0(?=\d)/;
-                e.target.value = e.target.value.replace(pattern, "");
-                setInputPrice(Number(e.target.value));
-              }}
-              // error={}
-              // helperText={}
-            />
-            <IconButton
-              aria-label="delete"
-              onClick={() => setInputPrice(inputPrice + 1)}
-            >
-              <Add />
-            </IconButton>
-          </div>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => tradeStore.buyToken()}
-          >
-            BUY
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="m12 1.75l-6.25 10.5L12 16l6.25-3.75L12 1.75M5.75 13.5L12 22.25l6.25-8.75L12 17.25L5.75 13.5Z"
-              />
-            </svg>
-          </Button>
-          <Button variant="contained" color="error">
-            SELL
-            {inputPrice / current_candles.close}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="m12 1.75l-6.25 10.5L12 16l6.25-3.75L12 1.75M5.75 13.5L12 22.25l6.25-8.75L12 17.25L5.75 13.5Z"
-              />
-            </svg>
-          </Button>
-        </div>
-      </form>
+      <BuySellBox
+        current_price={current_price}
+        current_candles={current_candles}
+      />
     </div>
   );
 };
