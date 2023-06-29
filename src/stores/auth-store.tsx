@@ -17,6 +17,7 @@ class AuthStoreImplementation {
       setUser: action.bound,
       signOut: action.bound,
       setAuthModal: action.bound,
+      reset: action.bound,
     });
 
     // Make the store persistable
@@ -27,12 +28,19 @@ class AuthStoreImplementation {
     });
   }
 
+  reset() {
+    this.user = null;
+    this.auth_modal = true;
+  }
+
   setAuthModal(value: boolean) {
     this.auth_modal = value;
   }
 
   setUser = (authUser: User | null): void => {
-    this.user = authUser;
+    authUser === null
+      ? (this.user = null)
+      : (this.user = { ...this.user, ...authUser! });
   };
 
   async signIn(values: InputData): Promise<void> {
@@ -96,12 +104,12 @@ class AuthStoreImplementation {
     const id = toast.loading("Please wait...");
     try {
       console.log({
-        headers: headers(this.user!.token),
+        headers: headers(this.user!.token!),
       });
       await axios.post(
         `${domain}/user/logoutUser`,
         {}, //pass in empty body
-        { headers: headers(this.user!.token) }
+        { headers: headers(this.user!.token!) }
       );
 
       toast.update(id, {

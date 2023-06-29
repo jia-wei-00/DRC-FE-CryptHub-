@@ -88,7 +88,7 @@
     .show {
       display: grid;
       grid-template-columns: auto auto;
-      padding-top: 10px;
+      padding: 20px 0;
     }
 
     .arrow-up {
@@ -120,6 +120,9 @@
     bottom: 0;
     left: 0;
     right: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
   }
 }
 
@@ -154,6 +157,11 @@
     @media only screen and (max-width: 1023px) {
       height: 150px;
     }
+  }
+
+  @media only screen and (max-width: 1023px) {
+    height: 100%;
+    flex-grow: 1;
   }
 }
 
@@ -232,13 +240,20 @@
     input {
       text-align: center;
     }
+
+    @media only screen and (max-width: 1023px) {
+      margin: 10px 0 0 0;
+
+      & > div {
+        flex-grow: 1;
+      }
+    }
   }
 
   .side-bar-input {
     display: flex;
     flex-direction: column;
     row-gap: 10px;
-    margin: 10px 0;
   }
 
   .indicator {
@@ -249,10 +264,21 @@
     width: 50%;
     left: 0;
   }
+
+  @media only screen and (max-width: 1023px) {
+    box-shadow: none;
+    padding: 0;
+  }
 }
 
 #light {
   .card {
     background-color: $light-bg;
+  }
+
+  .buy-sell-toggle {
+    button {
+      color: $black;
+    }
   }
 }

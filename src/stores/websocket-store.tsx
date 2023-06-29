@@ -92,7 +92,7 @@ class WebsocketStoreImplementation {
     const data = JSON.parse(res.data);
 
     if (data.error !== undefined) {
-      toast.success(`Error: ${data.error.message}`, {
+      toast.error(`Error: ${data.error.message}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
       this.connection?.removeEventListener("message", this.tickResponse, false);
@@ -153,7 +153,7 @@ class WebsocketStoreImplementation {
         }
         if (
           data.ohlc.epoch -
-            this.candlesticks[this.candlesticks.length - 1].epoch ===
+            this.candlesticks[this.candlesticks.length - 1].epoch! ===
           data.ohlc.granularity
         ) {
           this.candlesticks = [

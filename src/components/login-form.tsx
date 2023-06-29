@@ -2,7 +2,7 @@ import * as React from "react";
 import { authStore } from "../stores";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../schemas/login-page-schemas";
-import { InputData } from "../types";
+import { InputData, LoginFormProps } from "../types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import {
@@ -22,10 +22,6 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import "../styles/components/login-form.scss";
-
-interface LoginFormProps {
-  setResetPassword: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
 const LoginForm: React.FC<LoginFormProps> = (props) => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);

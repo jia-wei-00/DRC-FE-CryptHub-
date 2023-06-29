@@ -4,7 +4,8 @@ import React from "react";
 import { authStore, modeStore, websocketStore } from "../../stores";
 import { BuySellBoxT } from "../../types";
 import tradeStore from "../../stores/trade-store";
-import { Add, Remove } from "@mui/icons-material";
+import { Add, AttachMoney, CurrencyBitcoin, Remove } from "@mui/icons-material";
+import { BTCIcon, ETHIcon } from "../../assets/icons";
 
 const BuySellBox: React.FC<BuySellBoxT> = ({
   current_price,
@@ -28,8 +29,9 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
     websocketStore.interval === "1t" ? current_price : current_candles.close;
   //get the coin based on USD input
   const buy_coin = price === 0 ? 0 : input / price;
+  const sell_coin = price === 0 ? 0 : input * price;
 
-  //function for buy token
+  //function for buy and sell token
   const buySellHandler = () => {
     if (!authStore.user) {
       return authStore.setAuthModal(true);
@@ -37,12 +39,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
 
     active === "buy"
       ? tradeStore.buyToken(price, buy_coin)
-      : tradeStore.sellToken();
-  };
-
-  //function for sell token
-  const sellHandler = () => {
-    // tradeStore.sellToken(price, buy_coin);
+      : tradeStore.sellToken(price, input);
   };
 
   return (
@@ -107,22 +104,20 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
             variant="contained"
             color={active === "buy" ? "success" : "error"}
             className="buy-sell-btn"
-            disabled={price <= 0}
+            disabled={buy_coin <= 0}
             onClick={buySellHandler}
           >
             <span>{active === "buy" ? "BUY" : "SELL"}</span>
-            {buy_coin.toFixed(8)}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="m12 1.75l-6.25 10.5L12 16l6.25-3.75L12 1.75M5.75 13.5L12 22.25l6.25-8.75L12 17.25L5.75 13.5Z"
-              />
-            </svg>
+            {active === "buy" ? buy_coin.toFixed(8) : sell_coin}
+            {active === "buy" ? (
+              websocketStore.subscribe_currency === "ETH" ? (
+                ETHIcon
+              ) : (
+                BTCIcon
+              )
+            ) : (
+              <AttachMoney />
+            )}
           </Button>
         </div>
       </motion.div>

@@ -80,6 +80,17 @@ export const lightTheme = createTheme({
         },
       },
     },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              border: "1px solid rgba(0,0,0,0.3)",
+            },
+          },
+        },
+      },
+    },
   },
   typography: {
     fontFamily: "poppins",

@@ -11,9 +11,12 @@ import {
   Box,
   Button,
   Container,
+  FormControl,
   IconButton,
+  InputLabel,
   Menu,
   MenuItem,
+  Select,
   Toolbar,
   Tooltip,
   Typography,
@@ -28,6 +31,8 @@ function Nav() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  console.log(authStore.user);
 
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -95,6 +100,32 @@ function Nav() {
               </Link>
             ))}
           </Box>
+
+          <button onClick={() => authStore.reset()}>RESET</button>
+
+          <FormControl
+            sx={{
+              m: 1,
+              minWidth: 120,
+              "&:focus": {
+                color: "white", // Set the focus color here
+                outlineColor: "white",
+              },
+            }}
+            size="small"
+          >
+            <InputLabel id="demo-simple-select-label">WALLET</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Currency"
+              defaultValue={0}
+            >
+              <MenuItem value={0}>{authStore.user?.USD} USD</MenuItem>
+              <MenuItem value={1}>{authStore.user?.ETH} ETH</MenuItem>
+              <MenuItem value={2}>{authStore.user?.BTC} BTC</MenuItem>
+            </Select>
+          </FormControl>
 
           <Box>
             <div className="nav-end">

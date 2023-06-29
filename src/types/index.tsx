@@ -54,9 +54,9 @@ export type User = {
   BTC: number;
   ETH: number;
   USD: number;
-  email: string;
-  name: string;
-  token: string;
+  email?: string;
+  name?: string;
+  token?: string;
 };
 
 export type BuyTokenT = {
@@ -72,4 +72,8 @@ export type PriceT = {
 export type BuySellBoxT = {
   current_price: number;
   current_candles: Candlesticks;
+};
+
+export type LoginFormProps = {
+  setResetPassword: React.Dispatch<React.SetStateAction<boolean>>;
 };
