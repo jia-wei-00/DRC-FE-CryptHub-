@@ -7,11 +7,16 @@ import ReactLoading from "react-loading";
 
 const Chart: React.FC = () => {
   React.useEffect(() => {
-    websocketStore.subscribeTicks();
+    if (
+      websocketStore.chart_data.length === 0 &&
+      websocketStore.candlesticks.length === 0
+    ) {
+      websocketStore.subscribeTicks();
+    }
 
-    return () => {
-      websocketStore.unsubscribeTicks();
-    };
+    // return () => {
+    //   websocketStore.unsubscribeTicks();
+    // };
   }, [websocketStore.subscribe_currency]);
 
   const candlestickData = websocketStore.candlesticks.map((candle) =>

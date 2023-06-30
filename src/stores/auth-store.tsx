@@ -8,16 +8,19 @@ import { domain, headers } from "../constant";
 
 class AuthStoreImplementation {
   user: User | null = null;
-  auth_modal = false;
+  auth_modal: boolean = false;
+  transaction: any = [];
 
   constructor() {
     makeObservable(this, {
       user: observable,
       auth_modal: observable,
+      transaction: observable,
       setUser: action.bound,
       signOut: action.bound,
       setAuthModal: action.bound,
       reset: action.bound,
+      fetchTransaction: action.bound,
     });
 
     // Make the store persistable
@@ -78,27 +81,42 @@ class AuthStoreImplementation {
     }
   }
 
-  // async googleSignIn(): Promise<void> {
-  //   const id = toast.loading("Please wait...");
-  //   try {
-  //     const signIn = await signInWithPopup(auth, provider);
-  //     toast.update(id, {
-  //       render: "Welcome " + signIn.user.email,
-  //       type: "success",
-  //       isLoading: false,
-  //       autoClose: 5000,
-  //     });
-  //     this.setUser(signIn.user);
-  //     this.setUsername(signIn.user.displayName!);
-  //   } catch (error: any) {
-  //     toast.update(id, {
-  //       render: error.message,
-  //       type: "error",
-  //       isLoading: false,
-  //       autoClose: 5000,
-  //     });
-  //   }
-  // }
+  async deposit(): Promise<void> {
+    const id = toast.loading("Please wait...");
+
+    const values = {
+      amount: 1000,
+    };
+
+    try {
+      const res = await axios.post(`${domain}/wallet/walletDeposit`, values, {
+        headers: headers(this.user!.token!),
+      });
+
+      toast.update(id, {
+        render: "Successfully Deposited",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+      });
+
+      console.log(res);
+
+      this.user!.USD += values.amount;
+    } catch (error: any) {
+      let message = error.message;
+      if (error.response) {
+        message = error.response.data.message;
+      }
+
+      toast.update(id, {
+        render: message,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
+    }
+  }
 
   async signOut(): Promise<void> {
     const id = toast.loading("Please wait...");
@@ -173,6 +191,33 @@ class AuthStoreImplementation {
         autoClose: 5000,
       });
       setForgotPassword(false);
+    } catch (error: any) {
+      let message = error.message;
+      if (error.response) {
+        message = error.response.data.message;
+      }
+      toast.update(id, {
+        render: message,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
+    }
+  }
+
+  async fetchTransaction(): Promise<void> {
+    const id = toast.loading("Please wait...");
+    try {
+      const res = await axios.get(`${domain}/transaction/getAllTransactions`, {
+        headers: headers(this.user!.token!),
+      });
+      console.log(res);
+      toast.update(id, {
+        render: `Success`,
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+      });
     } catch (error: any) {
       let message = error.message;
       if (error.response) {

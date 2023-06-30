@@ -1,7 +1,7 @@
 import * as React from "react";
 import { authStore } from "../stores";
 import { pages, settings } from "../constant";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/components/nav.scss";
 import CustomizedSwitches from "./theme-toggle";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -11,6 +11,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   FormControl,
   IconButton,
   InputLabel,
@@ -22,17 +23,30 @@ import {
   Typography,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { AuthDialog, ProfileDialog, ForgotPasswordDialog } from "./dialog";
+import { AuthDialog, ForgotPasswordDialog } from "./dialog";
+
+const DepositOption = () => {
+  const handleDepositClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    // event.stopPropagation();
+    authStore.deposit();
+  };
+
+  return (
+    <Button className="deposit" onClick={handleDepositClick}>
+      Deposit
+    </Button>
+  );
+};
 
 function Nav() {
   const [active, setActive] = React.useState<string>("login");
-  const [openProfile, setOpenProfile] = React.useState<boolean>(false);
   const [forgotPassword, setForgotPassword] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
 
-  console.log(authStore.user);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -62,7 +76,7 @@ function Nav() {
     }
 
     if (value === "Profile") {
-      setOpenProfile(true);
+      navigate("/profile");
     }
   };
 
@@ -103,27 +117,15 @@ function Nav() {
 
           <button onClick={() => authStore.reset()}>RESET</button>
 
-          <FormControl
-            sx={{
-              m: 1,
-              minWidth: 120,
-              "&:focus": {
-                color: "white", // Set the focus color here
-                outlineColor: "white",
-              },
-            }}
-            size="small"
-          >
+          <FormControl size="small">
             <InputLabel id="demo-simple-select-label">WALLET</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="Currency"
-              defaultValue={0}
-            >
+            <Select label="wallet" defaultValue={0}>
               <MenuItem value={0}>{authStore.user?.USD} USD</MenuItem>
               <MenuItem value={1}>{authStore.user?.ETH} ETH</MenuItem>
               <MenuItem value={2}>{authStore.user?.BTC} BTC</MenuItem>
+              <Divider />
+
+              <DepositOption />
             </Select>
           </FormControl>
 
@@ -185,11 +187,6 @@ function Nav() {
             <ForgotPasswordDialog
               forgotPassword={forgotPassword}
               setForgotPassword={setForgotPassword}
-            />
-
-            <ProfileDialog
-              openProfile={openProfile}
-              setOpenProfile={setOpenProfile}
             />
           </Box>
         </Toolbar>

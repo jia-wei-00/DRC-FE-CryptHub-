@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import { ToastContainer } from "react-toastify";
 import { Nav } from "./components";
 import { pages } from "./constant";
+import { Profile } from "./pages";
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
               <Route key={index} path={page.path} element={page.element} />
             );
           })}
+          <Route path="/profile" element={<Profile />} />
         </Routes>
 
         <ToastContainer theme={modeStore.mode === "dark" ? "dark" : "light"} />

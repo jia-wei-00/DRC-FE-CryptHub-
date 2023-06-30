@@ -39,9 +39,9 @@ class TradeStoreImplementation {
       console.log(authStore.user);
 
       authStore.setUser({
-        USD: Number(res.data.details.usdWalletBalance.USD),
-        BTC: Number(res.data.details.usdWalletBalance.BTC),
-        ETH: Number(res.data.details.usdWalletBalance.ETH),
+        USD: Number(res.data.details.walletBalance.USD),
+        BTC: Number(res.data.details.walletBalance.BTC),
+        ETH: Number(res.data.details.walletBalance.ETH),
       });
 
       console.log(authStore.user);
@@ -107,9 +107,9 @@ class TradeStoreImplementation {
       console.log(authStore.user);
 
       authStore.setUser({
-        USD: Number(res.data.details.usdWalletBalance.USD),
-        BTC: Number(res.data.details.usdWalletBalance.BTC),
-        ETH: Number(res.data.details.usdWalletBalance.ETH),
+        USD: Number(res.data.details.walletBalance.USD),
+        BTC: Number(res.data.details.walletBalance.BTC),
+        ETH: Number(res.data.details.walletBalance.ETH),
       });
 
       console.log(authStore.user);
