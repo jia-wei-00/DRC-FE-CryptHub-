@@ -211,7 +211,29 @@ class AuthStoreImplementation {
       const res = await axios.get(`${domain}/transaction/getAllTransactions`, {
         headers: headers(this.user!.token!),
       });
+
       console.log(res);
+      const transaction = res.data.details.map((data: any) => {
+        const {
+          transaction_id: id,
+          trade_type: type,
+          currency,
+          coin_amount: coin_amount,
+          transaction_amount: transaction_amount,
+          transaction_date: string_date,
+        } = data;
+
+        const date = new Date(string_date).toLocaleString("en-US", {
+          timeZone: "Asia/Kuala_Lumpur",
+        });
+
+        return { id, type, currency, coin_amount, transaction_amount, date };
+      });
+
+      this.transaction = transaction;
+
+      console.log(transaction);
+
       toast.update(id, {
         render: `Success`,
         type: "success",
