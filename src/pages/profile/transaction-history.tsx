@@ -5,10 +5,13 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { observer } from "mobx-react-lite";
 import { authStore } from "../../stores";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 interface Column {
   id:
@@ -16,12 +19,13 @@ interface Column {
     | "type"
     | "date"
     | "currency"
+    | "commission"
     | "transaction_amount"
     | "coin_amount";
   label: string;
   minWidth?: number;
   align?: "right";
-  format?: (value: number) => string;
+  format?: (value: number | Date) => string;
 }
 
 const columns: readonly Column[] = [
@@ -32,21 +36,28 @@ const columns: readonly Column[] = [
     label: "Currency",
     minWidth: 170,
     align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
+    format: (value: number | Date) => value.toLocaleString("en-US"),
   },
   {
     id: "coin_amount",
     label: "Coin Amount",
     minWidth: 170,
     align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
+    format: (value: number | Date) => value.toLocaleString("en-US"),
   },
   {
     id: "transaction_amount",
     label: "Transaction Amount",
     minWidth: 170,
     align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
+    format: (value: number | Date) => value.toLocaleString("en-US"),
+  },
+  {
+    id: "commission",
+    label: "Commission (5%)",
+    minWidth: 170,
+    align: "right",
+    format: (value: number | Date) => value.toLocaleString("en-US"),
   },
 
   {
@@ -54,80 +65,75 @@ const columns: readonly Column[] = [
     label: "Date",
     minWidth: 170,
     align: "right",
-    format: (value: number) => value.toFixed(2),
+    format: (value: number | Date) => {
+      const date = new Date(value);
+      return date.toLocaleString("en-US");
+    },
   },
 ];
 
 function TransactionHistory() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(11);
+  const [fromDate, setFromDate] = React.useState<any>(
+    dayjs().subtract(30, "day")
+  );
+  const [toDate, setToDate] = React.useState<any>(dayjs());
 
   React.useEffect(() => {
     authStore.fetchTransaction();
   }, []);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
   return (
-    <Paper>
-      <TableContainer>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell key={column.id} align={column.align}>
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {authStore.transaction &&
-              authStore.transaction
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row: any) => {
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.code}
-                    >
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {column.format && typeof value === "number"
-                              ? column.format(value)
-                              : value}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={authStore.transaction.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+    <>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker value={fromDate} onChange={(date) => setFromDate(date)} />
+        <DatePicker value={toDate} onChange={(date) => setToDate(date)} />
+      </LocalizationProvider>
+      <Paper>
+        <TableContainer style={{ height: "calc(100vh - 240px)" }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell key={column.id} align={column.align}>
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {authStore.transaction &&
+                authStore.transaction
+                  .filter(
+                    (transaction: any) =>
+                      transaction.date >= fromDate.valueOf() &&
+                      transaction.date <= toDate.valueOf()
+                  )
+                  .map((row: any) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.code}
+                      >
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.format && typeof value === "number"
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    </>
   );
 }
 

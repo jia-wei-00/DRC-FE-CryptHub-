@@ -12,24 +12,28 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
   current_candles,
 }) => {
   const [active, setActive] = React.useState<string>("buy");
-  const [input, setInput] = React.useState<number>(0);
+  const [input, setInput] = React.useState<string>("");
 
   //onchange function for USD input
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.trim(); // Remove leading/trailing whitespace
-    const value =
-      inputValue.startsWith("0") && inputValue.length > 1
-        ? inputValue.slice(1)
-        : inputValue;
-    setInput(Number(value));
+    let value = inputValue.replace(/[^0-9.]/g, ""); // Remove non-digit and non-decimal characters
+    const decimalCount = value.split(".").length - 1;
+
+    // Remove extra decimal points if present
+    if (decimalCount > 1) {
+      value = value.replace(/\./g, "");
+    }
+
+    setInput(value);
   };
 
   //get the price for every second (ETH / BTC)
   const price =
     websocketStore.interval === "1t" ? current_price : current_candles.close;
   //get the coin based on USD input
-  const buy_coin = price === 0 ? 0 : input / price;
-  const sell_coin = price === 0 ? 0 : input * price;
+  const buy_coin = price === 0 ? 0 : Number(input) / price;
+  const sell_coin = price === 0 ? 0 : Number(input) * price;
 
   //function for buy and sell token
   const buySellHandler = () => {
@@ -39,7 +43,9 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
 
     active === "buy"
       ? tradeStore.buyToken(price, buy_coin)
-      : tradeStore.sellToken(price, input);
+      : tradeStore.sellToken(price, Number(input));
+
+    setInput("");
   };
 
   return (
@@ -72,10 +78,8 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
           <div className="amount">
             <IconButton
               aria-label="subtract"
-              onClick={() => {
-                if (input === 0) return;
-                setInput(input - 1);
-              }}
+              onClick={() => setInput((Number(input) - 1).toString())}
+              disabled={Number(input) <= 0}
             >
               <Remove />
             </IconButton>
@@ -90,13 +94,17 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
                   </InputAdornment>
                 ),
               }}
-              type="number"
+              type="text"
+              placeholder="0"
               variant="standard"
               onChange={handleInputChange}
               value={input}
             />
 
-            <IconButton aria-label="add" onClick={() => setInput(input + 1)}>
+            <IconButton
+              aria-label="add"
+              onClick={() => setInput((Number(input) + 1).toString())}
+            >
               <Add />
             </IconButton>
           </div>

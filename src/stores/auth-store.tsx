@@ -206,50 +206,49 @@ class AuthStoreImplementation {
   }
 
   async fetchTransaction(): Promise<void> {
-    const id = toast.loading("Please wait...");
     try {
       const res = await axios.get(`${domain}/transaction/getAllTransactions`, {
         headers: headers(this.user!.token!),
       });
 
-      console.log(res);
       const transaction = res.data.details.map((data: any) => {
         const {
           transaction_id: id,
           trade_type: type,
           currency,
-          coin_amount: coin_amount,
-          transaction_amount: transaction_amount,
+          coin_amount,
+          transaction_amount,
           transaction_date: string_date,
+          commission_deduction_5,
         } = data;
 
-        const date = new Date(string_date).toLocaleString("en-US", {
-          timeZone: "Asia/Kuala_Lumpur",
-        });
+        const date = new Date(string_date).getTime();
 
-        return { id, type, currency, coin_amount, transaction_amount, date };
+        let commission = commission_deduction_5;
+
+        if (commission === 0) {
+          commission = "-";
+        }
+
+        return {
+          id,
+          type,
+          currency,
+          coin_amount,
+          transaction_amount,
+          commission,
+          date,
+        };
       });
 
       this.transaction = transaction;
-
-      console.log(transaction);
-
-      toast.update(id, {
-        render: `Success`,
-        type: "success",
-        isLoading: false,
-        autoClose: 5000,
-      });
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
         message = error.response.data.message;
       }
-      toast.update(id, {
-        render: message,
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
+      toast.error(`Error: ${message}`, {
+        position: toast.POSITION.TOP_RIGHT,
       });
     }
   }

@@ -20,7 +20,7 @@ class TradeStoreImplementation {
       coin_amount: input_price,
     };
 
-    if (values.coin_amount > authStore.user!.USD) {
+    if (values.coin_amount >= authStore.user!.USD) {
       return toast.update(id, {
         render: "BALANCE INSUFFICIENT",
         type: "error",
