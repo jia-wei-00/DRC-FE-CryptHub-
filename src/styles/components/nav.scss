@@ -4,6 +4,12 @@
   top: 40px;
 }
 
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .app-bar {
   transition: $transition-all;
   backdrop-filter: blur(15px);
@@ -14,6 +20,7 @@
   .nav-end {
     display: flex;
     align-items: center;
+    column-gap: 15px;
 
     button {
       height: 30px;

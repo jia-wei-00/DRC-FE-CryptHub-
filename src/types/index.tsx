@@ -77,3 +77,18 @@ export type BuySellBoxT = {
 export type LoginFormProps = {
   setResetPassword: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+export type Column = {
+  id:
+    | "id"
+    | "type"
+    | "date"
+    | "currency"
+    | "commission"
+    | "transaction_amount"
+    | "coin_amount";
+  label: string;
+  minWidth?: number;
+  align?: "right";
+  format?: (value: number | Date) => string;
+};

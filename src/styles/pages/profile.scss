@@ -15,7 +15,16 @@
   }
 }
 
+.table-container {
+  height: calc(100vh - 240px);
+}
+
 #vertical-tabpanel-0 {
   width: 100%;
-  //   height: 100%;
+}
+
+#dark {
+  th {
+    background-color: black;
+  }
 }

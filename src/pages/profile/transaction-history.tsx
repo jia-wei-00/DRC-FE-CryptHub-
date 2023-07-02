@@ -12,21 +12,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-
-interface Column {
-  id:
-    | "id"
-    | "type"
-    | "date"
-    | "currency"
-    | "commission"
-    | "transaction_amount"
-    | "coin_amount";
-  label: string;
-  minWidth?: number;
-  align?: "right";
-  format?: (value: number | Date) => string;
-}
+import { Column } from "../../types";
 
 const columns: readonly Column[] = [
   { id: "id", label: "No", minWidth: 170 },
@@ -85,11 +71,19 @@ function TransactionHistory() {
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker value={fromDate} onChange={(date) => setFromDate(date)} />
-        <DatePicker value={toDate} onChange={(date) => setToDate(date)} />
+        <DatePicker
+          label="From"
+          value={fromDate}
+          onChange={(date) => setFromDate(date)}
+        />
+        <DatePicker
+          label="To"
+          value={toDate}
+          onChange={(date) => setToDate(date)}
+        />
       </LocalizationProvider>
       <Paper>
-        <TableContainer style={{ height: "calc(100vh - 240px)" }}>
+        <TableContainer className="table-container">
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>

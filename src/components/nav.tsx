@@ -21,9 +21,12 @@ import {
   Toolbar,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { AuthDialog, ForgotPasswordDialog } from "./dialog";
+import { Image } from "@mui/icons-material";
+import logo from "../assets/logo.svg";
 
 const DepositOption = () => {
   const handleDepositClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -45,8 +48,12 @@ function Nav() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
 
   const navigate = useNavigate();
+  const matches = useMediaQuery("(min-width:1023px)");
 
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -68,6 +75,14 @@ function Nav() {
     setAnchorElUser(event.currentTarget);
   };
 
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
   const handleCloseUserMenu = (value: string) => {
     setAnchorElUser(null);
 
@@ -84,15 +99,46 @@ function Nav() {
     <AppBar position="static" className="app-bar">
       <Container maxWidth="xl">
         <Toolbar disableGutters className="toolbar">
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            className="desktop-hide"
+          {!matches && (
+            <Box>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={handleOpenNavMenu}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Box>
+          )}
+
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorElNav}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            open={Boolean(anchorElNav)}
+            onClose={handleCloseNavMenu}
           >
-            <MenuIcon />
-          </IconButton>
+            <MenuItem>
+              <CustomizedSwitches />
+            </MenuItem>
+
+            {pages.map((page) => (
+              <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">{page.title}</Typography>
+              </MenuItem>
+            ))}
+          </Menu>
+
           <Link to="/">
             <Typography
               variant="h6"
@@ -102,8 +148,10 @@ function Nav() {
                 fontWeight: 700,
                 letterSpacing: ".3rem",
               }}
+              className="logo"
             >
-              LOGO
+              <img src={logo} width={40} />
+              CRYPTHUB
             </Typography>
           </Link>
 
@@ -115,23 +163,26 @@ function Nav() {
             ))}
           </Box>
 
-          <button onClick={() => authStore.reset()}>RESET</button>
-
-          <FormControl size="small">
-            <InputLabel id="demo-simple-select-label">WALLET</InputLabel>
-            <Select label="wallet" defaultValue={0}>
-              <MenuItem value={0}>{authStore.user?.USD} USD</MenuItem>
-              <MenuItem value={1}>{authStore.user?.ETH} ETH</MenuItem>
-              <MenuItem value={2}>{authStore.user?.BTC} BTC</MenuItem>
-              <Divider />
-
-              <DepositOption />
-            </Select>
-          </FormControl>
-
           <Box>
             <div className="nav-end">
-              <CustomizedSwitches />
+              {matches && (
+                <>
+                  <CustomizedSwitches />
+                  <FormControl size="small">
+                    <InputLabel id="demo-simple-select-label">
+                      WALLET
+                    </InputLabel>
+                    <Select label="wallet" defaultValue={0}>
+                      <MenuItem value={0}>{authStore.user?.USD} USD</MenuItem>
+                      <MenuItem value={1}>{authStore.user?.ETH} ETH</MenuItem>
+                      <MenuItem value={2}>{authStore.user?.BTC} BTC</MenuItem>
+                      <Divider />
+
+                      <DepositOption />
+                    </Select>
+                  </FormControl>
+                </>
+              )}
               {authStore.user ? (
                 <>
                   <Tooltip title="Open settings">
@@ -168,6 +219,27 @@ function Nav() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              {!matches && (
+                <MenuItem>
+                  <FormControl size="small">
+                    <InputLabel id="demo-simple-select-label">
+                      WALLET
+                    </InputLabel>
+                    <Select label="wallet" defaultValue={0}>
+                      <MenuItem value={0}>{authStore.user?.USD} USD</MenuItem>
+                      <MenuItem value={1}>
+                        {authStore.user?.ETH.toFixed(4)} ETH
+                      </MenuItem>
+                      <MenuItem value={2}>
+                        {authStore.user?.BTC.toFixed(4)} BTC
+                      </MenuItem>
+                      <Divider />
+
+                      <DepositOption />
+                    </Select>
+                  </FormControl>
+                </MenuItem>
+              )}
               {settings.map((setting) => (
                 <MenuItem
                   key={setting.title}
