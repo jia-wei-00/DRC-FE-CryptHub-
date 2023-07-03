@@ -106,6 +106,7 @@ function Nav() {
                 color="inherit"
                 aria-label="menu"
                 onClick={handleOpenNavMenu}
+                className="menu-icon"
               >
                 <MenuIcon />
               </IconButton>

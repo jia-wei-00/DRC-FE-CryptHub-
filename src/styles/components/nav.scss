@@ -126,6 +126,12 @@
 
 #light {
   .indicator {
-    background-color: #f6e6cb !important;
+    background-color: $main-color !important;
+  }
+
+  .menu-icon {
+    svg {
+      color: $main-color !important;
+    }
   }
 }
