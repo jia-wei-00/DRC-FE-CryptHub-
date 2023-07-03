@@ -12,7 +12,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import { Column } from "../../types";
+import { Column, Transaction } from "../../types";
 
 const columns: readonly Column[] = [
   { id: "id", label: "No", minWidth: 170 },
@@ -98,17 +98,17 @@ function TransactionHistory() {
               {authStore.transaction &&
                 authStore.transaction
                   .filter(
-                    (transaction: any) =>
+                    (transaction: Transaction) =>
                       transaction.date >= fromDate.valueOf() &&
                       transaction.date <= toDate.valueOf()
                   )
-                  .map((row: any) => {
+                  .map((row: Transaction) => {
                     return (
                       <TableRow
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.code}
+                        key={row.id}
                       >
                         {columns.map((column) => {
                           const value = row[column.id];

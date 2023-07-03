@@ -1,15 +1,15 @@
-import { makeObservable, action, observable } from "mobx";
+import { makeObservable, action, observable, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { makePersistable } from "mobx-persist-store";
 import axios from "axios";
-import { InputData, ResetPassword, User } from "../types";
+import { InputData, ResetPassword, Transaction, User } from "../types";
 import { domain, headers } from "../constant";
 
 class AuthStoreImplementation {
   user: User | null = null;
   auth_modal: boolean = false;
-  transaction: any = [];
+  transaction: Transaction[] = [];
 
   constructor() {
     makeObservable(this, {
@@ -32,18 +32,24 @@ class AuthStoreImplementation {
   }
 
   reset() {
-    this.user = null;
-    this.auth_modal = true;
+    runInAction(() => {
+      this.user = null;
+      this.auth_modal = true;
+    });
   }
 
   setAuthModal(value: boolean) {
-    this.auth_modal = value;
+    runInAction(() => {
+      this.auth_modal = value;
+    });
   }
 
   setUser = (authUser: User | null): void => {
-    authUser === null
-      ? (this.user = null)
-      : (this.user = { ...this.user, ...authUser! });
+    runInAction(() => {
+      authUser === null
+        ? (this.user = null)
+        : (this.user = { ...this.user, ...authUser! });
+    });
   };
 
   async signIn(values: InputData): Promise<void> {
@@ -53,9 +59,11 @@ class AuthStoreImplementation {
         `${domain}/user/loginUser`,
         values
       );
-      console.log(userCredential.data.details);
-      this.user = userCredential.data.details;
-      console.log(this.user);
+
+      runInAction(() => {
+        this.user = userCredential.data.details;
+      });
+
       this.setAuthModal(false);
       toast.update(id, {
         render: `Welcome ${this.user!.name}`,
@@ -100,9 +108,9 @@ class AuthStoreImplementation {
         autoClose: 5000,
       });
 
-      console.log(res);
-
-      this.user!.USD += values.amount;
+      runInAction(() => {
+        this.user!.USD += values.amount;
+      });
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
@@ -136,7 +144,10 @@ class AuthStoreImplementation {
         isLoading: false,
         autoClose: 5000,
       });
-      this.setUser(null);
+
+      runInAction(() => {
+        this.setUser(null);
+      });
     } catch (error: any) {
       console.log(error);
       toast.update(id, {
@@ -241,7 +252,9 @@ class AuthStoreImplementation {
         };
       });
 
-      this.transaction = transaction;
+      runInAction(() => {
+        this.transaction = transaction;
+      });
     } catch (error: any) {
       let message = error.message;
       if (error.response) {

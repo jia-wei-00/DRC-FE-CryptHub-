@@ -92,3 +92,13 @@ export type Column = {
   align?: "right";
   format?: (value: number | Date) => string;
 };
+
+export type Transaction = {
+  coin_amount: number;
+  commission: number | string;
+  currency: string;
+  date: EpochTimeStamp;
+  id: number;
+  transaction_amount: number;
+  type: string;
+};

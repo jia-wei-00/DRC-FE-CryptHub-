@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardContent,
@@ -8,18 +7,10 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Tab,
-  Tabs,
   ToggleButton,
   ToggleButtonGroup,
-  Typography,
 } from "@mui/material";
-import {
-  AuthDialogT,
-  ChartSettingsT,
-  ForgotPasswordDialogT,
-  ProfileT,
-} from "../types";
+import { AuthDialogT, ChartSettingsT, ForgotPasswordDialogT } from "../types";
 import { motion } from "framer-motion";
 import { websocketStore, modeStore, authStore } from "../stores";
 import LoginForm from "./login-form";
