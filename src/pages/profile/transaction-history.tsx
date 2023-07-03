@@ -74,16 +74,18 @@ function TransactionHistory() {
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          label="From"
-          value={fromDate}
-          onChange={(date) => setFromDate(date)}
-        />
-        <DatePicker
-          label="To"
-          value={toDate}
-          onChange={(date) => setToDate(date)}
-        />
+        <div className="date">
+          <DatePicker
+            label="From"
+            value={fromDate}
+            onChange={(date) => setFromDate(date)}
+          />
+          <DatePicker
+            label="To"
+            value={toDate}
+            onChange={(date) => setToDate(date)}
+          />
+        </div>
       </LocalizationProvider>
       <Paper>
         <TableContainer className="table-container">

@@ -8,20 +8,24 @@ import { ToastContainer } from "react-toastify";
 import { Nav } from "./components";
 import { pages } from "./constant";
 import { Profile } from "./pages";
+import Auth from "./auth";
 
 const App: React.FC = () => {
   return (
     <div id={modeStore.mode}>
       <ThemeProvider theme={modeStore.mode === "dark" ? darkTheme : lightTheme}>
         <Nav />
-        <Routes>
-          {pages.map((page, index) => {
-            return (
-              <Route key={index} path={page.path} element={page.element} />
-            );
-          })}
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
+        <Auth>
+          <Routes>
+            {pages.map((page, index) => {
+              return (
+                <Route key={index} path={page.path} element={page.element} />
+              );
+            })}
+
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        </Auth>
 
         <ToastContainer theme={modeStore.mode === "dark" ? "dark" : "light"} />
       </ThemeProvider>

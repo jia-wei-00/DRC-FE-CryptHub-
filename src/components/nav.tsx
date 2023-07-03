@@ -167,19 +167,21 @@ function Nav() {
               {matches && (
                 <>
                   <CustomizedSwitches />
-                  <FormControl size="small">
-                    <InputLabel id="demo-simple-select-label">
-                      WALLET
-                    </InputLabel>
-                    <Select label="wallet" defaultValue={0}>
-                      <MenuItem value={0}>{authStore.user?.USD} USD</MenuItem>
-                      <MenuItem value={1}>{authStore.user?.ETH} ETH</MenuItem>
-                      <MenuItem value={2}>{authStore.user?.BTC} BTC</MenuItem>
-                      <Divider />
+                  {authStore.user && (
+                    <FormControl size="small">
+                      <InputLabel id="demo-simple-select-label">
+                        WALLET
+                      </InputLabel>
+                      <Select label="wallet" defaultValue={0}>
+                        <MenuItem value={0}>{authStore.user?.USD} USD</MenuItem>
+                        <MenuItem value={1}>{authStore.user?.ETH} ETH</MenuItem>
+                        <MenuItem value={2}>{authStore.user?.BTC} BTC</MenuItem>
+                        <Divider />
 
-                      <DepositOption />
-                    </Select>
-                  </FormControl>
+                        <DepositOption />
+                      </Select>
+                    </FormControl>
+                  )}
                 </>
               )}
               {authStore.user ? (

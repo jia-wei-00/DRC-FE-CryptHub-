@@ -129,9 +129,6 @@ class AuthStoreImplementation {
   async signOut(): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      console.log({
-        headers: headers(this.user!.token!),
-      });
       await axios.post(
         `${domain}/user/logoutUser`,
         {}, //pass in empty body
@@ -149,9 +146,12 @@ class AuthStoreImplementation {
         this.setUser(null);
       });
     } catch (error: any) {
-      console.log(error);
+      let message = error.message;
+      if (error.response) {
+        message = error.response.data.message;
+      }
       toast.update(id, {
-        render: error.message,
+        render: message,
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -252,9 +252,6 @@ class AuthStoreImplementation {
       runInAction(() => {
         this.transaction = transaction;
       });
-
-      console.log(transaction);
-      console.log(this.transaction);
     } catch (error: any) {
       let message = error.message;
       if (error.response) {

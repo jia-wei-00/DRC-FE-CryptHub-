@@ -10,13 +10,20 @@
   box-shadow: $box-shadow;
   min-height: calc(100vh - 135px);
 
+  .date {
+    display: flex;
+    column-gap: 10px;
+    margin-bottom: 10px;
+    justify-content: flex-end;
+  }
+
   @media only screen and (max-width: 1023px) {
     flex-direction: column;
   }
 }
 
 .table-container {
-  height: calc(100vh - 240px);
+  height: calc(100vh - 250px);
 }
 
 #vertical-tabpanel-0 {
@@ -26,5 +33,31 @@
 #dark {
   th {
     background-color: black;
+  }
+}
+
+#light {
+  .profile-box {
+    background-color: $third-color;
+
+    button {
+      color: $black;
+
+      &:hover {
+        background-color: $main-color;
+      }
+    }
+
+    div {
+      color: $black;
+    }
+
+    input {
+      color: $black;
+    }
+
+    label {
+      color: $black;
+    }
   }
 }

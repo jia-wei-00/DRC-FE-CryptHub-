@@ -120,8 +120,9 @@ const Chart: React.FC = () => {
           modeStore.mode === "dark"
             ? websocketStore.chart_type === "line"
               ? "white"
-              : "grey"
-            : "#A27B5C",
+              : "lightgreen"
+            : "green",
+        upColor: "red",
         data:
           websocketStore.interval === "1t"
             ? websocketStore.chart_data.map((item) => [
