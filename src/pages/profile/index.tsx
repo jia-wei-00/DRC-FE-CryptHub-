@@ -1,12 +1,4 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Tab,
-  Tabs,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Tab, Tabs, useMediaQuery } from "@mui/material";
 import React from "react";
 import "../../styles/pages/profile.scss";
 import TransactionHistory from "./transaction-history";

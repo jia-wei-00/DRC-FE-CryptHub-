@@ -162,10 +162,7 @@ class AuthStoreImplementation {
   async signUp(values: InputData): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      const userCredential = await axios.post(
-        `${domain}/user/registerUser`,
-        values
-      );
+      await axios.post(`${domain}/user/registerUser`, values);
       toast.update(id, {
         render: `Check your email to activate account`,
         type: "success",
@@ -255,6 +252,9 @@ class AuthStoreImplementation {
       runInAction(() => {
         this.transaction = transaction;
       });
+
+      console.log(transaction);
+      console.log(this.transaction);
     } catch (error: any) {
       let message = error.message;
       if (error.response) {

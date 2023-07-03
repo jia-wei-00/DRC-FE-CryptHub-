@@ -29,21 +29,24 @@ const columns: readonly Column[] = [
     label: "Coin Amount",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) => value.toLocaleString("en-US"),
+    format: (value: number | Date) =>
+      value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
   },
   {
     id: "transaction_amount",
     label: "Transaction Amount",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) => value.toLocaleString("en-US"),
+    format: (value: number | Date) =>
+      value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
   },
   {
     id: "commission",
     label: "Commission (5%)",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) => value.toLocaleString("en-US"),
+    format: (value: number | Date) =>
+      value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
   },
 
   {
@@ -117,6 +120,7 @@ function TransactionHistory() {
                               {column.format && typeof value === "number"
                                 ? column.format(value)
                                 : value}
+                              {/* {value} */}
                             </TableCell>
                           );
                         })}

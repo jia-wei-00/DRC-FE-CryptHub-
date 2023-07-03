@@ -90,7 +90,7 @@ export type Column = {
   label: string;
   minWidth?: number;
   align?: "right";
-  format?: (value: number | Date) => string;
+  format?: (value: number) => string;
 };
 
 export type Transaction = {

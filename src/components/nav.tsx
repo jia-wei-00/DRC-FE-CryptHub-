@@ -25,7 +25,6 @@ import {
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { AuthDialog, ForgotPasswordDialog } from "./dialog";
-import { Image } from "@mui/icons-material";
 import logo from "../assets/logo.svg";
 
 const DepositOption = () => {
