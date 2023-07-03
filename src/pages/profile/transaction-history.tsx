@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 import { Column, Transaction } from "../../types";
 
 const columns: readonly Column[] = [
-  { id: "id", label: "No", minWidth: 170 },
+  // { id: "id", label: "No", minWidth: 170 },
   { id: "type", label: "Trade Type", minWidth: 100 },
   {
     id: "currency",
@@ -90,6 +90,7 @@ function TransactionHistory() {
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
+                <TableCell>No</TableCell>
                 {columns.map((column) => (
                   <TableCell key={column.id} align={column.align}>
                     {column.label}
@@ -105,7 +106,7 @@ function TransactionHistory() {
                       transaction.date >= fromDate.valueOf() &&
                       transaction.date <= toDate.valueOf()
                   )
-                  .map((row: Transaction) => {
+                  .map((row: Transaction, index: number) => {
                     return (
                       <TableRow
                         hover
@@ -113,6 +114,7 @@ function TransactionHistory() {
                         tabIndex={-1}
                         key={row.id}
                       >
+                        <TableCell>{index + 1}</TableCell>
                         {columns.map((column) => {
                           const value = row[column.id];
                           return (
