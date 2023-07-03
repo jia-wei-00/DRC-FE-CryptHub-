@@ -116,13 +116,9 @@ const Chart: React.FC = () => {
       {
         name: `${websocketStore.subscribe_currency} / USD`,
         type: websocketStore.chart_type === "line" ? "line" : "candlestick",
-        color:
-          modeStore.mode === "dark"
-            ? websocketStore.chart_type === "line"
-              ? "white"
-              : "lightgreen"
-            : "green",
-        upColor: "red",
+        color: websocketStore.chart_type === "line" ? "white" : "red",
+
+        upColor: modeStore.mode === "dark" ? "lightgreen" : "green",
         data:
           websocketStore.interval === "1t"
             ? websocketStore.chart_data.map((item) => [
