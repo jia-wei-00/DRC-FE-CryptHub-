@@ -27,7 +27,10 @@ const App: React.FC = () => {
           </Routes>
         </Auth>
 
-        <ToastContainer theme={modeStore.mode === "dark" ? "dark" : "light"} />
+        <ToastContainer
+          theme={modeStore.mode === "dark" ? "dark" : "light"}
+          limit={3}
+        />
       </ThemeProvider>
     </div>
   );

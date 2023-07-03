@@ -24,20 +24,46 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { AuthDialog, ForgotPasswordDialog } from "./dialog";
+import {
+  AuthDialog,
+  DepositDialog,
+  ForgotPasswordDialog,
+  WithdrawDialog,
+} from "./dialog";
 import logo from "../assets/logo.svg";
+import { DepositDialogT, WithdrawDialogT } from "../types";
 
-const DepositOption = () => {
-  const handleDepositClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
-    // event.stopPropagation();
-    authStore.deposit();
-  };
-
+const DepositOption: React.FC<DepositDialogT> = ({
+  depositModal,
+  setDepositModal,
+}) => {
   return (
-    <Button className="deposit" onClick={handleDepositClick}>
-      Deposit
-    </Button>
+    <>
+      <Button
+        className="deposit"
+        onClick={() => setDepositModal(!depositModal)}
+      >
+        Deposit
+      </Button>
+    </>
+  );
+};
+
+const WithdrawOption: React.FC<WithdrawDialogT> = ({
+  withdrawModal,
+  setWithdrawModal,
+}) => {
+  return (
+    <>
+      <Button
+        className="deposit"
+        onClick={() => {
+          setWithdrawModal(!withdrawModal);
+        }}
+      >
+        Withdraw
+      </Button>
+    </>
   );
 };
 
@@ -50,6 +76,8 @@ function Nav() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
+  const [depositModal, setDepositModal] = React.useState<boolean>(false);
+  const [withdrawModal, setWithdrawModal] = React.useState<boolean>(false);
 
   const navigate = useNavigate();
   const matches = useMediaQuery("(min-width:1023px)");
@@ -179,7 +207,14 @@ function Nav() {
                         <MenuItem value={2}>{authStore.user?.BTC} BTC</MenuItem>
                         <Divider />
 
-                        <DepositOption />
+                        <DepositOption
+                          depositModal={depositModal}
+                          setDepositModal={setDepositModal}
+                        />
+                        <WithdrawOption
+                          withdrawModal={withdrawModal}
+                          setWithdrawModal={setWithdrawModal}
+                        />
                       </Select>
                     </FormControl>
                   )}
@@ -237,7 +272,14 @@ function Nav() {
                       </MenuItem>
                       <Divider />
 
-                      <DepositOption />
+                      <DepositOption
+                        depositModal={depositModal}
+                        setDepositModal={setDepositModal}
+                      />
+                      <WithdrawOption
+                        withdrawModal={withdrawModal}
+                        setWithdrawModal={setWithdrawModal}
+                      />
                     </Select>
                   </FormControl>
                 </MenuItem>
@@ -261,6 +303,16 @@ function Nav() {
             <ForgotPasswordDialog
               forgotPassword={forgotPassword}
               setForgotPassword={setForgotPassword}
+            />
+
+            <DepositDialog
+              depositModal={depositModal}
+              setDepositModal={setDepositModal}
+            />
+
+            <WithdrawDialog
+              withdrawModal={withdrawModal}
+              setWithdrawModal={setWithdrawModal}
             />
           </Box>
         </Toolbar>

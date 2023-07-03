@@ -109,3 +109,15 @@ export type ResetPasswordFormT = {
   password: string;
   new_password: string;
 };
+
+//deposit modal type
+export type DepositDialogT = {
+  depositModal?: boolean;
+  setDepositModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+//withdrawal modal type
+export type WithdrawDialogT = {
+  withdrawModal?: boolean;
+  setWithdrawModal: React.Dispatch<React.SetStateAction<boolean>>;
+};

@@ -67,13 +67,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
       </motion.div>
 
       {/* Buy*/}
-      <motion.div
-      // animate={
-      //   active === "buy"
-      //     ? { display: "block" }
-      //     : { display: "none", opacity: 0 }
-      // }
-      >
+      <motion.div>
         <div className="side-bar-input">
           <div className="amount">
             <IconButton

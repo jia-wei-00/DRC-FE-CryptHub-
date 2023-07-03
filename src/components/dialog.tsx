@@ -1,24 +1,41 @@
 import {
+  Box,
   Button,
   Card,
   CardContent,
   Dialog,
   FormControl,
+  FormHelperText,
+  IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
+  TextField,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { AuthDialogT, ChartSettingsT, ForgotPasswordDialogT } from "../types";
+import {
+  AuthDialogT,
+  ChartSettingsT,
+  DepositDialogT,
+  ForgotPasswordDialogT,
+  PriceT,
+  WithdrawDialogT,
+} from "../types";
 import { motion } from "framer-motion";
 import { websocketStore, modeStore, authStore } from "../stores";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
-import { CandlestickChart, Timeline } from "@mui/icons-material";
+import { Add, CandlestickChart, Remove, Timeline } from "@mui/icons-material";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import ForgotPasswordForm from "./forget-password";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { resetSchema } from "../schemas";
+import DepositForm from "./deposit-form";
+import WithdrawForm from "./withdraw-form";
 
 export const ForgotPasswordDialog: React.FC<ForgotPasswordDialogT> = ({
   forgotPassword,
@@ -36,11 +53,6 @@ export const ForgotPasswordDialog: React.FC<ForgotPasswordDialogT> = ({
       }}
     >
       <div className="wrapper">
-        {/* <motion.div
-                  initial={{ y: 400 }}
-                  animate={{ y: 0 }}
-                  className="form-body"
-                > */}
         <Card className="card">
           <CardContent>
             <ForgotPasswordForm setForgotPassword={setForgotPassword} />
@@ -65,11 +77,6 @@ export const AuthDialog: React.FC<AuthDialogT> = observer(
         }}
       >
         <div className="wrapper">
-          {/* <motion.div
-        initial={{ y: 400 }}
-        animate={{ y: 0 }}
-        className="form-body"
-      > */}
           <Card className="card">
             <CardContent>
               <motion.div className="btn-group">
@@ -105,7 +112,6 @@ export const AuthDialog: React.FC<AuthDialogT> = observer(
               </motion.div>
             </CardContent>
           </Card>
-          {/* </motion.div> */}
         </div>
       </Dialog>
     );
@@ -240,3 +246,55 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
     );
   }
 );
+
+export const DepositDialog: React.FC<DepositDialogT> = ({
+  depositModal,
+  setDepositModal,
+}) => {
+  return (
+    <Dialog
+      open={depositModal!}
+      onClose={() => setDepositModal(false)}
+      PaperProps={{
+        style: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        },
+      }}
+    >
+      <div className="wrapper">
+        <Card className="card">
+          <CardContent>
+            <DepositForm setDepositModal={setDepositModal} />
+          </CardContent>
+        </Card>
+      </div>
+    </Dialog>
+  );
+};
+
+export const WithdrawDialog: React.FC<WithdrawDialogT> = ({
+  withdrawModal,
+  setWithdrawModal,
+}) => {
+  return (
+    <Dialog
+      open={withdrawModal!}
+      onClose={() => setWithdrawModal(false)}
+      PaperProps={{
+        style: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        },
+      }}
+    >
+      <div className="wrapper">
+        <Card className="card">
+          <CardContent>
+            <WithdrawForm setDepositModal={setWithdrawModal} />
+          </CardContent>
+        </Card>
+      </div>
+    </Dialog>
+  );
+};

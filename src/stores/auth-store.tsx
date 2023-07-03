@@ -5,6 +5,7 @@ import { makePersistable } from "mobx-persist-store";
 import axios from "axios";
 import {
   InputData,
+  PriceT,
   ResetPassword,
   ResetPasswordFormT,
   Transaction,
@@ -71,6 +72,7 @@ class AuthStoreImplementation {
         type: "success",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     } catch (error: any) {
       let message = error.message;
@@ -82,6 +84,7 @@ class AuthStoreImplementation {
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     }
   }
@@ -104,6 +107,7 @@ class AuthStoreImplementation {
         type: "success",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     } catch (error: any) {
       let message = error.message;
@@ -119,33 +123,33 @@ class AuthStoreImplementation {
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     }
   }
 
-  async deposit(): Promise<void> {
+  async deposit(values: PriceT): Promise<void> {
     const id = toast.loading("Please wait...");
 
-    const values = {
-      amount: 1000,
+    const amount = {
+      amount: values.price,
     };
 
     try {
-      const res = await axios.post(`${domain}/wallet/walletDeposit`, values, {
+      const res = await axios.post(`${domain}/wallet/walletDeposit`, amount, {
         headers: headers(this.user!.token!),
       });
-
-      console.log(res);
 
       toast.update(id, {
         render: "Successfully Deposited",
         type: "success",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
 
       runInAction(() => {
-        this.user!.USD += values.amount;
+        this.user!.USD = res.data.details.balance;
       });
     } catch (error: any) {
       let message = error.message;
@@ -158,6 +162,46 @@ class AuthStoreImplementation {
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
+      });
+    }
+  }
+
+  async withdraw(values: PriceT): Promise<void> {
+    const id = toast.loading("Please wait...");
+
+    const amount = {
+      amount: values.price,
+    };
+
+    try {
+      const res = await axios.post(`${domain}/wallet/walletWithdraw`, amount, {
+        headers: headers(this.user!.token!),
+      });
+
+      toast.update(id, {
+        render: "Successfully Deposited",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+        closeButton: null,
+      });
+
+      runInAction(() => {
+        this.user!.USD = res.data.details.balance;
+      });
+    } catch (error: any) {
+      let message = error.message;
+      if (error.response) {
+        message = error.response.data.message;
+      }
+
+      toast.update(id, {
+        render: message,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        closeButton: null,
       });
     }
   }
@@ -176,6 +220,7 @@ class AuthStoreImplementation {
         type: "success",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
 
       runInAction(() => {
@@ -191,6 +236,7 @@ class AuthStoreImplementation {
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     }
   }
@@ -204,6 +250,7 @@ class AuthStoreImplementation {
         type: "success",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
       this.setAuthModal(false);
     } catch (error: any) {
@@ -217,6 +264,7 @@ class AuthStoreImplementation {
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     }
   }
@@ -233,6 +281,7 @@ class AuthStoreImplementation {
         type: "success",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
       setForgotPassword(false);
     } catch (error: any) {
@@ -245,6 +294,7 @@ class AuthStoreImplementation {
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     }
   }

@@ -26,6 +26,7 @@ class TradeStoreImplementation {
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     }
 
@@ -51,6 +52,7 @@ class TradeStoreImplementation {
         type: "success",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     } catch (error: any) {
       let message = error.message;
@@ -66,6 +68,7 @@ class TradeStoreImplementation {
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     }
   }
@@ -94,6 +97,7 @@ class TradeStoreImplementation {
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     }
 
@@ -101,10 +105,6 @@ class TradeStoreImplementation {
       const res = await axios.post(`${domain}/trade/sell`, values, {
         headers: headers(authStore.user!.token!),
       });
-
-      console.log(res);
-
-      console.log(authStore.user);
 
       authStore.setUser({
         USD: Number(res.data.details.walletBalance.USD),
@@ -119,6 +119,7 @@ class TradeStoreImplementation {
         type: "success",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     } catch (error: any) {
       let message = error.message;
@@ -134,6 +135,7 @@ class TradeStoreImplementation {
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        closeButton: null,
       });
     }
   }

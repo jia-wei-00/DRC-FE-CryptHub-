@@ -124,6 +124,19 @@
   width: 100% !important;
 }
 
+.deposit-form {
+  text-align: center;
+
+  .deposit-input-box {
+    display: flex !important;
+    flex-direction: row;
+
+    input {
+      text-align: center;
+    }
+  }
+}
+
 #light {
   .indicator {
     background-color: $main-color !important;
