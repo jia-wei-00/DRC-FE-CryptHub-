@@ -15,11 +15,11 @@ import {
 import { EmailRounded } from "@mui/icons-material";
 import "../styles/components/login-form.scss";
 
-interface ResetFormProps {
+interface ForgotPasswordFormProps {
   setForgotPassword: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ForgotPasswordForm: React.FC<ResetFormProps> = (props) => {
+const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = (props) => {
   const {
     register,
     formState: { errors, isSubmitSuccessful },

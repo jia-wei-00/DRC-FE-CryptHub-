@@ -2,7 +2,7 @@ import { Box, Tab, Tabs, useMediaQuery } from "@mui/material";
 import React from "react";
 import "../../styles/pages/profile.scss";
 import TransactionHistory from "./transaction-history";
-import ResetPassword from "./reset-password";
+import ResetPasswordForm from "./reset-password";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -58,7 +58,7 @@ const Profile = () => {
         <TransactionHistory />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ResetPassword />
+        <ResetPasswordForm />
       </TabPanel>
     </Box>
   );

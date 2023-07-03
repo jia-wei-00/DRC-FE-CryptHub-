@@ -102,3 +102,10 @@ export type Transaction = {
   transaction_amount: number;
   type: string;
 };
+
+//reset password form type
+export type ResetPasswordFormT = {
+  old_password: string;
+  password: string;
+  new_password: string;
+};

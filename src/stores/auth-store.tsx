@@ -3,7 +3,13 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { makePersistable } from "mobx-persist-store";
 import axios from "axios";
-import { InputData, ResetPassword, Transaction, User } from "../types";
+import {
+  InputData,
+  ResetPassword,
+  ResetPasswordFormT,
+  Transaction,
+  User,
+} from "../types";
 import { domain, headers } from "../constant";
 
 class AuthStoreImplementation {
@@ -51,6 +57,34 @@ class AuthStoreImplementation {
         : (this.user = { ...this.user, ...authUser! });
     });
   };
+
+  async resetPassword(values: ResetPasswordFormT): Promise<void> {
+    const id = toast.loading("Please wait...");
+
+    try {
+      await axios.post(`${domain}/user/resetPassword`, values, {
+        headers: headers(this.user!.token!),
+      });
+
+      toast.update(id, {
+        render: "Successfully Reset Password",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+      });
+    } catch (error: any) {
+      let message = error.message;
+      if (error.response) {
+        message = error.response.data.message;
+      }
+      toast.update(id, {
+        render: message,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
+    }
+  }
 
   async signIn(values: InputData): Promise<void> {
     const id = toast.loading("Please wait...");
@@ -100,6 +134,8 @@ class AuthStoreImplementation {
       const res = await axios.post(`${domain}/wallet/walletDeposit`, values, {
         headers: headers(this.user!.token!),
       });
+
+      console.log(res);
 
       toast.update(id, {
         render: "Successfully Deposited",
@@ -218,6 +254,8 @@ class AuthStoreImplementation {
       const res = await axios.get(`${domain}/transaction/getAllTransactions`, {
         headers: headers(this.user!.token!),
       });
+
+      console.log(res);
 
       const transaction = res.data.details.map((data: any) => {
         const {

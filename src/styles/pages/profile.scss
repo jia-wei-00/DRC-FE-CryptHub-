@@ -26,6 +26,23 @@
   height: calc(100vh - 250px);
 }
 
+.reset-password-form {
+  box-shadow: $box-shadow;
+  padding: 30px;
+  display: grid;
+  row-gap: 25px;
+  border-radius: 20px;
+
+  .box {
+    display: flex;
+    align-items: end;
+
+    & > .icon {
+      padding: 10px;
+    }
+  }
+}
+
 #vertical-tabpanel-0 {
   width: 100%;
 }

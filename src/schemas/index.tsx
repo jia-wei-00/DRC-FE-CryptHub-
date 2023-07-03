@@ -4,3 +4,4 @@ export {
   forgetPasswordSchema,
 } from "./login-page-schemas";
 export { priceSchema } from "./home-page-schemas";
+export { resetSchema } from "./profile-page-schemas";
