@@ -1,0 +1,29 @@
+@import "../variables";
+
+.p2p-container {
+  display: flex !important;
+  margin: 20px 0;
+  min-height: calc(100vh - 105px);
+  border-radius: 20px;
+  column-gap: 20px;
+
+  & > .filter {
+    width: 200px;
+    background-color: black;
+    border-radius: 5px;
+    padding: 15px;
+  }
+
+  & > .market-card {
+    flex-grow: 1;
+    padding: 10px;
+  }
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

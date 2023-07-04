@@ -11,8 +11,8 @@ import { authStore } from "../../stores";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
 import { Column, Transaction } from "../../types";
+import dayjs from "dayjs";
 
 const columns: readonly Column[] = [
   // { id: "id", label: "No", minWidth: 170 },
@@ -56,16 +56,16 @@ const columns: readonly Column[] = [
     align: "right",
     format: (value: number | Date) => {
       const date = new Date(value);
-      return date.toLocaleString("en-US");
+      return date.toLocaleString("en-US", { timeZone: "Asia/Kuala_Lumpur" });
     },
   },
 ];
 
 function TransactionHistory() {
   const [fromDate, setFromDate] = React.useState<any>(
-    dayjs().subtract(30, "day")
+    dayjs().subtract(30, "day").add(8, "hour")
   );
-  const [toDate, setToDate] = React.useState<any>(dayjs());
+  const [toDate, setToDate] = React.useState<any>(dayjs().add(8, "hour"));
 
   React.useEffect(() => {
     authStore.fetchTransaction();

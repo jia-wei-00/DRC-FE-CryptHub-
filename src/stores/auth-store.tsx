@@ -307,8 +307,6 @@ class AuthStoreImplementation {
         headers: headers(this.user!.token!),
       });
 
-      console.log(res);
-
       const transaction = res.data.details.map((data: any) => {
         const {
           transaction_id: id,

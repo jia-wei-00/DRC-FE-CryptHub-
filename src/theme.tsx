@@ -41,6 +41,13 @@ export const darkTheme = createTheme({
         },
       },
     },
+    MuiCardActions: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "black",
+        },
+      },
+    },
   },
   typography: {
     fontFamily: "poppins",
