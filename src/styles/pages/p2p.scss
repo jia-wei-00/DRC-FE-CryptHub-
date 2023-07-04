@@ -8,13 +8,14 @@
   column-gap: 20px;
 
   & > .filter {
-    width: 200px;
+    min-width: 150px;
     background-color: rgba(0, 0, 0, 0.4);
     border-radius: 5px;
     padding: 15px;
     margin: 10px 0;
     position: sticky;
-    top: 0;
+    top: 90px;
+    height: calc(100vh - 155px);
   }
 
   & > .market-card {
@@ -24,7 +25,7 @@
     & > .p2p-head-stack {
       margin-bottom: 10px;
       position: relative;
-      width: 500px;
+      max-width: 500px;
 
       & > button {
         z-index: 10;
@@ -47,6 +48,15 @@
     & > .filter {
       margin: 0 10px;
       width: unset;
+      height: unset;
+      top: 70px;
+      z-index: 50;
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
+    }
+
+    & > .market-card > .p2p-head-stack {
+      max-width: unset;
     }
   }
 }
@@ -68,5 +78,49 @@
 
   & > div {
     border-radius: 5px;
+  }
+}
+
+.market-sell-box {
+  position: fixed;
+  right: 70px;
+  bottom: 50px;
+
+  & > .sell-button {
+    backdrop-filter: blur(5px);
+
+    svg {
+      color: $white;
+      padding-right: 5px;
+    }
+
+    &:hover {
+      color: $light-bg;
+
+      svg {
+        color: $light-bg;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 1023px) {
+    right: 20px;
+    bottom: 20px;
+  }
+}
+
+#light {
+  .filter {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  .p2p-indicator {
+    background-color: $light-bg;
+  }
+
+  .market-sell-box:hover {
+    & > .sell-button {
+      color: $light-bg;
+    }
   }
 }

@@ -21,6 +21,7 @@ import {
   DepositDialogT,
   ForgotPasswordDialogT,
   PriceT,
+  SellOnMarketT,
   WithdrawDialogT,
 } from "../types";
 import { motion } from "framer-motion";
@@ -292,6 +293,32 @@ export const WithdrawDialog: React.FC<WithdrawDialogT> = ({
         <Card className="card">
           <CardContent>
             <WithdrawForm setDepositModal={setWithdrawModal} />
+          </CardContent>
+        </Card>
+      </div>
+    </Dialog>
+  );
+};
+
+export const SellOnMarkerPlace: React.FC<SellOnMarketT> = ({
+  sellModal,
+  setSellModal,
+}) => {
+  return (
+    <Dialog
+      open={sellModal}
+      onClose={() => setSellModal(false)}
+      PaperProps={{
+        style: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        },
+      }}
+    >
+      <div className="wrapper">
+        <Card className="card">
+          <CardContent>
+            <WithdrawForm setDepositModal={setSellModal} />
           </CardContent>
         </Card>
       </div>

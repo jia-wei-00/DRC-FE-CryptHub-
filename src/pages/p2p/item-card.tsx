@@ -6,8 +6,14 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Bitcoin from "../../assets/bitcoin.svg";
+import Ethereum from "../../assets/ethereum.svg";
 
-function ItemCard() {
+type ItemCardT = {
+  active: string;
+  array: string;
+};
+
+const ItemCard: React.FC<ItemCardT> = ({ active, array }) => {
   return (
     <Card className="market-card">
       <CardMedia
@@ -15,11 +21,11 @@ function ItemCard() {
         alt="green iguana"
         height="100"
         sx={{ objectFit: "contain" }}
-        image={Bitcoin}
+        image={array === "BTC" ? Bitcoin : Ethereum}
       />
       <CardContent className="card-content">
         <Typography gutterBottom variant="h5" component="div">
-          BTC
+          {array}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Amount: 0.04
@@ -30,10 +36,14 @@ function ItemCard() {
       </CardContent>
 
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
-        <Button size="small">BUY</Button>
+        {active === "market" ? (
+          <Button size="small">BUY</Button>
+        ) : (
+          <Button size="small">WITHDRAW</Button>
+        )}
       </CardActions>
     </Card>
   );
-}
+};
 
 export default ItemCard;

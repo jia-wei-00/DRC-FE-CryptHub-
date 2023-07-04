@@ -6,4 +6,5 @@ export {
   AuthDialog,
   ForgotPasswordDialog,
   ChartSettingsDialog,
+  SellOnMarkerPlace,
 } from "./dialog";

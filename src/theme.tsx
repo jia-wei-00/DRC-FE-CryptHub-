@@ -48,6 +48,14 @@ export const darkTheme = createTheme({
         },
       },
     },
+    MuiFab: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgba(162, 123, 92, 0.8)",
+          color: "white",
+        },
+      },
+    },
   },
   typography: {
     fontFamily: "poppins",
@@ -101,7 +109,14 @@ export const lightTheme = createTheme({
     MuiCardActions: {
       styleOverrides: {
         root: {
-          backgroundColor: "rgba(0,0,0,0.3)",
+          backgroundColor: "rgba(162, 123, 92, 0.8)",
+        },
+      },
+    },
+    MuiFab: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgba(162, 123, 92, 0.8)",
         },
       },
     },
