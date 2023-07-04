@@ -44,7 +44,7 @@ export const darkTheme = createTheme({
     MuiCardActions: {
       styleOverrides: {
         root: {
-          backgroundColor: "black",
+          backgroundColor: "rgba(0,0,0,0.5)",
         },
       },
     },
@@ -95,6 +95,13 @@ export const lightTheme = createTheme({
               border: "1px solid rgba(0,0,0,0.3)",
             },
           },
+        },
+      },
+    },
+    MuiCardActions: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgba(0,0,0,0.3)",
         },
       },
     },

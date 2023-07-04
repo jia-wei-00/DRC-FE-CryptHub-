@@ -9,12 +9,12 @@ import Bitcoin from "../../assets/bitcoin.svg";
 
 function ItemCard() {
   return (
-    <Card sx={{ maxWidth: 200 }}>
+    <Card className="market-card">
       <CardMedia
         component="img"
         alt="green iguana"
         height="100"
-        sx={{ objectFit: "contain", marginTop: "25px" }}
+        sx={{ objectFit: "contain" }}
         image={Bitcoin}
       />
       <CardContent className="card-content">
@@ -28,6 +28,7 @@ function ItemCard() {
           Price: 3000
         </Typography>
       </CardContent>
+
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
         <Button size="small">BUY</Button>
       </CardActions>

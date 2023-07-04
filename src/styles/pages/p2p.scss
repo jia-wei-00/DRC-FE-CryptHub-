@@ -9,21 +9,64 @@
 
   & > .filter {
     width: 200px;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.4);
     border-radius: 5px;
     padding: 15px;
+    margin: 10px 0;
+    position: sticky;
+    top: 0;
   }
 
   & > .market-card {
     flex-grow: 1;
     padding: 10px;
+
+    & > .p2p-head-stack {
+      margin-bottom: 10px;
+      position: relative;
+      width: 500px;
+
+      & > button {
+        z-index: 10;
+      }
+
+      & > .p2p-indicator {
+        position: absolute;
+        left: 0;
+        background-color: aliceblue;
+        height: 35px;
+        width: 50%;
+        border-radius: 5px;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 1023px) {
+    flex-direction: column;
+
+    & > .filter {
+      margin: 0 10px;
+      width: unset;
+    }
   }
 }
 
-.card-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.market-card {
+  padding: 10px;
+
+  & > .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  & > div {
+    border-radius: 5px;
+  }
 }
