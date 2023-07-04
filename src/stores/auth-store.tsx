@@ -179,8 +179,10 @@ class AuthStoreImplementation {
         headers: headers(this.user!.token!),
       });
 
+      console.log(res);
+
       toast.update(id, {
-        render: "Successfully Deposited",
+        render: "Successfully Withdraw",
         type: "success",
         isLoading: false,
         autoClose: 5000,
