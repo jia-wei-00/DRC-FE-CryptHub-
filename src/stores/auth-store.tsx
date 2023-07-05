@@ -350,6 +350,56 @@ class AuthStoreImplementation {
       });
     }
   }
+
+  async fetchWalletHistory(): Promise<void> {
+    try {
+      const res = await axios.get(`${domain}/wallet/walletTransaction`, {
+        headers: headers(this.user!.token!),
+      });
+
+      const transaction = res.data.details.map((data: any) => {
+        const {
+          transaction_id: id,
+          trade_type: type,
+          currency,
+          coin_amount,
+          transaction_amount,
+          transaction_date: string_date,
+          commission_deduction_5,
+        } = data;
+
+        const date = new Date(string_date).getTime();
+
+        let commission = commission_deduction_5;
+
+        if (commission === 0) {
+          commission = "-";
+        }
+
+        return {
+          id,
+          type,
+          currency,
+          coin_amount,
+          transaction_amount,
+          commission,
+          date,
+        };
+      });
+
+      runInAction(() => {
+        this.transaction = transaction;
+      });
+    } catch (error: any) {
+      let message = error.message;
+      if (error.response) {
+        message = error.response.data.message;
+      }
+      toast.error(`Error: ${message}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  }
 }
 
 const authStore = new AuthStoreImplementation();

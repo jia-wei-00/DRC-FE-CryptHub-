@@ -124,6 +124,6 @@ export type WithdrawDialogT = {
 
 //sell on marketplace modal type
 export type SellOnMarketT = {
-  sellModal: boolean;
+  sellModal?: boolean;
   setSellModal: React.Dispatch<React.SetStateAction<boolean>>;
 };

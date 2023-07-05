@@ -37,6 +37,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { resetSchema } from "../schemas";
 import DepositForm from "./deposit-form";
 import WithdrawForm from "./withdraw-form";
+import SellOnMarketForm from "./sell-on-market-form";
 
 export const ForgotPasswordDialog: React.FC<ForgotPasswordDialogT> = ({
   forgotPassword,
@@ -306,7 +307,7 @@ export const SellOnMarkerPlace: React.FC<SellOnMarketT> = ({
 }) => {
   return (
     <Dialog
-      open={sellModal}
+      open={sellModal!}
       onClose={() => setSellModal(false)}
       PaperProps={{
         style: {
@@ -318,7 +319,7 @@ export const SellOnMarkerPlace: React.FC<SellOnMarketT> = ({
       <div className="wrapper">
         <Card className="card">
           <CardContent>
-            <WithdrawForm setDepositModal={setSellModal} />
+            <SellOnMarketForm setSellModal={setSellModal} />
           </CardContent>
         </Card>
       </div>

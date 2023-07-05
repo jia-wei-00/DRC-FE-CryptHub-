@@ -61,7 +61,7 @@ const columns: readonly Column[] = [
   },
 ];
 
-function TransactionHistory() {
+function WalletHistory() {
   const [fromDate, setFromDate] = React.useState<any>(
     dayjs().subtract(30, "day")
   );
@@ -139,4 +139,4 @@ function TransactionHistory() {
   );
 }
 
-export default observer(TransactionHistory);
+export default observer(WalletHistory);

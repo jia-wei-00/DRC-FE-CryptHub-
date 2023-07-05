@@ -135,7 +135,6 @@ const P2P: React.FC = () => {
           ))}
         </Grid>
       </div>
-
       <SellButton />
     </Container>
   );

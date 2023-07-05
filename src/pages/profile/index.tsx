@@ -52,12 +52,16 @@ const Profile = () => {
         sx={{ borderRight: 1, borderColor: "divider" }}
       >
         <Tab label="Transaction History" {...a11yProps(0)} />
-        <Tab label="Reset Password" {...a11yProps(1)} />
+        <Tab label="Wallet History" {...a11yProps(1)} />
+        <Tab label="Reset Password" {...a11yProps(2)} />
       </Tabs>
       <TabPanel value={value} index={0}>
         <TransactionHistory />
       </TabPanel>
       <TabPanel value={value} index={1}>
+        <TransactionHistory />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
         <ResetPasswordForm />
       </TabPanel>
     </Box>
