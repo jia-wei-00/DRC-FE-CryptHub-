@@ -145,7 +145,7 @@ const Action: React.FC = () => {
 
   return (
     <div className="side-bar">
-      <div className="side-bar-details">
+      <div className="side-bar-details" id="chart-settings">
         <div className="mobile-hide">
           <FormControl sx={{ display: "flex" }}>
             <InputLabel id="demo-simple-select-autowidth-label">

@@ -54,7 +54,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 
 const CustomizedSwitches = () => {
   return (
-    <FormGroup>
+    <FormGroup id="#dark-light-toggle">
       <FormControlLabel
         control={
           <MaterialUISwitch

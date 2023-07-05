@@ -197,7 +197,7 @@ function Nav() {
                 <>
                   <CustomizedSwitches />
                   {authStore.user && (
-                    <FormControl size="small">
+                    <FormControl size="small" id="wallet">
                       <InputLabel id="demo-simple-select-label">
                         WALLET
                       </InputLabel>
@@ -223,10 +223,14 @@ function Nav() {
               {authStore.user ? (
                 <>
                   <Tooltip title="Open settings">
-                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <IconButton
+                      onClick={handleOpenUserMenu}
+                      sx={{ p: 0 }}
+                      id="profile"
+                    >
                       <Avatar
-                        alt="Remy Sharp"
-                        // src="/static/images/avatar/2.jpg"
+                        alt={authStore.user.name}
+                        src="/static/images/avatar/2.jpg"
                       />
                     </IconButton>
                   </Tooltip>

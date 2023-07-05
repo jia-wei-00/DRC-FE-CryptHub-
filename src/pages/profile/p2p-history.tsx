@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { observer } from "mobx-react-lite";
-import { authStore } from "../../stores";
+import { authStore, p2pStore } from "../../stores";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -52,14 +52,14 @@ const columns: readonly WalletHistoryColumn[] = [
   },
 ];
 
-function WalletHistory() {
+function P2PHistory() {
   const [fromDate, setFromDate] = React.useState<any>(
     dayjs().subtract(30, "day")
   );
   const [toDate, setToDate] = React.useState<any>(dayjs());
 
   React.useEffect(() => {
-    authStore.fetchWalletHistory();
+    p2pStore.fetchP2PHistory();
   }, []);
 
   return (
@@ -124,4 +124,4 @@ function WalletHistory() {
   );
 }
 
-export default observer(WalletHistory);
+export default observer(P2PHistory);

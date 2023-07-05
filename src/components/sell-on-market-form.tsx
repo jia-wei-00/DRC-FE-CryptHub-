@@ -53,6 +53,7 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
   React.useEffect(() => {
     if (isSubmitSuccessful) {
       reset();
+      p2pStore.fetchP2PMarket();
       setSellModal(false);
     }
 

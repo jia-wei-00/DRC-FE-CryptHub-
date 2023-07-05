@@ -4,6 +4,7 @@ import "../../styles/pages/profile.scss";
 import TransactionHistory from "./transaction-history";
 import ResetPasswordForm from "./reset-password";
 import WalletHistoryT from "./wallet-history";
+import P2PHistory from "./p2p-history";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,7 +56,8 @@ const Profile = () => {
       >
         <Tab label="Transaction History" {...a11yProps(0)} />
         <Tab label="Wallet History" {...a11yProps(1)} />
-        <Tab label="Reset Password" {...a11yProps(2)} />
+        <Tab label="P2P Completed History" {...a11yProps(2)} />
+        <Tab label="Reset Password" {...a11yProps(3)} />
       </Tabs>
       <TabPanel value={value} index={0}>
         <TransactionHistory />
@@ -64,6 +66,9 @@ const Profile = () => {
         <WalletHistoryT />
       </TabPanel>
       <TabPanel value={value} index={2}>
+        <P2PHistory />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
         <ResetPasswordForm />
       </TabPanel>
     </Box>

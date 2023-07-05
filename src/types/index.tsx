@@ -154,5 +154,15 @@ export type AddP2PContractFormT = {
 //p2p market item card type
 export type ItemCardT = {
   active: string;
-  array: string;
+  contract: P2PContractsT;
+};
+
+//p2p contracts type
+export type P2PContractsT = {
+  coin_amount: number;
+  contract_id: string;
+  created_at: EpochTimeStamp;
+  currency: string;
+  seller_id: number;
+  selling_price: number;
 };
