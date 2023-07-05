@@ -143,3 +143,16 @@ export type SellOnMarketT = {
   sellModal?: boolean;
   setSellModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+//add p2p contract form type
+export type AddP2PContractFormT = {
+  currency: string;
+  coin_amount: number;
+  price: number;
+};
+
+//p2p market item card type
+export type ItemCardT = {
+  active: string;
+  array: string;
+};

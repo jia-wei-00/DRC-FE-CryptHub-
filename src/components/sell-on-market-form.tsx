@@ -1,8 +1,7 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { DepositDialogT, PriceT, SellOnMarketT } from "../types";
+import { AddP2PContractFormT, SellOnMarketT } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authStore } from "../stores";
 import {
   Box,
   Button,
@@ -13,12 +12,17 @@ import {
   MenuItem,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
-import { depositSchema } from "../schemas";
+import { addP2PSchema } from "../schemas";
+import p2pStore from "../stores/p2p-store";
+import { websocketStoreP2P } from "../stores";
+import { observer } from "mobx-react-lite";
+import ReactLoading from "react-loading";
 
 const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
-  const [currency, setCurrency] = React.useState("ETH");
+  const [coinAmount, setCoinAmount] = React.useState<number>(0);
 
   const {
     register,
@@ -27,20 +31,36 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
     handleSubmit,
     setValue,
     getValues,
-  } = useForm<PriceT>({
-    resolver: zodResolver(depositSchema),
+    watch,
+  } = useForm<AddP2PContractFormT>({
+    resolver: zodResolver(addP2PSchema(websocketStoreP2P.ticks, coinAmount)),
   });
+
+  React.useEffect(() => {
+    if (websocketStoreP2P.ticks === 0) {
+      websocketStoreP2P.subscribeTicks();
+    }
+
+    return () => {
+      websocketStoreP2P.unsubscribeTicks();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    setCoinAmount(Number(getValues("coin_amount")));
+  }, [watch("coin_amount")]);
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
       reset();
       setSellModal(false);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitSuccessful]);
 
-  const onSubmitHandler: SubmitHandler<PriceT> = (values) => {
-    authStore.withdraw(values);
+  const onSubmitHandler: SubmitHandler<AddP2PContractFormT> = (values) => {
+    p2pStore.addP2PContract(values);
   };
 
   const handleAdd = () => {
@@ -57,14 +77,24 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)} className="deposit-form">
       Insert the details
+      <span className="add-contract-current-price">
+        <Typography sx={{ margin: "0 10px" }}>Current Price:</Typography>
+        {websocketStoreP2P.ticks === 0 ? (
+          <ReactLoading type="bars" height={"20px"} width={"20px"} />
+        ) : (
+          websocketStoreP2P.ticks
+        )}
+      </span>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Currency</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={currency}
           label="Currency"
-          onChange={(e) => setCurrency(e.target.value)}
+          value={websocketStoreP2P.currency}
+          onChange={(e) =>
+            websocketStoreP2P.changeSubscribedCurrency(e.target.value)
+          }
         >
           <MenuItem value="ETH">ETH</MenuItem>
           <MenuItem value="BTC">BTC</MenuItem>
@@ -77,10 +107,33 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
         <TextField
           InputProps={{
             endAdornment: (
-              <InputAdornment position="end">{currency}</InputAdornment>
+              <InputAdornment position="end">
+                {websocketStoreP2P.currency}
+              </InputAdornment>
             ),
           }}
+          label="Coin to sell"
           type="number"
+          variant="standard"
+          error={!!errors["coin_amount"]}
+          defaultValue={0}
+          helperText={!!errors.coin_amount && errors.coin_amount.message}
+          {...register("coin_amount", { valueAsNumber: true })}
+        />
+        <IconButton onClick={handleAdd} aria-label="add">
+          <Add />
+        </IconButton>
+      </Box>
+      <Box className="deposit-input-box">
+        <IconButton onClick={handleSubtract} aria-label="subtract">
+          <Remove />
+        </IconButton>
+        <TextField
+          InputProps={{
+            endAdornment: <InputAdornment position="end">USD</InputAdornment>,
+          }}
+          type="number"
+          label="Price"
           variant="standard"
           error={!!errors["price"]}
           defaultValue={0}
@@ -91,11 +144,15 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
           <Add />
         </IconButton>
       </Box>
-      <Button type="submit" variant="contained">
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={websocketStoreP2P.ticks === 0}
+      >
         SELL
       </Button>
     </form>
   );
 };
 
-export default SellOnMarketForm;
+export default observer(SellOnMarketForm);

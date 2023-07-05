@@ -126,6 +126,12 @@
   }
 }
 
+.add-contract-current-price {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
 #light {
   .filter {
     background-color: rgba(0, 0, 0, 0.6);

@@ -14,12 +14,12 @@ import "../../styles/pages/p2p.scss";
 import ItemCard from "./item-card";
 import { motion } from "framer-motion";
 import SellButton from "./floading-sell";
-import { SellOnMarkerPlace } from "../../components";
+import { observer } from "mobx-react-lite";
+import p2pStore from "../../stores/p2p-store";
 
 const P2P: React.FC = () => {
   const [active, setActive] = React.useState("market");
   const [checked, setChecked] = React.useState([true, true]);
-  const [sellModal, setSellModal] = React.useState(false);
 
   const handleChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked([event.target.checked, event.target.checked]);
@@ -84,6 +84,10 @@ const P2P: React.FC = () => {
     return false;
   });
 
+  React.useEffect(() => {
+    p2pStore.fetchP2PMarket();
+  }, []);
+
   return (
     <Container maxWidth="xl" className="p2p-container">
       <div className="filter">
@@ -140,4 +144,4 @@ const P2P: React.FC = () => {
   );
 };
 
-export default P2P;
+export default observer(P2P);

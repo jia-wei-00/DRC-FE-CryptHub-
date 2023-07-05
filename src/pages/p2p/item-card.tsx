@@ -7,11 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Bitcoin from "../../assets/bitcoin.svg";
 import Ethereum from "../../assets/ethereum.svg";
-
-type ItemCardT = {
-  active: string;
-  array: string;
-};
+import { ItemCardT } from "../../types";
 
 const ItemCard: React.FC<ItemCardT> = ({ active, array }) => {
   return (
