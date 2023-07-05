@@ -3,6 +3,7 @@ import React from "react";
 import "../../styles/pages/profile.scss";
 import TransactionHistory from "./transaction-history";
 import ResetPasswordForm from "./reset-password";
+import WalletHistoryT from "./wallet-history";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -20,6 +21,7 @@ function TabPanel(props: TabPanelProps) {
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
+      className="tabpanel"
     >
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
@@ -59,7 +61,7 @@ const Profile = () => {
         <TransactionHistory />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <TransactionHistory />
+        <WalletHistoryT />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <ResetPasswordForm />

@@ -11,29 +11,29 @@ import { authStore } from "../../stores";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Column, Transaction } from "../../types";
+import { WalletHistoryT, WalletHistoryColumn } from "../../types";
 import dayjs from "dayjs";
 
-const columns: readonly Column[] = [
+const columns: readonly WalletHistoryColumn[] = [
   // { id: "id", label: "No", minWidth: 170 },
-  { id: "type", label: "Trade Type", minWidth: 100 },
+  { id: "dwt_type", label: "Type", minWidth: 100 },
   {
-    id: "currency",
-    label: "Currency",
+    id: "dwt_before",
+    label: "Before",
     minWidth: 170,
     align: "right",
     format: (value: number | Date) => value.toLocaleString("en-US"),
   },
   {
-    id: "coin_amount",
-    label: "Coin Amount",
+    id: "dwt_after",
+    label: "After",
     minWidth: 170,
     align: "right",
     format: (value: number | Date) =>
       value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
   },
   {
-    id: "transaction_amount",
+    id: "dwt_amount",
     label: "Transaction Amount",
     minWidth: 170,
     align: "right",
@@ -41,21 +41,13 @@ const columns: readonly Column[] = [
       value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
   },
   {
-    id: "commission",
-    label: "Commission (5%)",
-    minWidth: 170,
-    align: "right",
-    format: (value: number | Date) =>
-      value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
-  },
-
-  {
-    id: "date",
+    id: "created_at",
     label: "Date",
     minWidth: 170,
     align: "right",
     format: (value: number | Date) => {
       const date = new Date(value);
+      console.log(date);
       return date.toLocaleString("eu-US");
     },
   },
@@ -68,7 +60,7 @@ function WalletHistory() {
   const [toDate, setToDate] = React.useState<any>(dayjs());
 
   React.useEffect(() => {
-    authStore.fetchTransaction();
+    authStore.fetchWalletHistory();
   }, []);
 
   return (
@@ -101,21 +93,16 @@ function WalletHistory() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {authStore.transaction &&
-                authStore.transaction
+              {authStore.wallet_history &&
+                authStore.wallet_history
                   .filter(
-                    (transaction: Transaction) =>
-                      transaction.date >= fromDate.valueOf() &&
-                      transaction.date <= toDate.valueOf()
+                    (transaction: WalletHistoryT) =>
+                      transaction.created_at >= fromDate.valueOf() &&
+                      transaction.created_at <= toDate.valueOf()
                   )
-                  .map((row: Transaction, index: number) => {
+                  .map((row: WalletHistoryT, index: number) => {
                     return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.id}
-                      >
+                      <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                         <TableCell>{index + 1}</TableCell>
                         {columns.map((column) => {
                           const value = row[column.id];
@@ -124,7 +111,6 @@ function WalletHistory() {
                               {column.format && typeof value === "number"
                                 ? column.format(value)
                                 : value}
-                              {/* {value} */}
                             </TableCell>
                           );
                         })}

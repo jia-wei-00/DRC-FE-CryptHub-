@@ -10,6 +10,7 @@ import {
   ResetPasswordFormT,
   Transaction,
   User,
+  WalletHistoryT,
 } from "../types";
 import { domain, headers } from "../constant";
 
@@ -17,12 +18,15 @@ class AuthStoreImplementation {
   user: User | null = null;
   auth_modal: boolean = false;
   transaction: Transaction[] = [];
+  wallet_history: WalletHistoryT[] = [];
 
   constructor() {
     makeObservable(this, {
       user: observable,
       auth_modal: observable,
       transaction: observable,
+      wallet_history: observable,
+      fetchWalletHistory: action.bound,
       setUser: action.bound,
       signOut: action.bound,
       setAuthModal: action.bound,
@@ -178,8 +182,6 @@ class AuthStoreImplementation {
       const res = await axios.post(`${domain}/wallet/walletWithdraw`, amount, {
         headers: headers(this.user!.token!),
       });
-
-      console.log(res);
 
       toast.update(id, {
         render: "Successfully Withdraw",
@@ -357,38 +359,26 @@ class AuthStoreImplementation {
         headers: headers(this.user!.token!),
       });
 
-      const transaction = res.data.details.map((data: any) => {
-        const {
-          transaction_id: id,
-          trade_type: type,
-          currency,
-          coin_amount,
-          transaction_amount,
-          transaction_date: string_date,
-          commission_deduction_5,
-        } = data;
+      const transaction = res.data.details.map((data: WalletHistoryT) => {
+        const { dwt_type, dwt_before, dwt_after, dwt_amount, created_at } =
+          data;
 
-        const date = new Date(string_date).getTime();
-
-        let commission = commission_deduction_5;
-
-        if (commission === 0) {
-          commission = "-";
-        }
+        const date = new Date(created_at).getTime();
+        const before = Number(dwt_before);
+        const after = Number(dwt_after);
+        const amount = Number(dwt_amount);
 
         return {
-          id,
-          type,
-          currency,
-          coin_amount,
-          transaction_amount,
-          commission,
-          date,
+          dwt_type,
+          dwt_before: before,
+          dwt_after: after,
+          dwt_amount: amount,
+          created_at: date,
         };
       });
 
       runInAction(() => {
-        this.transaction = transaction;
+        this.wallet_history = transaction;
       });
     } catch (error: any) {
       let message = error.message;

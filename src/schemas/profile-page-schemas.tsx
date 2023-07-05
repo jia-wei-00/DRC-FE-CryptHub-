@@ -15,6 +15,6 @@ export const resetSchema: ZodType = object({
     ),
   new_password: string().nonempty("Please confirm your password"),
 }).refine((data) => data.password === data.new_password, {
-  path: ["passwordConfirm"],
+  path: ["new_password"],
   message: "Passwords do not match",
 });

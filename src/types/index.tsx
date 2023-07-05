@@ -103,6 +103,22 @@ export type Transaction = {
   type: string;
 };
 
+export type WalletHistoryColumn = {
+  id: "dwt_type" | "dwt_before" | "dwt_after" | "dwt_amount" | "created_at";
+  label: string;
+  minWidth?: number;
+  align?: "right";
+  format?: (value: number) => string;
+};
+
+export type WalletHistoryT = {
+  dwt_type: string;
+  dwt_before: number;
+  dwt_after: number;
+  dwt_amount: number;
+  created_at: EpochTimeStamp | string;
+};
+
 //reset password form type
 export type ResetPasswordFormT = {
   old_password: string;
