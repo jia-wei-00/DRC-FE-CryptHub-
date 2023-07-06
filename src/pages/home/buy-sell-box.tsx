@@ -93,6 +93,9 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
               variant="standard"
               onChange={handleInputChange}
               value={input}
+              inputProps={{
+                min: 1,
+              }}
             />
 
             <IconButton
@@ -106,7 +109,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
             variant="contained"
             color={active === "buy" ? "success" : "error"}
             className="buy-sell-btn"
-            disabled={buy_coin <= 0}
+            disabled={buy_coin <= 0 || Number.isNaN(buy_coin)}
             onClick={buySellHandler}
           >
             <span>{active === "buy" ? "BUY" : "SELL"}</span>

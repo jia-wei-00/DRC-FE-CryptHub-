@@ -13,6 +13,7 @@ import {
   WalletHistoryT,
 } from "../types";
 import { domain, headers } from "../constant";
+import { createTimeoutPromise } from "../functions";
 
 class AuthStoreImplementation {
   user: User | null = null;
@@ -67,9 +68,12 @@ class AuthStoreImplementation {
     const id = toast.loading("Please wait...");
 
     try {
-      await axios.post(`${domain}/user/resetPassword`, values, {
-        headers: headers(this.user!.token!),
-      });
+      await Promise.race([
+        axios.post(`${domain}/user/resetPassword`, values, {
+          headers: headers(this.user!.token!),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       toast.update(id, {
         render: "Successfully Reset Password",
@@ -96,10 +100,10 @@ class AuthStoreImplementation {
   async signIn(values: InputData): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      const userCredential = await axios.post(
-        `${domain}/user/loginUser`,
-        values
-      );
+      const userCredential = await Promise.race([
+        axios.post(`${domain}/user/loginUser`, values),
+        createTimeoutPromise(10000),
+      ]);
 
       runInAction(() => {
         this.user = userCredential.data.details;
@@ -140,9 +144,12 @@ class AuthStoreImplementation {
     };
 
     try {
-      const res = await axios.post(`${domain}/wallet/walletDeposit`, amount, {
-        headers: headers(this.user!.token!),
-      });
+      const res = await Promise.race([
+        axios.post(`${domain}/wallet/walletDeposit`, amount, {
+          headers: headers(this.user!.token!),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       toast.update(id, {
         render: "Successfully Deposited",
@@ -179,9 +186,12 @@ class AuthStoreImplementation {
     };
 
     try {
-      const res = await axios.post(`${domain}/wallet/walletWithdraw`, amount, {
-        headers: headers(this.user!.token!),
-      });
+      const res = await Promise.race([
+        axios.post(`${domain}/wallet/walletWithdraw`, amount, {
+          headers: headers(this.user!.token!),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       toast.update(id, {
         render: "Successfully Withdraw",
@@ -213,11 +223,14 @@ class AuthStoreImplementation {
   async signOut(): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      await axios.post(
-        `${domain}/user/logoutUser`,
-        {}, //pass in empty body
-        { headers: headers(this.user!.token!) }
-      );
+      await Promise.race([
+        axios.post(
+          `${domain}/user/logoutUser`,
+          {}, // pass in empty body
+          { headers: headers(this.user!.token!) }
+        ),
+        createTimeoutPromise(10000),
+      ]);
 
       toast.update(id, {
         render: "Successfully Logout",
@@ -248,7 +261,10 @@ class AuthStoreImplementation {
   async signUp(values: InputData): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      await axios.post(`${domain}/user/registerUser`, values);
+      await Promise.race([
+        axios.post(`${domain}/user/registerUser`, values),
+        createTimeoutPromise(10000),
+      ]);
       toast.update(id, {
         render: `Check your email to activate account`,
         type: "success",
@@ -279,7 +295,10 @@ class AuthStoreImplementation {
   ): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      await axios.post(`${domain}/user/forgotPassword`, values);
+      await Promise.race([
+        axios.post(`${domain}/user/forgotPassword`, values),
+        createTimeoutPromise(10000),
+      ]);
       toast.update(id, {
         render: `Check your email to reset password`,
         type: "success",
@@ -305,9 +324,12 @@ class AuthStoreImplementation {
 
   async fetchTransaction(): Promise<void> {
     try {
-      const res = await axios.get(`${domain}/transaction/getAllTransactions`, {
-        headers: headers(this.user!.token!),
-      });
+      const res = await Promise.race([
+        axios.get(`${domain}/transaction/getAllTransactions`, {
+          headers: headers(this.user!.token!),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       const transaction = res.data.details.map((data: any) => {
         const {
@@ -355,9 +377,12 @@ class AuthStoreImplementation {
 
   async fetchWalletHistory(): Promise<void> {
     try {
-      const res = await axios.get(`${domain}/wallet/walletTransaction`, {
-        headers: headers(this.user!.token!),
-      });
+      const res = await Promise.race([
+        axios.get(`${domain}/wallet/walletTransaction`, {
+          headers: headers(this.user!.token!),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       const transaction = res.data.details.map((data: WalletHistoryT) => {
         const { dwt_type, dwt_before, dwt_after, dwt_amount, created_at } =

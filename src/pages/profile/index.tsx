@@ -24,7 +24,11 @@ function TabPanel(props: TabPanelProps) {
       {...other}
       className="tabpanel"
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && (
+        <Box sx={{ p: 3 }} className="tab-box">
+          {children}
+        </Box>
+      )}
     </div>
   );
 }
@@ -51,7 +55,10 @@ const Profile = () => {
         orientation={matches ? "vertical" : "horizontal"}
         value={value}
         onChange={handleChange}
-        aria-label="Vertical tabs example"
+        aria-label="vertial_tabs_table"
+        variant="scrollable"
+        scrollButtons="auto"
+        allowScrollButtonsMobile
         sx={{ borderRight: 1, borderColor: "divider" }}
       >
         <Tab label="Transaction History" {...a11yProps(0)} />
