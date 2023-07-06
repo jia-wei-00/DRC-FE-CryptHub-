@@ -30,7 +30,7 @@ const Action: React.FC = () => {
 
   //function for change chart type
   const handleChangeChart = (
-    event: React.MouseEvent<HTMLElement>,
+    _: React.MouseEvent<HTMLElement>,
     type: string
   ) => {
     if (type === null) return;
@@ -39,7 +39,7 @@ const Action: React.FC = () => {
 
   //function for change chart interval
   const handleChangeInterval = (
-    event: React.MouseEvent<HTMLElement>,
+    _: React.MouseEvent<HTMLElement>,
     interval: string
   ) => {
     if (interval === null) return;

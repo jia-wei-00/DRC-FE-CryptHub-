@@ -6,10 +6,9 @@ import { modeStore } from "./stores";
 import { observer } from "mobx-react-lite";
 import { ToastContainer } from "react-toastify";
 import { Nav } from "./components";
-import { steps, pages } from "./constant";
+import { pages } from "./constant";
 import { Profile } from "./pages";
 import Auth from "./auth";
-import JoyRide, { Placement } from "react-joyride";
 
 const App: React.FC = () => {
   return (
@@ -32,13 +31,6 @@ const App: React.FC = () => {
           theme={modeStore.mode === "dark" ? "dark" : "light"}
           limit={3}
         />
-        {/* <JoyRide
-          continuous
-          hideCloseButton
-          scrollToFirstStep
-          showProgress
-          steps={steps}
-        /> */}
       </ThemeProvider>
     </div>
   );

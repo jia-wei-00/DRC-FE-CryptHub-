@@ -114,7 +114,7 @@ export const AuthDialog: React.FC<AuthDialogT> = observer(
 export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
   ({ openSettings, setOpenSettings }) => {
     const handleChangeChart = (
-      event: React.MouseEvent<HTMLElement>,
+      _: React.MouseEvent<HTMLElement>,
       type: string
     ) => {
       if (type === null) return;
@@ -122,7 +122,7 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
     };
 
     const handleChangeInterval = (
-      event: React.MouseEvent<HTMLElement>,
+      _: React.MouseEvent<HTMLElement>,
       interval: string
     ) => {
       if (interval === null) return;
