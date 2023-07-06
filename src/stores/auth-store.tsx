@@ -4,7 +4,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { makePersistable } from "mobx-persist-store";
 import axios from "axios";
 import {
+  Action,
+  HandleModalDispatchT,
   InputData,
+  ModalState,
   PriceT,
   ResetPassword,
   ResetPasswordFormT,
@@ -12,7 +15,7 @@ import {
   User,
   WalletHistoryT,
 } from "../types";
-import { domain, headers } from "../constant";
+import { MODALACTIONS, domain, headers } from "../constant";
 import { createTimeoutPromise } from "../functions";
 
 class AuthStoreImplementation {
@@ -291,7 +294,8 @@ class AuthStoreImplementation {
 
   async forgotPassword(
     values: ResetPassword,
-    setForgotPassword: React.Dispatch<React.SetStateAction<boolean>>
+    modal: ModalState,
+    dispatch: React.Dispatch<Action>
   ): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
@@ -306,7 +310,10 @@ class AuthStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-      setForgotPassword(false);
+      dispatch({
+        type: MODALACTIONS.FORGOTPASSWORD,
+        payload: !modal.forgot_password_modal,
+      });
     } catch (error: any) {
       let message = error.message;
       if (error.response) {

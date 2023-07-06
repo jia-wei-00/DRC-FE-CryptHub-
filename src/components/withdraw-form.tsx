@@ -1,6 +1,6 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { DepositDialogT, PriceT } from "../types";
+import { DepositDialogT, HandleModalDispatchT, PriceT } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authStore } from "../stores";
 import {
@@ -12,8 +12,9 @@ import {
 } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 import { depositSchema } from "../schemas";
+import { MODALACTIONS } from "../constant";
 
-const WithdrawForm: React.FC<DepositDialogT> = ({ setDepositModal }) => {
+const WithdrawForm: React.FC<HandleModalDispatchT> = ({ dispatch }) => {
   const {
     register,
     formState: { errors, isSubmitSuccessful },
@@ -28,7 +29,7 @@ const WithdrawForm: React.FC<DepositDialogT> = ({ setDepositModal }) => {
   React.useEffect(() => {
     if (isSubmitSuccessful) {
       reset();
-      setDepositModal(false);
+      dispatch({ type: MODALACTIONS.WITHDRAW, payload: false });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitSuccessful]);

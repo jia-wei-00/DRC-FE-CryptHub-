@@ -53,3 +53,10 @@ export const steps = [
     placement: "top" as Placement,
   },
 ];
+
+export const MODALACTIONS = {
+  DEPOSIT: "deposit",
+  WITHDRAW: "withdraw",
+  FORGOTPASSWORD: "forgot_password",
+  AUTHACTIVE: "auth_active",
+};

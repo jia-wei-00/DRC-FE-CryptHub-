@@ -15,6 +15,7 @@ import {
   ChartSettingsT,
   DepositDialogT,
   ForgotPasswordDialogT,
+  HandleModalReducerT,
   SellOnMarketT,
   WithdrawDialogT,
 } from "../types";
@@ -29,15 +30,21 @@ import ForgotPasswordForm from "./forget-password";
 import DepositForm from "./deposit-form";
 import WithdrawForm from "./withdraw-form";
 import SellOnMarketForm from "./sell-on-market-form";
+import { MODALACTIONS } from "../constant";
 
-export const ForgotPasswordDialog: React.FC<ForgotPasswordDialogT> = ({
-  forgotPassword,
-  setForgotPassword,
+export const ForgotPasswordDialog: React.FC<HandleModalReducerT> = ({
+  modal,
+  dispatch,
 }) => {
   return (
     <Dialog
-      open={forgotPassword}
-      onClose={() => setForgotPassword(false)}
+      open={modal.forgot_password_modal}
+      onClose={() =>
+        dispatch({
+          type: MODALACTIONS.FORGOTPASSWORD,
+          payload: !modal.forgot_password_modal,
+        })
+      }
       PaperProps={{
         style: {
           backgroundColor: "transparent",
@@ -48,7 +55,7 @@ export const ForgotPasswordDialog: React.FC<ForgotPasswordDialogT> = ({
       <div className="wrapper">
         <Card className="card">
           <CardContent>
-            <ForgotPasswordForm setForgotPassword={setForgotPassword} />
+            <ForgotPasswordForm modal={modal} dispatch={dispatch} />
           </CardContent>
         </Card>
       </div>
@@ -56,8 +63,8 @@ export const ForgotPasswordDialog: React.FC<ForgotPasswordDialogT> = ({
   );
 };
 
-export const AuthDialog: React.FC<AuthDialogT> = observer(
-  ({ active, setActive, setForgotPassword }) => {
+export const AuthDialog: React.FC<HandleModalReducerT> = observer(
+  ({ modal, dispatch }) => {
     return (
       <Dialog
         open={authStore.auth_modal}
@@ -73,10 +80,32 @@ export const AuthDialog: React.FC<AuthDialogT> = observer(
           <Card className="card">
             <CardContent>
               <motion.div className="btn-group">
-                <Button onClick={() => setActive("login")}>Login</Button>
-                <Button onClick={() => setActive("register")}>Register</Button>
+                <Button
+                  onClick={() =>
+                    dispatch({
+                      type: MODALACTIONS.AUTHACTIVE,
+                      payload: "login",
+                    })
+                  }
+                >
+                  Login
+                </Button>
+                <Button
+                  onClick={() =>
+                    dispatch({
+                      type: MODALACTIONS.AUTHACTIVE,
+                      payload: "register",
+                    })
+                  }
+                >
+                  Register
+                </Button>
                 <motion.div
-                  animate={active === "register" ? { x: "100%" } : { x: 0 }}
+                  animate={
+                    modal.auth_modal_active === "register"
+                      ? { x: "100%" }
+                      : { x: 0 }
+                  }
                   className="indicator"
                   style={
                     modeStore.mode === "dark"
@@ -87,16 +116,16 @@ export const AuthDialog: React.FC<AuthDialogT> = observer(
               </motion.div>
               <motion.div
                 animate={
-                  active === "login"
+                  modal.auth_modal_active === "login"
                     ? { height: "auto" }
                     : { height: 0, opacity: 0 }
                 }
               >
-                <LoginForm setResetPassword={setForgotPassword} />
+                <LoginForm dispatch={dispatch} />
               </motion.div>
               <motion.div
                 animate={
-                  active === "register"
+                  modal.auth_modal_active === "register"
                     ? { height: "auto", marginTop: "-15px" }
                     : { height: 0, opacity: 0 }
                 }
@@ -240,14 +269,14 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
   }
 );
 
-export const DepositDialog: React.FC<DepositDialogT> = ({
-  depositModal,
-  setDepositModal,
+export const DepositDialog: React.FC<HandleModalReducerT> = ({
+  modal,
+  dispatch,
 }) => {
   return (
     <Dialog
-      open={depositModal!}
-      onClose={() => setDepositModal(false)}
+      open={modal.deposit_modal}
+      onClose={() => dispatch({ type: MODALACTIONS.DEPOSIT, payload: false })}
       PaperProps={{
         style: {
           backgroundColor: "transparent",
@@ -258,7 +287,7 @@ export const DepositDialog: React.FC<DepositDialogT> = ({
       <div className="wrapper">
         <Card className="card">
           <CardContent>
-            <DepositForm setDepositModal={setDepositModal} />
+            <DepositForm dispatch={dispatch} />
           </CardContent>
         </Card>
       </div>
@@ -266,14 +295,14 @@ export const DepositDialog: React.FC<DepositDialogT> = ({
   );
 };
 
-export const WithdrawDialog: React.FC<WithdrawDialogT> = ({
-  withdrawModal,
-  setWithdrawModal,
+export const WithdrawDialog: React.FC<HandleModalReducerT> = ({
+  modal,
+  dispatch,
 }) => {
   return (
     <Dialog
-      open={withdrawModal!}
-      onClose={() => setWithdrawModal(false)}
+      open={modal.withdraw_modal!}
+      onClose={() => dispatch({ type: MODALACTIONS.WITHDRAW, payload: false })}
       PaperProps={{
         style: {
           backgroundColor: "transparent",
@@ -284,7 +313,7 @@ export const WithdrawDialog: React.FC<WithdrawDialogT> = ({
       <div className="wrapper">
         <Card className="card">
           <CardContent>
-            <WithdrawForm setDepositModal={setWithdrawModal} />
+            <WithdrawForm dispatch={dispatch} />
           </CardContent>
         </Card>
       </div>

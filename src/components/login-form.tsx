@@ -2,7 +2,7 @@ import * as React from "react";
 import { authStore } from "../stores";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../schemas/login-page-schemas";
-import { InputData, LoginFormProps } from "../types";
+import { HandleModalDispatchT, InputData, LoginFormProps } from "../types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import {
@@ -22,8 +22,9 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import "../styles/components/login-form.scss";
+import { MODALACTIONS } from "../constant";
 
-const LoginForm: React.FC<LoginFormProps> = (props) => {
+const LoginForm: React.FC<HandleModalDispatchT> = ({ dispatch }) => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
 
   const {
@@ -104,7 +105,14 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
           </FormHelperText>
           <div className="forget-password">
             <span>
-              <span onClick={() => props.setResetPassword(true)}>
+              <span
+                onClick={() =>
+                  dispatch({
+                    type: MODALACTIONS.FORGOTPASSWORD,
+                    payload: true,
+                  })
+                }
+              >
                 Forget Password
               </span>
             </span>

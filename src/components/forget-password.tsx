@@ -2,7 +2,7 @@ import * as React from "react";
 import { authStore } from "../stores";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forgetPasswordSchema } from "../schemas/login-page-schemas";
-import { InputData } from "../types";
+import { HandleModalDispatchT, HandleModalReducerT, InputData } from "../types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   Box,
@@ -15,11 +15,10 @@ import {
 import { EmailRounded } from "@mui/icons-material";
 import "../styles/components/login-form.scss";
 
-interface ForgotPasswordFormProps {
-  setForgotPassword: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = (props) => {
+const ForgotPasswordForm: React.FC<HandleModalReducerT> = ({
+  modal,
+  dispatch,
+}) => {
   const {
     register,
     formState: { errors, isSubmitSuccessful },
@@ -37,8 +36,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = (props) => {
   }, [isSubmitSuccessful]);
 
   const onSubmitHandler: SubmitHandler<InputData> = (values) => {
-    console.log("come here");
-    authStore.forgotPassword(values, props.setForgotPassword);
+    authStore.forgotPassword(values, modal, dispatch);
   };
 
   return (

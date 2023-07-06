@@ -124,7 +124,6 @@ function TransactionHistory() {
                               {column.format && typeof value === "number"
                                 ? column.format(value)
                                 : value}
-                              {/* {value} */}
                             </TableCell>
                           );
                         })}

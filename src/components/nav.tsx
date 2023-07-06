@@ -1,6 +1,6 @@
 import * as React from "react";
 import { authStore } from "../stores";
-import { pages, settings } from "../constant";
+import { MODALACTIONS, pages, settings } from "../constant";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/components/nav.scss";
 import CustomizedSwitches from "./theme-toggle";
@@ -31,17 +31,19 @@ import {
   WithdrawDialog,
 } from "./dialog";
 import logo from "../assets/logo.svg";
-import { DepositDialogT, WithdrawDialogT } from "../types";
+import { Action, HandleModalReducerT, ModalState } from "../types";
 
-const DepositOption: React.FC<DepositDialogT> = ({
-  depositModal,
-  setDepositModal,
-}) => {
+const DepositOption: React.FC<HandleModalReducerT> = ({ modal, dispatch }) => {
   return (
     <>
       <Button
         className="deposit"
-        onClick={() => setDepositModal(!depositModal)}
+        onClick={() =>
+          dispatch({
+            type: MODALACTIONS.DEPOSIT,
+            payload: !modal.deposit_modal,
+          })
+        }
       >
         Deposit
       </Button>
@@ -49,16 +51,16 @@ const DepositOption: React.FC<DepositDialogT> = ({
   );
 };
 
-const WithdrawOption: React.FC<WithdrawDialogT> = ({
-  withdrawModal,
-  setWithdrawModal,
-}) => {
+const WithdrawOption: React.FC<HandleModalReducerT> = ({ modal, dispatch }) => {
   return (
     <>
       <Button
         className="deposit"
         onClick={() => {
-          setWithdrawModal(!withdrawModal);
+          dispatch({
+            type: MODALACTIONS.WITHDRAW,
+            payload: !modal.withdraw_modal,
+          });
         }}
       >
         Withdraw
@@ -67,17 +69,36 @@ const WithdrawOption: React.FC<WithdrawDialogT> = ({
   );
 };
 
+const initialModal: ModalState = {
+  deposit_modal: false,
+  withdraw_modal: false,
+  forgot_password_modal: false,
+  auth_modal_active: "login",
+};
+
+const reducer = (state: ModalState, action: Action): ModalState => {
+  switch (action.type) {
+    case MODALACTIONS.DEPOSIT:
+      return { ...state, deposit_modal: action.payload as boolean };
+    case MODALACTIONS.WITHDRAW:
+      return { ...state, withdraw_modal: action.payload as boolean };
+    case MODALACTIONS.FORGOTPASSWORD:
+      return { ...state, forgot_password_modal: action.payload as boolean };
+    case MODALACTIONS.AUTHACTIVE:
+      return { ...state, auth_modal_active: action.payload as string };
+    default:
+      return state;
+  }
+};
+
 function Nav() {
-  const [active, setActive] = React.useState<string>("login");
-  const [forgotPassword, setForgotPassword] = React.useState(false);
+  const [modal, dispatch] = React.useReducer(reducer, initialModal);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
-  const [depositModal, setDepositModal] = React.useState<boolean>(false);
-  const [withdrawModal, setWithdrawModal] = React.useState<boolean>(false);
 
   const navigate = useNavigate();
   const matches = useMediaQuery("(min-width:1023px)");
@@ -209,14 +230,8 @@ function Nav() {
                         <MenuItem value={2}>{authStore.user?.BTC} BTC</MenuItem>
                         <Divider />
 
-                        <DepositOption
-                          depositModal={depositModal}
-                          setDepositModal={setDepositModal}
-                        />
-                        <WithdrawOption
-                          withdrawModal={withdrawModal}
-                          setWithdrawModal={setWithdrawModal}
-                        />
+                        <DepositOption modal={modal} dispatch={dispatch} />
+                        <WithdrawOption modal={modal} dispatch={dispatch} />
                       </Select>
                     </FormControl>
                   )}
@@ -278,14 +293,8 @@ function Nav() {
                       </MenuItem>
                       <Divider />
 
-                      <DepositOption
-                        depositModal={depositModal}
-                        setDepositModal={setDepositModal}
-                      />
-                      <WithdrawOption
-                        withdrawModal={withdrawModal}
-                        setWithdrawModal={setWithdrawModal}
-                      />
+                      <DepositOption modal={modal} dispatch={dispatch} />
+                      <WithdrawOption modal={modal} dispatch={dispatch} />
                     </Select>
                   </FormControl>
                 </MenuItem>
@@ -300,26 +309,13 @@ function Nav() {
               ))}
             </Menu>
 
-            <AuthDialog
-              active={active}
-              setActive={setActive}
-              setForgotPassword={setForgotPassword}
-            />
+            <AuthDialog modal={modal} dispatch={dispatch} />
 
-            <ForgotPasswordDialog
-              forgotPassword={forgotPassword}
-              setForgotPassword={setForgotPassword}
-            />
+            <ForgotPasswordDialog modal={modal} dispatch={dispatch} />
 
-            <DepositDialog
-              depositModal={depositModal}
-              setDepositModal={setDepositModal}
-            />
+            <DepositDialog modal={modal} dispatch={dispatch} />
 
-            <WithdrawDialog
-              withdrawModal={withdrawModal}
-              setWithdrawModal={setWithdrawModal}
-            />
+            <WithdrawDialog modal={modal} dispatch={dispatch} />
           </Box>
         </Toolbar>
       </Container>
