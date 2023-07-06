@@ -33,33 +33,6 @@ const P2P: React.FC = () => {
     setChecked([checked[0], event.target.checked]);
   };
 
-  const dummyArray = [
-    "ETH",
-    "BTC",
-    "BTC",
-    "BTC",
-    "BTC",
-    "ETH",
-    "BTC",
-    "ETH",
-    "BTC",
-    "ETH",
-    "ETH",
-    "ETH",
-    "ETH",
-    "BTC",
-    "BTC",
-    "BTC",
-    "BTC",
-    "ETH",
-    "BTC",
-    "ETH",
-    "BTC",
-    "ETH",
-    "ETH",
-    "ETH",
-  ];
-
   const children = (
     <Box sx={{ display: "flex", flexDirection: "column", ml: 3 }}>
       <FormControlLabel

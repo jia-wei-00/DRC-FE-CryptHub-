@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import { StringValidation } from "zod";
 
 export type InputData = {
   name?: string;

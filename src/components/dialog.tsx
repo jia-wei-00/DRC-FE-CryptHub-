@@ -1,17 +1,12 @@
 import {
-  Box,
   Button,
   Card,
   CardContent,
   Dialog,
   FormControl,
-  FormHelperText,
-  IconButton,
-  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
@@ -20,7 +15,6 @@ import {
   ChartSettingsT,
   DepositDialogT,
   ForgotPasswordDialogT,
-  PriceT,
   SellOnMarketT,
   WithdrawDialogT,
 } from "../types";
@@ -28,13 +22,10 @@ import { motion } from "framer-motion";
 import { websocketStore, modeStore, authStore } from "../stores";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
-import { Add, CandlestickChart, Remove, Timeline } from "@mui/icons-material";
+import { CandlestickChart, Timeline } from "@mui/icons-material";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import ForgotPasswordForm from "./forget-password";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { resetSchema } from "../schemas";
 import DepositForm from "./deposit-form";
 import WithdrawForm from "./withdraw-form";
 import SellOnMarketForm from "./sell-on-market-form";
