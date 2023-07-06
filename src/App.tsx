@@ -32,13 +32,13 @@ const App: React.FC = () => {
           theme={modeStore.mode === "dark" ? "dark" : "light"}
           limit={3}
         />
-        <JoyRide
+        {/* <JoyRide
           continuous
           hideCloseButton
           scrollToFirstStep
           showProgress
           steps={steps}
-        />
+        /> */}
       </ThemeProvider>
     </div>
   );

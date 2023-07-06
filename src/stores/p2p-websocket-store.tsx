@@ -72,7 +72,6 @@ class P2PWebSocketStoreImplementation {
 
     if (data.msg_type === "tick") {
       this.setTicks(data.tick.quote);
-      console.log("running every tick");
     }
   };
 

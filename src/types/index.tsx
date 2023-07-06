@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { StringValidation } from "zod";
 
 export type InputData = {
   name?: string;
@@ -165,4 +166,29 @@ export type P2PContractsT = {
   currency: string;
   seller_id: number;
   selling_price: number;
+};
+
+//p2p completed contracts history
+export type P2PCompletedHistoryT = {
+  coin_amount: number;
+  completed_at: EpochTimeStamp;
+  created_at: EpochTimeStamp;
+  currency: string;
+  selling_price: number;
+  transaction_type: string;
+};
+
+//p2p completed contracts hitory table
+export type P2PCompletedHistoryColumn = {
+  id:
+    | "coin_amount"
+    | "completed_at"
+    | "created_at"
+    | "currency"
+    | "transaction_type"
+    | "selling_price";
+  label: string;
+  minWidth?: number;
+  align?: "right";
+  format?: (value: number) => string;
 };

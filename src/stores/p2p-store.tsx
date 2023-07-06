@@ -3,15 +3,33 @@ import { toast } from "react-toastify";
 import { domain, headers } from "../constant";
 import axios from "axios";
 import { authStore, websocketStoreP2P } from ".";
-import { AddP2PContractFormT, P2PContractsT } from "../types";
+import {
+  AddP2PContractFormT,
+  P2PCompletedHistoryT,
+  P2PContractsT,
+} from "../types";
 
 class P2PStoreImplementation {
   p2p_contracts: P2PContractsT[] = [];
+  p2p_completed_history: P2PCompletedHistoryT[] = [];
 
   constructor() {
     makeObservable(this, {
       p2p_contracts: observable,
+      p2p_completed_history: observable,
+      setP2PContracts: action.bound,
       addP2PContract: action.bound,
+      buyContract: action.bound,
+      withdrawContract: action.bound,
+      fetchP2PMarket: action.bound,
+      fetchP2PHistory: action.bound,
+      setP2PCompletedHistory: action.bound,
+    });
+  }
+
+  setP2PCompletedHistory(values: P2PCompletedHistoryT[]) {
+    runInAction(() => {
+      this.p2p_completed_history = values;
     });
   }
 
@@ -40,6 +58,7 @@ class P2PStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
+      console.log(res);
       authStore.setUser(res.data.details.wallet_balance);
     } catch (error: any) {
       let message = error.message;
@@ -73,7 +92,8 @@ class P2PStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-      authStore.setUser(res.data.details.wallet_balance);
+      authStore.setUser(res.data.details);
+      console.log(res, "buy_contract");
       this.fetchOnGoingContracts();
     } catch (error: any) {
       let message = error.message;
@@ -107,9 +127,12 @@ class P2PStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-      authStore.setUser(res.data.details.wallet_balance);
+      console.log(res);
+      authStore.setUser(res.data.details);
+      console.log(authStore.user);
       this.fetchOnGoingContracts();
     } catch (error: any) {
+      console.log(error);
       let message = error.message;
       if (error.response) {
         message = error.response.data.message;
@@ -165,9 +188,21 @@ class P2PStoreImplementation {
         headers: headers(authStore.user!.token!),
       });
 
-      console.log(res);
+      const values = res.data.details.map((value: P2PCompletedHistoryT) => {
+        const created_date = new Date(value.created_at).getTime();
+        const completed_date = new Date(value.completed_at).getTime();
 
-      // this.setP2PContracts(res.data.details);P2PHistory
+        return {
+          coin_amount: value.coin_amount,
+          completed_at: completed_date,
+          created_at: created_date,
+          currency: value.currency,
+          selling_price: value.selling_price,
+          transaction_type: value.transaction_type,
+        };
+      });
+
+      this.setP2PCompletedHistory(values);
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
