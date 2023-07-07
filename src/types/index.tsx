@@ -63,10 +63,6 @@ export type BuySellBoxT = {
   current_candles: Candlesticks;
 };
 
-export type LoginFormProps = {
-  setResetPassword: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
 export type Column = {
   id:
     | "id"

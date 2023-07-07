@@ -5,7 +5,6 @@ import { makePersistable } from "mobx-persist-store";
 import axios from "axios";
 import {
   Action,
-  HandleModalDispatchT,
   InputData,
   ModalState,
   PriceT,
