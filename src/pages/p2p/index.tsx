@@ -16,6 +16,7 @@ import { motion } from "framer-motion";
 import SellButton from "./floading-sell";
 import { observer } from "mobx-react-lite";
 import p2pStore from "../../stores/p2p-store";
+import { authStore } from "../../stores";
 
 const P2P: React.FC = () => {
   const [active, setActive] = React.useState("market");
@@ -57,13 +58,35 @@ const P2P: React.FC = () => {
     return false;
   });
 
+  const filteredOnGoingContracts = p2pStore.p2p_contracts_ongoing.filter(
+    (contract) => {
+      if (checked[0] && checked[1]) {
+        return true; // Show all items if both checkboxes are checked
+      } else if (checked[0] && contract.currency === "ETH") {
+        return true; // Show only "ETH" items if the "ETH" checkbox is checked
+      } else if (checked[1] && contract.currency === "BTC") {
+        return true; // Show only "BTC" items if the "BTC" checkbox is checked
+      }
+      return false;
+    }
+  );
+
   React.useEffect(() => {
+    if (authStore.user === null) {
+      setActive("market");
+    }
     if (active === "market") {
       p2pStore.fetchP2PMarket();
-    } else if (active === "ongoing") {
-      p2pStore.fetchOnGoingContracts();
     }
-  }, [active]);
+  }, [active, authStore.user]);
+
+  React.useEffect(() => {
+    p2pStore.fetchOnGoingContracts();
+  }, []);
+
+  React.useCallback(() => {
+    p2pStore.fetchOnGoingContracts();
+  }, [p2pStore.addP2PContract]);
 
   return (
     <Container maxWidth="xl" className="p2p-container">
@@ -88,16 +111,24 @@ const P2P: React.FC = () => {
         <Stack direction="row" className="p2p-head-stack">
           <Button
             onClick={() => setActive("market")}
-            style={active !== "market" ? { color: "#a27b5c" } : {}}
+            style={
+              authStore.user === null
+                ? { width: "50%" }
+                : active !== "market"
+                ? { color: "#a27b5c" }
+                : {}
+            }
           >
             Marketplace
           </Button>
-          <Button
-            onClick={() => setActive("ongoing")}
-            style={active !== "ongoing" ? { color: "#a27b5c" } : {}}
-          >
-            On Going
-          </Button>
+          {authStore.user !== null && (
+            <Button
+              onClick={() => setActive("ongoing")}
+              style={active !== "ongoing" ? { color: "#a27b5c" } : {}}
+            >
+              On Going
+            </Button>
+          )}
           <motion.div
             className="p2p-indicator"
             animate={active === "market" ? { x: 0 } : { x: "100%" }}
@@ -109,11 +140,17 @@ const P2P: React.FC = () => {
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 2, sm: 8, md: 12 }}
         >
-          {filteredContracts.map((contract, index) => (
-            <Grid item xs={2} sm={4} md={3} key={index}>
-              <ItemCard active={active} contract={contract} />
-            </Grid>
-          ))}
+          {active === "market"
+            ? filteredContracts.map((contract, index) => (
+                <Grid item xs={2} sm={4} md={3} key={index}>
+                  <ItemCard active={active} contract={contract} />
+                </Grid>
+              ))
+            : filteredOnGoingContracts.map((contract, index) => (
+                <Grid item xs={2} sm={4} md={3} key={index}>
+                  <ItemCard active={active} contract={contract} />
+                </Grid>
+              ))}
         </Grid>
       </div>
       <SellButton />

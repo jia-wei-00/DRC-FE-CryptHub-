@@ -11,13 +11,16 @@ import {
 
 class P2PStoreImplementation {
   p2p_contracts: P2PContractsT[] = [];
+  p2p_contracts_ongoing: P2PContractsT[] = [];
   p2p_completed_history: P2PCompletedHistoryT[] = [];
 
   constructor() {
     makeObservable(this, {
       p2p_contracts: observable,
+      p2p_contracts_ongoing: observable,
       p2p_completed_history: observable,
       setP2PContracts: action.bound,
+      setP2POnGoingContracts: action.bound,
       addP2PContract: action.bound,
       buyContract: action.bound,
       withdrawContract: action.bound,
@@ -36,6 +39,12 @@ class P2PStoreImplementation {
   setP2PContracts(values: P2PContractsT[]) {
     runInAction(() => {
       this.p2p_contracts = values;
+    });
+  }
+
+  setP2POnGoingContracts(values: P2PContractsT[]) {
+    runInAction(() => {
+      this.p2p_contracts_ongoing = values;
     });
   }
 
@@ -149,9 +158,7 @@ class P2PStoreImplementation {
 
   async fetchP2PMarket(): Promise<void> {
     try {
-      const res = await axios.get(`${domain}/p2p/getOpenContracts`, {
-        headers: headers(authStore.user!.token!),
-      });
+      const res = await axios.get(`${domain}/p2p/getOpenContracts`);
       this.setP2PContracts(res.data.details);
     } catch (error: any) {
       let message = error.message;
@@ -165,6 +172,7 @@ class P2PStoreImplementation {
   }
 
   async fetchOnGoingContracts(): Promise<void> {
+    if (authStore.user === null) return;
     try {
       const res = await axios.get(`${domain}/p2p/getOngoingContracts`, {
         headers: headers(authStore.user!.token!),

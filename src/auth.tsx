@@ -1,16 +1,17 @@
-import { PropsWithChildren } from "react";
-// import { useNavigate } from "react-router-dom";
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-// import { authStore } from "./stores";
+import { authStore } from "./stores";
 
-const Auth = ({ children }: PropsWithChildren) => {
-  // const navigate = useNavigate();
+const Auth = ({ children }: React.PropsWithChildren) => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // React.useEffect(() => {
-  //   if (authStore.user === null) {
-  //     navigate("/");
-  //   }
-  // }, [authStore.user, navigate]);
+  React.useEffect(() => {
+    if (authStore.user === null && location.pathname === "/profile") {
+      navigate("/");
+    }
+  }, [authStore.user, navigate]);
 
   return <>{children}</>;
 };

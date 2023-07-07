@@ -204,8 +204,6 @@ function Nav() {
             </Typography>
           </Link>
 
-          <button onClick={() => authStore.reset()}>RESET</button>
-
           <Box className="link-column mobile-hide">
             {pages.map((page, index) => (
               <Link key={index} className="link" to={page.path}>
