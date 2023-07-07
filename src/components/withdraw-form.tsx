@@ -1,6 +1,6 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { DepositDialogT, HandleModalDispatchT, PriceT } from "../types";
+import { HandleModalDispatchT, PriceT } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authStore } from "../stores";
 import {

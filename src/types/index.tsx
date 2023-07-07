@@ -29,17 +29,6 @@ export type Candlesticks = {
   epoch?: EpochTimeStamp;
 };
 
-export type ForgotPasswordDialogT = {
-  forgotPassword: boolean;
-  setForgotPassword: Dispatch<SetStateAction<boolean>>;
-};
-
-export type AuthDialogT = {
-  active: string;
-  setActive: Dispatch<SetStateAction<string>>;
-  setForgotPassword: Dispatch<SetStateAction<boolean>>;
-};
-
 export type ChartSettingsT = {
   openSettings: boolean;
   setOpenSettings: Dispatch<SetStateAction<boolean>>;
@@ -124,18 +113,6 @@ export type ResetPasswordFormT = {
   old_password: string;
   password: string;
   new_password: string;
-};
-
-//deposit modal type
-export type DepositDialogT = {
-  depositModal?: boolean;
-  setDepositModal: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-//withdrawal modal type
-export type WithdrawDialogT = {
-  withdrawModal?: boolean;
-  setWithdrawModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 //sell on marketplace modal type

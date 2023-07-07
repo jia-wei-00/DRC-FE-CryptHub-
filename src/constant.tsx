@@ -18,8 +18,7 @@ export const headers = (token: string) => {
   };
 };
 
-export const domain = "http://localhost:5000";
-// export const domain = "http://103.253.145.220";
+export const domain = "http://103.253.145.220:5000";
 
 export const steps = [
   {

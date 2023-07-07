@@ -10,15 +10,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import {
-  AuthDialogT,
-  ChartSettingsT,
-  DepositDialogT,
-  ForgotPasswordDialogT,
-  HandleModalReducerT,
-  SellOnMarketT,
-  WithdrawDialogT,
-} from "../types";
+import { ChartSettingsT, HandleModalReducerT, SellOnMarketT } from "../types";
 import { motion } from "framer-motion";
 import { websocketStore, modeStore, authStore } from "../stores";
 import LoginForm from "./login-form";
