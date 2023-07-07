@@ -11,16 +11,13 @@ import {
 
 class P2PStoreImplementation {
   p2p_contracts: P2PContractsT[] = [];
-  p2p_contracts_ongoing: P2PContractsT[] = [];
   p2p_completed_history: P2PCompletedHistoryT[] = [];
 
   constructor() {
     makeObservable(this, {
       p2p_contracts: observable,
-      p2p_contracts_ongoing: observable,
       p2p_completed_history: observable,
       setP2PContracts: action.bound,
-      setP2POnGoingContracts: action.bound,
       addP2PContract: action.bound,
       buyContract: action.bound,
       withdrawContract: action.bound,
@@ -39,12 +36,6 @@ class P2PStoreImplementation {
   setP2PContracts(values: P2PContractsT[]) {
     runInAction(() => {
       this.p2p_contracts = values;
-    });
-  }
-
-  setP2POnGoingContracts(values: P2PContractsT[]) {
-    runInAction(() => {
-      this.p2p_contracts_ongoing = values;
     });
   }
 
@@ -140,11 +131,11 @@ class P2PStoreImplementation {
       authStore.setUser(res.data.details);
       console.log(authStore.user);
       this.fetchOnGoingContracts();
-    } catch (error: any) {
-      console.log(error);
-      let message = error.message;
-      if (error.response) {
-        message = error.response.data.message;
+    } catch (error: unknown) {
+      let message = (error as { message: string }).message;
+      if ((error as { response: object }).response) {
+        message = (error as { response: { data: { message: string } } })
+          .response.data.message;
       }
       toast.update(id, {
         render: message,
@@ -166,7 +157,7 @@ class P2PStoreImplementation {
         message = error.response.data.message;
       }
       toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_RIGHT,
+        position: toast.POSITION.TOP_CENTER,
       });
     }
   }
@@ -185,7 +176,7 @@ class P2PStoreImplementation {
         message = error.response.data.message;
       }
       toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_RIGHT,
+        position: toast.POSITION.TOP_CENTER,
       });
     }
   }
@@ -217,7 +208,7 @@ class P2PStoreImplementation {
         message = error.response.data.message;
       }
       toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_RIGHT,
+        position: toast.POSITION.TOP_CENTER,
       });
     }
   }

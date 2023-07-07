@@ -5,7 +5,7 @@ import { authStore, modeStore, websocketStore } from "../../stores";
 import { BuySellBoxT } from "../../types";
 import tradeStore from "../../stores/trade-store";
 import { Add, AttachMoney, Remove } from "@mui/icons-material";
-import { BTCIcon, ETHIcon } from "../../assets/icons";
+import { BTCIcon, ETHIcon, USDIcon } from "../../assets/icons";
 
 const BuySellBox: React.FC<BuySellBoxT> = ({
   current_price,
@@ -36,7 +36,8 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
   const sell_coin = price === 0 ? 0 : Number(input) * price;
 
   //function for buy and sell token
-  const buySellHandler = () => {
+  const buySellHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!authStore.user) {
       return authStore.setAuthModal(true);
     }
@@ -67,7 +68,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
       </motion.div>
 
       {/* Buy*/}
-      <motion.div>
+      <motion.form onSubmit={buySellHandler}>
         <div className="side-bar-input">
           <div className="amount">
             <IconButton
@@ -110,22 +111,18 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
             color={active === "buy" ? "success" : "error"}
             className="buy-sell-btn"
             disabled={buy_coin <= 0 || Number.isNaN(buy_coin)}
-            onClick={buySellHandler}
+            type="submit"
           >
             <span>{active === "buy" ? "BUY" : "SELL"}</span>
             {active === "buy" ? buy_coin.toFixed(8) : sell_coin}
-            {active === "buy" ? (
-              websocketStore.subscribe_currency === "ETH" ? (
-                ETHIcon
-              ) : (
-                BTCIcon
-              )
-            ) : (
-              <AttachMoney />
-            )}
+            {active === "buy"
+              ? websocketStore.subscribe_currency === "ETH"
+                ? ETHIcon
+                : BTCIcon
+              : USDIcon}
           </Button>
         </div>
-      </motion.div>
+      </motion.form>
     </div>
   );
 };

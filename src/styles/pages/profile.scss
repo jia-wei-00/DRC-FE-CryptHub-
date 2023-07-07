@@ -57,14 +57,14 @@
   }
 }
 
+table {
+  text-transform: capitalize;
+}
+
 @media only screen and (max-width: 370px) {
   .tab-box {
     padding: 20px 0 !important;
   }
-}
-
-#vertical-tabpanel-0 {
-  width: 100%;
 }
 
 #dark {

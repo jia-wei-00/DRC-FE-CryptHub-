@@ -127,8 +127,16 @@ function Nav() {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (value: string) => {
     setAnchorElNav(null);
+
+    if (value === "Home") {
+      navigate("/");
+    }
+
+    if (value === "P2P Trader") {
+      navigate("/p2pTrader");
+    }
   };
 
   const handleCloseUserMenu = (value: string) => {
@@ -182,7 +190,10 @@ function Nav() {
             </MenuItem>
 
             {pages.map((page) => (
-              <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+              <MenuItem
+                key={page.title}
+                onClick={() => handleCloseNavMenu(page.title)}
+              >
                 <Typography textAlign="center">{page.title}</Typography>
               </MenuItem>
             ))}

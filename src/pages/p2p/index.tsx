@@ -47,30 +47,6 @@ const P2P: React.FC = () => {
     </Box>
   );
 
-  const filteredContracts = p2pStore.p2p_contracts.filter((contract) => {
-    if (checked[0] && checked[1]) {
-      return true; // Show all items if both checkboxes are checked
-    } else if (checked[0] && contract.currency === "ETH") {
-      return true; // Show only "ETH" items if the "ETH" checkbox is checked
-    } else if (checked[1] && contract.currency === "BTC") {
-      return true; // Show only "BTC" items if the "BTC" checkbox is checked
-    }
-    return false;
-  });
-
-  const filteredOnGoingContracts = p2pStore.p2p_contracts_ongoing.filter(
-    (contract) => {
-      if (checked[0] && checked[1]) {
-        return true; // Show all items if both checkboxes are checked
-      } else if (checked[0] && contract.currency === "ETH") {
-        return true; // Show only "ETH" items if the "ETH" checkbox is checked
-      } else if (checked[1] && contract.currency === "BTC") {
-        return true; // Show only "BTC" items if the "BTC" checkbox is checked
-      }
-      return false;
-    }
-  );
-
   React.useEffect(() => {
     if (authStore.user === null) {
       setActive("market");
@@ -80,12 +56,10 @@ const P2P: React.FC = () => {
     }
   }, [active, authStore.user]);
 
-  React.useEffect(() => {
-    p2pStore.fetchOnGoingContracts();
-  }, []);
-
   React.useCallback(() => {
-    p2pStore.fetchOnGoingContracts();
+    if (authStore.user !== null) {
+      p2pStore.fetchOnGoingContracts();
+    }
   }, [p2pStore.addP2PContract]);
 
   return (
@@ -140,17 +114,22 @@ const P2P: React.FC = () => {
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 2, sm: 8, md: 12 }}
         >
-          {active === "market"
-            ? filteredContracts.map((contract, index) => (
-                <Grid item xs={2} sm={4} md={3} key={index}>
-                  <ItemCard active={active} contract={contract} />
-                </Grid>
-              ))
-            : filteredOnGoingContracts.map((contract, index) => (
-                <Grid item xs={2} sm={4} md={3} key={index}>
-                  <ItemCard active={active} contract={contract} />
-                </Grid>
-              ))}
+          {p2pStore.p2p_contracts
+            .filter((contract) => {
+              if (checked[0] && checked[1]) {
+                return true; // Show all items if both checkboxes are checked
+              } else if (checked[0] && contract.currency === "ETH") {
+                return true; // Show only "ETH" items if the "ETH" checkbox is checked
+              } else if (checked[1] && contract.currency === "BTC") {
+                return true; // Show only "BTC" items if the "BTC" checkbox is checked
+              }
+              return false;
+            })
+            .map((contract, index) => (
+              <Grid item xs={2} sm={4} md={3} key={index}>
+                <ItemCard active={active} contract={contract} />
+              </Grid>
+            ))}
         </Grid>
       </div>
       <SellButton />
