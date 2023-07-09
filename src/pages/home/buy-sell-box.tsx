@@ -4,7 +4,7 @@ import React from "react";
 import { authStore, modeStore, websocketStore } from "../../stores";
 import { BuySellBoxT } from "../../types";
 import tradeStore from "../../stores/trade-store";
-import { Add, AttachMoney, Remove } from "@mui/icons-material";
+import { Add, Remove } from "@mui/icons-material";
 import { BTCIcon, ETHIcon, USDIcon } from "../../assets/icons";
 
 const BuySellBox: React.FC<BuySellBoxT> = ({
