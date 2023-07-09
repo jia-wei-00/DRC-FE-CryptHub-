@@ -1,0 +1,22 @@
+.rotate {
+  perspective: 1000px;
+  animation: rotation 2s infinite linear;
+  width: 25vh;
+  height: 25vh;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotateY(0deg);
+  }
+
+  100% {
+    transform: rotateY(360deg);
+  }
+}
