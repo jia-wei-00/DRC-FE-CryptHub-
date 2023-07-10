@@ -2,6 +2,7 @@ import { makeObservable, action, observable, runInAction } from "mobx";
 import DerivAPIBasic from "https://cdn.skypack.dev/@deriv/deriv-api/dist/DerivAPIBasic";
 import { makePersistable } from "mobx-persist-store";
 import { toast } from "react-toastify";
+import { APIT } from "../types";
 
 class P2PWebSocketStoreImplementation {
   ticks: number = 0;
@@ -60,6 +61,7 @@ class P2PWebSocketStoreImplementation {
   };
 
   tickResponse = async (res: any) => {
+    console.log(res);
     const data = JSON.parse(res.data);
 
     if (data.error !== undefined) {

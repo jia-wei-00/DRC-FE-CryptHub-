@@ -1,14 +1,15 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import { domain, headers } from "../constant";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { authStore, websocketStoreP2P } from ".";
 import {
   AddP2PContractFormT,
+  ErrorResponse,
   P2PCompletedHistoryT,
   P2PContractsT,
 } from "../types";
-import { handleErrors } from "../functions";
+import { errorChecking, handleErrors } from "../functions";
 
 class P2PStoreImplementation {
   p2p_contracts: P2PContractsT[] = [];
@@ -61,11 +62,9 @@ class P2PStoreImplementation {
       });
       console.log(res);
       authStore.setUser(res.data.details.wallet_balance);
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.update(id, {
         render: message,
         type: "error",
@@ -96,11 +95,9 @@ class P2PStoreImplementation {
       authStore.setUser(res.data.details);
       console.log(res, "buy_contract");
       this.fetchOnGoingContracts();
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.update(id, {
         render: message,
         type: "error",
@@ -133,11 +130,8 @@ class P2PStoreImplementation {
       console.log(authStore.user);
       this.fetchOnGoingContracts();
     } catch (error: unknown) {
-      let message = (error as { message: string }).message;
-      if ((error as { response: object }).response) {
-        message = (error as { response: { data: { message: string } } })
-          .response.data.message;
-      }
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.update(id, {
         render: message,
         type: "error",
@@ -152,11 +146,9 @@ class P2PStoreImplementation {
     try {
       const res = await axios.get(`${domain}/p2p/getOpenContracts`);
       this.setP2PContracts(res.data.details);
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = error.response.data.message;
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.error(`Error: ${message}`, {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -171,11 +163,9 @@ class P2PStoreImplementation {
       });
 
       this.setP2PContracts(res.data.details);
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = error.response.data.message;
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.error(`Error: ${message}`, {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -203,11 +193,9 @@ class P2PStoreImplementation {
       });
 
       this.setP2PCompletedHistory(values);
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = error.response.data.message;
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.error(`Error: ${message}`, {
         position: toast.POSITION.TOP_CENTER,
       });

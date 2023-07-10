@@ -92,6 +92,18 @@ export type Transaction = {
   type: string;
 };
 
+export type TransactionDateFromAPI = {
+  coin_amount: number;
+  commission_deduction_5: number | string;
+  currency: string;
+  trade_type: string;
+  transaction_amount: number;
+  transaction_date: string;
+  transaction_id: number;
+  user_id: number;
+  wallet_id: number;
+};
+
 export type WalletHistoryColumn = {
   id: "dwt_type" | "dwt_before" | "dwt_after" | "dwt_amount" | "created_at";
   label: string;
@@ -188,4 +200,19 @@ export type HandleModalReducerT = {
 
 export type HandleModalDispatchT = {
   dispatch: Dispatch<Action>;
+};
+
+export type ErrorResponse = {
+  message: string;
+};
+
+export type APIT = {
+  data: {
+    ticks_history: string;
+    adjust_start_time: number;
+    count: number;
+    end: string;
+    start: number;
+    style: string;
+  };
 };

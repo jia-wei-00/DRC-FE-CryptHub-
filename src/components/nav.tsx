@@ -32,7 +32,6 @@ import {
 } from "./dialog";
 import logo from "../assets/logo.svg";
 import { Action, HandleModalReducerT, ModalState } from "../types";
-import Cookies from "js-cookie";
 
 const DepositOption: React.FC<HandleModalReducerT> = ({ modal, dispatch }) => {
   return (
@@ -170,11 +169,6 @@ function Nav() {
               </IconButton>
             </Box>
           )}
-
-          <button onClick={() => authStore.reset()}>RESET</button>
-          <button onClick={() => console.log(Cookies.get("crypthub_user"))}>
-            GET
-          </button>
 
           <Menu
             id="menu-appbar"

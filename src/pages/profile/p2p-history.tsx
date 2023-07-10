@@ -12,7 +12,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { P2PCompletedHistoryColumn, P2PCompletedHistoryT } from "../../types";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 const columns: readonly P2PCompletedHistoryColumn[] = [
   // { id: "id", label: "No", minWidth: 170 },
@@ -57,10 +57,10 @@ const columns: readonly P2PCompletedHistoryColumn[] = [
 ];
 
 function P2PHistory() {
-  const [fromDate, setFromDate] = React.useState<any>(
+  const [fromDate, setFromDate] = React.useState<Dayjs | number>(
     dayjs().subtract(30, "day")
   );
-  const [toDate, setToDate] = React.useState<any>(dayjs());
+  const [toDate, setToDate] = React.useState<Dayjs | number>(dayjs());
 
   React.useEffect(() => {
     p2pStore.fetchP2PHistory();
@@ -73,12 +73,12 @@ function P2PHistory() {
           <DatePicker
             label="From"
             value={fromDate}
-            onChange={(date) => setFromDate(date)}
+            onChange={(date) => setFromDate(date!)}
           />
           <DatePicker
             label="To"
             value={toDate}
-            onChange={(date) => setToDate(date)}
+            onChange={(date) => setToDate(date!)}
           />
         </div>
       </LocalizationProvider>

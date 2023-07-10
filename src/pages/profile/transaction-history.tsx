@@ -12,7 +12,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Column, Transaction } from "../../types";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 const columns: readonly Column[] = [
   // { id: "id", label: "No", minWidth: 170 },
@@ -62,10 +62,10 @@ const columns: readonly Column[] = [
 ];
 
 function TransactionHistory() {
-  const [fromDate, setFromDate] = React.useState<any>(
+  const [fromDate, setFromDate] = React.useState<Dayjs>(
     dayjs().subtract(30, "day")
   );
-  const [toDate, setToDate] = React.useState<any>(dayjs());
+  const [toDate, setToDate] = React.useState<Dayjs>(dayjs());
 
   React.useEffect(() => {
     authStore.fetchTransaction();
@@ -78,12 +78,12 @@ function TransactionHistory() {
           <DatePicker
             label="From"
             value={fromDate}
-            onChange={(date) => setFromDate(date)}
+            onChange={(date) => setFromDate(date!)}
           />
           <DatePicker
             label="To"
             value={toDate}
-            onChange={(date) => setToDate(date)}
+            onChange={(date) => setToDate(date!)}
           />
         </div>
       </LocalizationProvider>

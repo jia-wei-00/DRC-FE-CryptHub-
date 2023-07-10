@@ -1,8 +1,10 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { action, makeObservable } from "mobx";
 import { toast } from "react-toastify";
 import { domain, headers } from "../constant";
 import { authStore, websocketStore } from ".";
+import { errorChecking } from "../functions";
+import { ErrorResponse } from "../types";
 
 class TradeStoreImplementation {
   constructor() {
@@ -20,7 +22,7 @@ class TradeStoreImplementation {
       coin_amount: input_price,
     };
 
-    if (values.coin_amount >= authStore.user!.USD) {
+    if (values.coin_amount >= authStore.wallet.USD) {
       return toast.update(id, {
         render: "BALANCE INSUFFICIENT",
         type: "error",
@@ -39,7 +41,7 @@ class TradeStoreImplementation {
 
       console.log(authStore.user);
 
-      authStore.setUser({
+      authStore.setUserWallet({
         USD: Number(res.data.details.walletBalance.USD),
         BTC: Number(res.data.details.walletBalance.BTC),
         ETH: Number(res.data.details.walletBalance.ETH),
@@ -54,15 +56,9 @@ class TradeStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        if (error.response.data.message === "ACCOUNT_NOT_VERIFIED") {
-          message = "Please check your email to verify your account";
-        } else {
-          message = error.response.data.message;
-        }
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.update(id, {
         render: message,
         type: "error",
@@ -88,8 +84,8 @@ class TradeStoreImplementation {
 
     const coin_balance =
       websocketStore.subscribe_currency === "ETH"
-        ? authStore.user!.ETH
-        : authStore.user!.BTC;
+        ? authStore.wallet.ETH
+        : authStore.wallet.BTC;
 
     if (coin_amount > coin_balance) {
       return toast.update(id, {
@@ -106,7 +102,7 @@ class TradeStoreImplementation {
         headers: headers(authStore.user!.token!),
       });
 
-      authStore.setUser({
+      authStore.setUserWallet({
         USD: Number(res.data.details.walletBalance.USD),
         BTC: Number(res.data.details.walletBalance.BTC),
         ETH: Number(res.data.details.walletBalance.ETH),
@@ -121,15 +117,9 @@ class TradeStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        if (error.response.data.message === "ACCOUNT_NOT_VERIFIED") {
-          message = "Please check your email to verify your account";
-        } else {
-          message = error.response.data.message;
-        }
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.update(id, {
         render: message,
         type: "error",

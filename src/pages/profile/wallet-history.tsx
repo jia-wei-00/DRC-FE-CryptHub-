@@ -12,7 +12,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { WalletHistoryT, WalletHistoryColumn } from "../../types";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 const columns: readonly WalletHistoryColumn[] = [
   // { id: "id", label: "No", minWidth: 170 },
@@ -53,10 +53,10 @@ const columns: readonly WalletHistoryColumn[] = [
 ];
 
 function WalletHistory() {
-  const [fromDate, setFromDate] = React.useState<any>(
+  const [fromDate, setFromDate] = React.useState<Dayjs>(
     dayjs().subtract(30, "day")
   );
-  const [toDate, setToDate] = React.useState<any>(dayjs());
+  const [toDate, setToDate] = React.useState<Dayjs>(dayjs());
 
   React.useEffect(() => {
     authStore.fetchWalletHistory();
@@ -69,12 +69,12 @@ function WalletHistory() {
           <DatePicker
             label="From"
             value={fromDate}
-            onChange={(date) => setFromDate(date)}
+            onChange={(date) => setFromDate(date!)}
           />
           <DatePicker
             label="To"
             value={toDate}
-            onChange={(date) => setToDate(date)}
+            onChange={(date) => setToDate(date!)}
           />
         </div>
       </LocalizationProvider>
@@ -96,8 +96,9 @@ function WalletHistory() {
                 authStore.wallet_history
                   .filter(
                     (transaction: WalletHistoryT) =>
-                      transaction.created_at >= fromDate.valueOf() &&
-                      transaction.created_at <= toDate.valueOf()
+                      (transaction.created_at as number) >=
+                        fromDate.valueOf() &&
+                      (transaction.created_at as number) <= toDate.valueOf()
                   )
                   .map((row: WalletHistoryT, index: number) => {
                     return (

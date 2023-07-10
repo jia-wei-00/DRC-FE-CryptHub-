@@ -1,4 +1,6 @@
+import axios, { AxiosError } from "axios";
 import { authStore } from "./stores";
+import { ErrorResponse } from "./types";
 
 export const createTimeoutPromise = (timeout: number): Promise<never> => {
   return new Promise((_, reject) => {
@@ -21,7 +23,27 @@ export const handleErrors = (error: string) => {
       return "Email does not exist";
     case "DUPLICATE_EMAIL":
       return "Email registered";
+    case "INVALID_PASSWORD":
+      return "Invalid password";
     default:
       return error;
   }
+};
+
+export const errorChecking = (error: AxiosError<ErrorResponse>) => {
+  let message: string;
+
+  if (axios.isAxiosError(error)) {
+    if (error.response) {
+      message = handleErrors(error.response.data.message);
+    } else if (error.message) {
+      message = error.message;
+    } else {
+      message = "An unknown error occurred in axios";
+    }
+  } else {
+    message = "An unknown error occurred";
+  }
+
+  return message;
 };

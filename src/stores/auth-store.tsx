@@ -1,28 +1,28 @@
-import {
-  makeObservable,
-  action,
-  observable,
-  runInAction,
-  reaction,
-} from "mobx";
+import { makeObservable, action, observable, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { makePersistable } from "mobx-persist-store";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   Action,
+  ErrorResponse,
   InputData,
   ModalState,
   PriceT,
   ResetPassword,
   ResetPasswordFormT,
   Transaction,
+  TransactionDateFromAPI,
   User,
   Wallet,
   WalletHistoryT,
 } from "../types";
 import { MODALACTIONS, domain, headers } from "../constant";
-import { createTimeoutPromise, handleErrors } from "../functions";
+import {
+  createTimeoutPromise,
+  errorChecking,
+  handleErrors,
+} from "../functions";
 import Cookies from "js-cookie";
 
 class AuthStoreImplementation {
@@ -76,9 +76,6 @@ class AuthStoreImplementation {
 
   setUser = (authUser: User | null): void => {
     runInAction(() => {
-      // authUser === null
-      //   ? (this.user = null)
-      //   : (this.user = { ...this.user, ...authUser! });
       this.user = authUser;
     });
   };
@@ -107,11 +104,9 @@ class AuthStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.update(id, {
         render: message,
         type: "error",
@@ -146,11 +141,9 @@ class AuthStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.update(toast_id, {
         render: message,
         type: "error",
@@ -187,11 +180,8 @@ class AuthStoreImplementation {
       runInAction(() => {
         this.wallet.USD = res.data.details.balance;
       });
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
 
       toast.update(id, {
         render: message,
@@ -229,11 +219,8 @@ class AuthStoreImplementation {
       runInAction(() => {
         this.wallet.USD = res.data.details.balance;
       });
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
 
       toast.update(id, {
         render: message,
@@ -270,11 +257,9 @@ class AuthStoreImplementation {
       });
 
       Cookies.remove("crypthub_user");
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.update(id, {
         render: message,
         type: "error",
@@ -300,11 +285,9 @@ class AuthStoreImplementation {
         closeButton: null,
       });
       this.setAuthModal(false);
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.update(id, {
         render: message,
         type: "error",
@@ -337,11 +320,9 @@ class AuthStoreImplementation {
         type: MODALACTIONS.FORGOTPASSWORD,
         payload: !modal.forgot_password_modal,
       });
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.update(id, {
         render: message,
         type: "error",
@@ -361,44 +342,44 @@ class AuthStoreImplementation {
         createTimeoutPromise(10000),
       ]);
 
-      const transaction = res.data.details.map((data: any) => {
-        const {
-          transaction_id: id,
-          trade_type: type,
-          currency,
-          coin_amount,
-          transaction_amount,
-          transaction_date: string_date,
-          commission_deduction_5,
-        } = data;
+      const transaction = res.data.details.map(
+        (data: TransactionDateFromAPI) => {
+          const {
+            transaction_id: id,
+            trade_type: type,
+            currency,
+            coin_amount,
+            transaction_amount,
+            transaction_date: string_date,
+            commission_deduction_5,
+          } = data;
 
-        const date = new Date(string_date).getTime();
+          const date = new Date(string_date).getTime();
 
-        let commission = commission_deduction_5;
+          let commission = commission_deduction_5;
 
-        if (commission === 0) {
-          commission = "-";
+          if (commission === 0) {
+            commission = "-";
+          }
+
+          return {
+            id,
+            type,
+            currency,
+            coin_amount,
+            transaction_amount,
+            commission,
+            date,
+          };
         }
-
-        return {
-          id,
-          type,
-          currency,
-          coin_amount,
-          transaction_amount,
-          commission,
-          date,
-        };
-      });
+      );
 
       runInAction(() => {
         this.transaction = transaction;
       });
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.error(`Error: ${message}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -435,11 +416,9 @@ class AuthStoreImplementation {
       runInAction(() => {
         this.wallet_history = transaction;
       });
-    } catch (error: any) {
-      let message = error.message;
-      if (error.response) {
-        message = handleErrors(error.response.data.message);
-      }
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
       toast.error(`Error: ${message}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
