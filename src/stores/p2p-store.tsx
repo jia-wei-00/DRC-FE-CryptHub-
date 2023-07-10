@@ -8,6 +8,7 @@ import {
   P2PCompletedHistoryT,
   P2PContractsT,
 } from "../types";
+import { handleErrors } from "../functions";
 
 class P2PStoreImplementation {
   p2p_contracts: P2PContractsT[] = [];
@@ -63,7 +64,7 @@ class P2PStoreImplementation {
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        message = error.response.data.message;
+        message = handleErrors(error.response.data.message);
       }
       toast.update(id, {
         render: message,
@@ -98,7 +99,7 @@ class P2PStoreImplementation {
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        message = error.response.data.message;
+        message = handleErrors(error.response.data.message);
       }
       toast.update(id, {
         render: message,

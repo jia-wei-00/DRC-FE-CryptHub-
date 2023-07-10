@@ -1,4 +1,10 @@
-import { makeObservable, action, observable, runInAction } from "mobx";
+import {
+  makeObservable,
+  action,
+  observable,
+  runInAction,
+  reaction,
+} from "mobx";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { makePersistable } from "mobx-persist-store";
@@ -12,13 +18,16 @@ import {
   ResetPasswordFormT,
   Transaction,
   User,
+  Wallet,
   WalletHistoryT,
 } from "../types";
 import { MODALACTIONS, domain, headers } from "../constant";
-import { createTimeoutPromise } from "../functions";
+import { createTimeoutPromise, handleErrors } from "../functions";
+import Cookies from "js-cookie";
 
 class AuthStoreImplementation {
   user: User | null = null;
+  wallet: Wallet = { BTC: 0, ETH: 0, USD: 0 };
   auth_modal: boolean = false;
   transaction: Transaction[] = [];
   wallet_history: WalletHistoryT[] = [];
@@ -26,6 +35,7 @@ class AuthStoreImplementation {
   constructor() {
     makeObservable(this, {
       user: observable,
+      wallet: observable,
       auth_modal: observable,
       transaction: observable,
       wallet_history: observable,
@@ -37,10 +47,14 @@ class AuthStoreImplementation {
       fetchTransaction: action.bound,
     });
 
+    const user_data = Cookies.get("crypthub_user");
+
+    this.setUser(user_data ? JSON.parse(user_data) : null);
+
     // Make the store persistable
     makePersistable(this, {
-      name: "UserStore",
-      properties: ["user"],
+      name: "crypthub_user_wallet",
+      properties: ["wallet"],
       storage: window.localStorage,
     });
   }
@@ -50,6 +64,8 @@ class AuthStoreImplementation {
       this.user = null;
       this.auth_modal = true;
     });
+
+    Cookies.remove("crypthub_user");
   }
 
   setAuthModal(value: boolean) {
@@ -60,9 +76,16 @@ class AuthStoreImplementation {
 
   setUser = (authUser: User | null): void => {
     runInAction(() => {
-      authUser === null
-        ? (this.user = null)
-        : (this.user = { ...this.user, ...authUser! });
+      // authUser === null
+      //   ? (this.user = null)
+      //   : (this.user = { ...this.user, ...authUser! });
+      this.user = authUser;
+    });
+  };
+
+  setUserWallet = (wallet: Wallet): void => {
+    runInAction(() => {
+      this.wallet = wallet;
     });
   };
 
@@ -87,7 +110,7 @@ class AuthStoreImplementation {
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        message = error.response.data.message;
+        message = handleErrors(error.response.data.message);
       }
       toast.update(id, {
         render: message,
@@ -100,19 +123,23 @@ class AuthStoreImplementation {
   }
 
   async signIn(values: InputData): Promise<void> {
-    const id = toast.loading("Please wait...");
+    const toast_id = toast.loading("Please wait...");
     try {
       const userCredential = await Promise.race([
         axios.post(`${domain}/user/loginUser`, values),
         createTimeoutPromise(10000),
       ]);
 
-      runInAction(() => {
-        this.user = userCredential.data.details;
-      });
+      const { id, email, name, token, BTC, ETH, USD } =
+        userCredential.data.details;
+
+      this.setUser({ id, email, name, token });
+      this.setUserWallet({ BTC, ETH, USD });
+
+      Cookies.set("crypthub_user", JSON.stringify(this.user), { expires: 1 });
 
       this.setAuthModal(false);
-      toast.update(id, {
+      toast.update(toast_id, {
         render: `Welcome ${this.user!.name}`,
         type: "success",
         isLoading: false,
@@ -122,13 +149,9 @@ class AuthStoreImplementation {
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        if (error.response.data.message === "ACCOUNT_NOT_VERIFIED") {
-          message = "Please check your email to verify your account";
-        } else {
-          message = error.response.data.message;
-        }
+        message = handleErrors(error.response.data.message);
       }
-      toast.update(id, {
+      toast.update(toast_id, {
         render: message,
         type: "error",
         isLoading: false,
@@ -162,12 +185,12 @@ class AuthStoreImplementation {
       });
 
       runInAction(() => {
-        this.user!.USD = res.data.details.balance;
+        this.wallet.USD = res.data.details.balance;
       });
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        message = error.response.data.message;
+        message = handleErrors(error.response.data.message);
       }
 
       toast.update(id, {
@@ -204,12 +227,12 @@ class AuthStoreImplementation {
       });
 
       runInAction(() => {
-        this.user!.USD = res.data.details.balance;
+        this.wallet.USD = res.data.details.balance;
       });
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        message = error.response.data.message;
+        message = handleErrors(error.response.data.message);
       }
 
       toast.update(id, {
@@ -245,10 +268,12 @@ class AuthStoreImplementation {
       runInAction(() => {
         this.setUser(null);
       });
+
+      Cookies.remove("crypthub_user");
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        message = error.response.data.message;
+        message = handleErrors(error.response.data.message);
       }
       toast.update(id, {
         render: message,
@@ -278,9 +303,8 @@ class AuthStoreImplementation {
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        message = error.response.data.message;
+        message = handleErrors(error.response.data.message);
       }
-
       toast.update(id, {
         render: message,
         type: "error",
@@ -316,7 +340,7 @@ class AuthStoreImplementation {
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        message = error.response.data.message;
+        message = handleErrors(error.response.data.message);
       }
       toast.update(id, {
         render: message,
@@ -373,7 +397,7 @@ class AuthStoreImplementation {
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        message = error.response.data.message;
+        message = handleErrors(error.response.data.message);
       }
       toast.error(`Error: ${message}`, {
         position: toast.POSITION.TOP_RIGHT,
@@ -414,7 +438,7 @@ class AuthStoreImplementation {
     } catch (error: any) {
       let message = error.message;
       if (error.response) {
-        message = error.response.data.message;
+        message = handleErrors(error.response.data.message);
       }
       toast.error(`Error: ${message}`, {
         position: toast.POSITION.TOP_RIGHT,

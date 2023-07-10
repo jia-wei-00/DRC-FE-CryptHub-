@@ -32,6 +32,7 @@ import {
 } from "./dialog";
 import logo from "../assets/logo.svg";
 import { Action, HandleModalReducerT, ModalState } from "../types";
+import Cookies from "js-cookie";
 
 const DepositOption: React.FC<HandleModalReducerT> = ({ modal, dispatch }) => {
   return (
@@ -170,6 +171,11 @@ function Nav() {
             </Box>
           )}
 
+          <button onClick={() => authStore.reset()}>RESET</button>
+          <button onClick={() => console.log(Cookies.get("crypthub_user"))}>
+            GET
+          </button>
+
           <Menu
             id="menu-appbar"
             anchorEl={anchorElNav}
@@ -234,9 +240,15 @@ function Nav() {
                         WALLET
                       </InputLabel>
                       <Select label="wallet" defaultValue={0}>
-                        <MenuItem value={0}>{authStore.user?.USD} USD</MenuItem>
-                        <MenuItem value={1}>{authStore.user?.ETH} ETH</MenuItem>
-                        <MenuItem value={2}>{authStore.user?.BTC} BTC</MenuItem>
+                        <MenuItem value={0}>
+                          {authStore.wallet.USD} USD
+                        </MenuItem>
+                        <MenuItem value={1}>
+                          {authStore.wallet.ETH} ETH
+                        </MenuItem>
+                        <MenuItem value={2}>
+                          {authStore.wallet.BTC} BTC
+                        </MenuItem>
                         <Divider />
 
                         <DepositOption modal={modal} dispatch={dispatch} />
@@ -293,12 +305,12 @@ function Nav() {
                       WALLET
                     </InputLabel>
                     <Select label="wallet" defaultValue={0}>
-                      <MenuItem value={0}>{authStore.user?.USD} USD</MenuItem>
+                      <MenuItem value={0}>{authStore.wallet.USD} USD</MenuItem>
                       <MenuItem value={1}>
-                        {authStore.user?.ETH.toFixed(4)} ETH
+                        {authStore.wallet.ETH.toFixed(4)} ETH
                       </MenuItem>
                       <MenuItem value={2}>
-                        {authStore.user?.BTC.toFixed(4)} BTC
+                        {authStore.wallet.BTC.toFixed(4)} BTC
                       </MenuItem>
                       <Divider />
 

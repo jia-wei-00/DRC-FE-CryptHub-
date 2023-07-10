@@ -40,12 +40,16 @@ export type ProfileT = {
 };
 
 export type User = {
+  id: number;
+  email: string;
+  name: string;
+  token: string;
+};
+
+export type Wallet = {
   BTC: number;
   ETH: number;
   USD: number;
-  email?: string;
-  name?: string;
-  token?: string;
 };
 
 export type BuyTokenT = {

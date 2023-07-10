@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Bitcoin from "../../assets/bitcoin.svg";
 import Ethereum from "../../assets/ethereum.svg";
 import { ItemCardT } from "../../types";
-import { p2pStore } from "../../stores";
+import { authStore, p2pStore } from "../../stores";
 
 const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
   return (
@@ -34,7 +34,18 @@ const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
 
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
         {active === "market" ? (
-          <Button size="small" onClick={() => p2pStore.buyContract(contract)}>
+          <Button
+            size="small"
+            onClick={() =>
+              authStore.user
+                ? p2pStore.buyContract(contract)
+                : authStore.setAuthModal(true)
+            }
+            // disabled={
+            //   authStore.user !== null &&
+            //   authStore.user.id === contract.seller_id
+            // }
+          >
             BUY
           </Button>
         ) : (
