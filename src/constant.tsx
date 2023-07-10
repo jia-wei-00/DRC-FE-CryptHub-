@@ -18,9 +18,7 @@ export const headers = (token: string) => {
   };
 };
 
-export const domain = `http://${
-  import.meta.env.VITE_API_DOMAIN as string
-}:5000`;
+export const domain = `http://${import.meta.env.VITE_API_DOMAIN}:5000`;
 
 export const steps = [
   {
