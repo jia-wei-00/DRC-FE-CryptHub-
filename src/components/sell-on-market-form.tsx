@@ -1,5 +1,5 @@
 import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { AddP2PContractFormT, SellOnMarketT } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -20,6 +20,7 @@ import p2pStore from "../stores/p2p-store";
 import { websocketStoreP2P } from "../stores";
 import { observer } from "mobx-react-lite";
 import ReactLoading from "react-loading";
+import { NumericFormat } from "react-number-format";
 
 const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
   const [coinAmount, setCoinAmount] = React.useState<number>(0);
@@ -27,6 +28,7 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
   const {
     register,
     formState: { errors, isSubmitSuccessful },
+    control,
     reset,
     handleSubmit,
     setValue,
@@ -76,6 +78,18 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
     setValue("price", Number.isNaN(price_value) ? 0 : price_value - 1);
   };
 
+  const handleAddCoin = () => {
+    const price_value = getValues("coin_amount");
+    if (price_value >= 30000) return;
+    setValue("coin_amount", Number.isNaN(price_value) ? 0 : price_value + 1);
+  };
+
+  const handleSubtractCoin = () => {
+    const price_value = getValues("coin_amount");
+    if (price_value <= 0) return;
+    setValue("coin_amount", Number.isNaN(price_value) ? 0 : price_value - 1);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)} className="deposit-form">
       Insert the details
@@ -103,10 +117,12 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
         </Select>
       </FormControl>
       <Box className="deposit-input-box">
-        <IconButton onClick={handleSubtract} aria-label="subtract">
+        <IconButton onClick={handleSubtractCoin} aria-label="subtract">
           <Remove />
         </IconButton>
-        <TextField
+
+        {/* <NumericFormat
+          {...register("coin_amount", { valueAsNumber: true })}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -115,14 +131,41 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
             ),
           }}
           label="Coin to sell"
-          type="number"
           variant="standard"
           error={!!errors["coin_amount"]}
           defaultValue={0}
           helperText={!!errors.coin_amount && errors.coin_amount.message}
-          {...register("coin_amount", { valueAsNumber: true })}
+          decimalScale={2}
+          customInput={TextField}
+        /> */}
+
+        <Controller
+          control={control}
+          {...register("coin_amount")}
+          render={({ field }) => (
+            <NumericFormat
+              {...field}
+              onChange={(event) => field.onChange(+event.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {websocketStoreP2P.currency}
+                  </InputAdornment>
+                ),
+              }}
+              label="Coin to sell"
+              variant="standard"
+              error={!!errors["coin_amount"]}
+              defaultValue={0}
+              helperText={!!errors.coin_amount && errors.coin_amount.message}
+              decimalScale={2}
+              customInput={TextField}
+              allowNegative={false}
+            />
+          )}
         />
-        <IconButton onClick={handleAdd} aria-label="add">
+
+        <IconButton onClick={handleAddCoin} aria-label="add">
           <Add />
         </IconButton>
       </Box>
