@@ -355,12 +355,6 @@ export const ConfirmationPopUp: React.FC = observer(() => {
     <Dialog
       open={modalStore.confirmation_modal.open}
       onClose={() => modalStore.setConfirmationModal(null, "")}
-      PaperProps={{
-        style: {
-          backgroundColor: "transparent",
-          boxShadow: "none",
-        },
-      }}
     >
       <DialogTitle>Alert</DialogTitle>
       <DialogContent>
