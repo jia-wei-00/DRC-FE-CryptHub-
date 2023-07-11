@@ -78,6 +78,7 @@
 }
 
 .market-card {
+  position: relative;
   padding: 10px;
 
   & > .card-content {
@@ -130,6 +131,33 @@
   display: flex;
   justify-content: center;
   align-items: start;
+}
+
+.owned-contract {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: transparent;
+  z-index: 2;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+
+    &::after {
+      content: "OWNED";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: $light-bg;
+      height: 25px;
+      width: 100%;
+      text-align: center;
+    }
+  }
 }
 
 #light {

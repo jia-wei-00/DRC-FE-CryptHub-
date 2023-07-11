@@ -348,13 +348,13 @@ export const ConfirmationPopUp: React.FC = observer(() => {
     if (modalStore.confirmation_modal.modal_function) {
       await modalStore.confirmation_modal.modal_function();
     }
-    modalStore.setConfirmationModal(null, "");
+    modalStore.setConfirmationModal(null);
   };
 
   return (
     <Dialog
       open={modalStore.confirmation_modal.open}
-      onClose={() => modalStore.setConfirmationModal(null, "")}
+      onClose={() => modalStore.setConfirmationModal(null)}
       PaperProps={{
         style: {
           backgroundColor: "transparent",
@@ -378,7 +378,7 @@ export const ConfirmationPopUp: React.FC = observer(() => {
                 Yes
               </Button>
               <Button
-                onClick={() => modalStore.setConfirmationModal(null, "")}
+                onClick={() => modalStore.setConfirmationModal(null)}
                 color="error"
                 variant="contained"
               >

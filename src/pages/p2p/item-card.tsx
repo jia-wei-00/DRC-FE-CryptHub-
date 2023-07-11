@@ -9,13 +9,17 @@ import Bitcoin from "../../assets/bitcoin.svg";
 import Ethereum from "../../assets/ethereum.svg";
 import { ItemCardT } from "../../types";
 import { authStore, modalStore, p2pStore } from "../../stores";
-import { ConfirmationPopUp } from "../../components/dialog";
 import { observer } from "mobx-react-lite";
 
 const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
   return (
     <>
       <Card className="market-card">
+        {authStore.user !== null &&
+          authStore.user.id === contract.seller_id && (
+            <div className="owned-contract" />
+          )}
+
         <CardMedia
           component="img"
           alt="green iguana"
@@ -47,25 +51,28 @@ const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
                     )
                   : authStore.setAuthModal(true)
               }
-              // disabled={
-              //   authStore.user !== null &&
-              //   authStore.user.id === contract.seller_id
-              // }
+              disabled={
+                authStore.user !== null &&
+                authStore.user.id === contract.seller_id
+              }
             >
               BUY
             </Button>
           ) : (
             <Button
               size="small"
-              onClick={() => p2pStore.withdrawContract(contract)}
+              onClick={() =>
+                modalStore.setConfirmationModal(
+                  () => p2pStore.withdrawContract(contract),
+                  "withdraw"
+                )
+              }
             >
               WITHDRAW
             </Button>
           )}
         </CardActions>
       </Card>
-
-      <ConfirmationPopUp />
     </>
   );
 };

@@ -17,6 +17,7 @@ import SellButton from "./floading-sell";
 import { observer } from "mobx-react-lite";
 import p2pStore from "../../stores/p2p-store";
 import { authStore } from "../../stores";
+import { ConfirmationPopUp } from "../../components/dialog";
 
 const P2P: React.FC = () => {
   const [active, setActive] = React.useState("market");
@@ -129,6 +130,7 @@ const P2P: React.FC = () => {
         </Grid>
       </div>
       <SellButton />
+      <ConfirmationPopUp />
     </Container>
   );
 };

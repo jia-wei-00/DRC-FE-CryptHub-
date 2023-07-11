@@ -16,12 +16,12 @@ class ModalStoreImplementation {
 
   setConfirmationModal(
     modal_function: (() => Promise<void>) | null,
-    text: string
+    text?: string
   ) {
     runInAction(() => {
       this.confirmation_modal = {
         open: !this.confirmation_modal.open,
-        text: text,
+        text: text ? text : this.confirmation_modal.text,
         modal_function: modal_function,
       };
     });
