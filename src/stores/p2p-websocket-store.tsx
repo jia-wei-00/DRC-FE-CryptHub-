@@ -2,7 +2,6 @@ import { makeObservable, action, observable, runInAction } from "mobx";
 import DerivAPIBasic from "https://cdn.skypack.dev/@deriv/deriv-api/dist/DerivAPIBasic";
 import { makePersistable } from "mobx-persist-store";
 import { toast } from "react-toastify";
-import { APIT } from "../types";
 
 class P2PWebSocketStoreImplementation {
   ticks: number = 0;

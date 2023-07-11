@@ -9,7 +9,7 @@ import {
   P2PCompletedHistoryT,
   P2PContractsT,
 } from "../types";
-import { errorChecking, handleErrors } from "../functions";
+import { errorChecking } from "../functions";
 
 class P2PStoreImplementation {
   p2p_contracts: P2PContractsT[] = [];
