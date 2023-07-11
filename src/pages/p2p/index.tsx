@@ -53,14 +53,10 @@ const P2P: React.FC = () => {
     }
     if (active === "market") {
       p2pStore.fetchP2PMarket();
-    }
-  }, [active, authStore.user]);
-
-  React.useCallback(() => {
-    if (authStore.user !== null) {
+    } else if (active === "ongoing") {
       p2pStore.fetchOnGoingContracts();
     }
-  }, [p2pStore.addP2PContract]);
+  }, [active, authStore.user, authStore.wallet]);
 
   return (
     <Container maxWidth="xl" className="p2p-container">

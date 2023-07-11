@@ -75,6 +75,7 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
     if (price_value <= 0) return;
     setValue("price", Number.isNaN(price_value) ? 0 : price_value - 1);
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)} className="deposit-form">
       Insert the details

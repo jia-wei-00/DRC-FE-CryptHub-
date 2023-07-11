@@ -60,8 +60,7 @@ class P2PStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-      console.log(res);
-      authStore.setUser(res.data.details.wallet_balance);
+      authStore.setUserWallet(res.data.details.wallet_balance);
     } catch (error: unknown) {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
 
@@ -92,7 +91,7 @@ class P2PStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-      authStore.setUser(res.data.details);
+      authStore.setUserWallet(res.data.details);
       console.log(res, "buy_contract");
       this.fetchOnGoingContracts();
     } catch (error: unknown) {
@@ -116,7 +115,7 @@ class P2PStoreImplementation {
 
     try {
       const res = await axios.post(`${domain}/p2p/deleteContract`, data, {
-        headers: headers(authStore.user!.token!),
+        headers: headers(authStore.user!.token),
       });
       toast.update(id, {
         render: `Withdraw Sucessfully`,

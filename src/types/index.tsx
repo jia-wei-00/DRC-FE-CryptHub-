@@ -131,6 +131,7 @@ export type ResetPasswordFormT = {
 export type SellOnMarketT = {
   sellModal?: boolean;
   setSellModal: React.Dispatch<React.SetStateAction<boolean>>;
+  active?: string;
 };
 
 //add p2p contract form type
@@ -138,6 +139,7 @@ export type AddP2PContractFormT = {
   currency: string;
   coin_amount: number;
   price: number;
+  active?: string;
 };
 
 //p2p market item card type

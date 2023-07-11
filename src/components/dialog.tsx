@@ -319,6 +319,7 @@ export const WithdrawDialog: React.FC<HandleModalReducerT> = ({
 export const SellOnMarkerPlace: React.FC<SellOnMarketT> = ({
   sellModal,
   setSellModal,
+  active,
 }) => {
   return (
     <Dialog
@@ -334,7 +335,7 @@ export const SellOnMarkerPlace: React.FC<SellOnMarketT> = ({
       <div className="wrapper">
         <Card className="card">
           <CardContent>
-            <SellOnMarketForm setSellModal={setSellModal} />
+            <SellOnMarketForm setSellModal={setSellModal} active={active} />
           </CardContent>
         </Card>
       </div>
