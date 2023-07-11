@@ -125,9 +125,9 @@ class P2PStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-      console.log(res);
-      authStore.setUser(res.data.details);
-      console.log(authStore.user);
+
+      authStore.setUserWallet(res.data.details);
+
       this.fetchOnGoingContracts();
     } catch (error: unknown) {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
@@ -159,7 +159,7 @@ class P2PStoreImplementation {
     if (authStore.user === null) return;
     try {
       const res = await axios.get(`${domain}/p2p/getOngoingContracts`, {
-        headers: headers(authStore.user!.token!),
+        headers: headers(authStore.user.token),
       });
 
       this.setP2PContracts(res.data.details);
