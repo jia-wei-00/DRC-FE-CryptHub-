@@ -88,7 +88,7 @@ class WebsocketStoreImplementation {
     this.ohlc = [];
   };
 
-  tickResponse = async (res: any) => {
+  tickResponse = async (res: MessageEvent) => {
     const data = JSON.parse(res.data);
 
     if (data.error !== undefined) {

@@ -60,8 +60,7 @@ class P2PWebSocketStoreImplementation {
     });
   };
 
-  tickResponse = async (res: any) => {
-    console.log(res);
+  tickResponse = async (res: MessageEvent) => {
     const data = JSON.parse(res.data);
 
     if (data.error !== undefined) {

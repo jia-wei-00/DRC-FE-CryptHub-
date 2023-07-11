@@ -31,7 +31,6 @@ const App: React.FC = () => {
 
         <ToastContainer
           theme={modeStore.mode === "dark" ? "dark" : "light"}
-          limit={3}
           position="top-center"
         />
       </ThemeProvider>

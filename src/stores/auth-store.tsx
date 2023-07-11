@@ -18,11 +18,7 @@ import {
   WalletHistoryT,
 } from "../types";
 import { MODALACTIONS, domain, headers } from "../constant";
-import {
-  createTimeoutPromise,
-  errorChecking,
-  handleErrors,
-} from "../functions";
+import { createTimeoutPromise, errorChecking } from "../functions";
 import Cookies from "js-cookie";
 
 class AuthStoreImplementation {

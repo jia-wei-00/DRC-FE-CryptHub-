@@ -42,7 +42,7 @@ export const errorChecking = (error: AxiosError<ErrorResponse>) => {
       message = "An unknown error occurred in axios";
     }
   } else {
-    message = "An unknown error occurred";
+    message = error;
   }
 
   return message;

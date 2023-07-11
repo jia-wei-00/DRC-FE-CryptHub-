@@ -9,10 +9,13 @@ import {
   Select,
   ToggleButton,
   ToggleButtonGroup,
+  DialogContent,
+  DialogActions,
+  DialogTitle,
 } from "@mui/material";
 import { ChartSettingsT, HandleModalReducerT, SellOnMarketT } from "../types";
 import { motion } from "framer-motion";
-import { websocketStore, modeStore, authStore } from "../stores";
+import { websocketStore, modeStore, authStore, modalStore } from "../stores";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
 import { CandlestickChart, Timeline } from "@mui/icons-material";
@@ -338,3 +341,46 @@ export const SellOnMarkerPlace: React.FC<SellOnMarketT> = ({
     </Dialog>
   );
 };
+
+export const ConfirmationPopUp: React.FC = observer(() => {
+  const handleConfirmation = async () => {
+    if (modalStore.confirmation_modal.modal_function) {
+      await modalStore.confirmation_modal.modal_function();
+    }
+    modalStore.setConfirmationModal(null, "");
+  };
+
+  return (
+    <Dialog
+      open={modalStore.confirmation_modal.open}
+      onClose={() => modalStore.setConfirmationModal(null, "")}
+      PaperProps={{
+        style: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        },
+      }}
+    >
+      <DialogTitle>Alert</DialogTitle>
+      <DialogContent>
+        Press yes to {modalStore.confirmation_modal.text}!
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={handleConfirmation}
+          color="success"
+          variant="contained"
+        >
+          Yes
+        </Button>
+        <Button
+          onClick={() => modalStore.setConfirmationModal(null, "")}
+          color="error"
+          variant="contained"
+        >
+          No
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+});

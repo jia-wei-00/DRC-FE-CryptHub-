@@ -5,7 +5,7 @@ import { P2P } from "./pages";
 import HomePage from "./pages/home";
 
 export const pages = [
-  { title: "Home", path: "/", element: <HomePage /> },
+  { title: "Crypthub Trader", path: "/", element: <HomePage /> },
   { title: "P2P Trader", path: "/p2pTrader", element: <P2P /> },
 ];
 
@@ -18,7 +18,8 @@ export const headers = (token: string) => {
   };
 };
 
-export const domain = `http://${import.meta.env.VITE_API_DOMAIN}:5000`;
+export const domain =
+  `https://${import.meta.env.VITE_API_DOMAIN}` || "localhost:5000";
 
 export const steps = [
   {

@@ -130,7 +130,7 @@ function Nav() {
   const handleCloseNavMenu = (value: string) => {
     setAnchorElNav(null);
 
-    if (value === "Home") {
+    if (value === "Crypthub Trader") {
       navigate("/");
     }
 
@@ -199,7 +199,7 @@ function Nav() {
             ))}
           </Menu>
 
-          <Link to="/">
+          <Link to="https://crypthub.vercel.app/" target="_blank">
             <Typography
               variant="h6"
               noWrap
