@@ -355,27 +355,39 @@ export const ConfirmationPopUp: React.FC = observer(() => {
     <Dialog
       open={modalStore.confirmation_modal.open}
       onClose={() => modalStore.setConfirmationModal(null, "")}
+      PaperProps={{
+        style: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        },
+      }}
     >
-      <DialogTitle>Alert</DialogTitle>
-      <DialogContent>
-        Press yes to {modalStore.confirmation_modal.text}!
-      </DialogContent>
-      <DialogActions>
-        <Button
-          onClick={handleConfirmation}
-          color="success"
-          variant="contained"
-        >
-          Yes
-        </Button>
-        <Button
-          onClick={() => modalStore.setConfirmationModal(null, "")}
-          color="error"
-          variant="contained"
-        >
-          No
-        </Button>
-      </DialogActions>
+      <div className="wrapper">
+        <Card className="card">
+          <CardContent>
+            <DialogTitle>Alert</DialogTitle>
+            <DialogContent>
+              Press yes to {modalStore.confirmation_modal.text}!
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleConfirmation}
+                color="success"
+                variant="contained"
+              >
+                Yes
+              </Button>
+              <Button
+                onClick={() => modalStore.setConfirmationModal(null, "")}
+                color="error"
+                variant="contained"
+              >
+                No
+              </Button>
+            </DialogActions>
+          </CardContent>
+        </Card>
+      </div>
     </Dialog>
   );
 });
