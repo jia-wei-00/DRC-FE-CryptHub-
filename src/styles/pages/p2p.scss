@@ -103,6 +103,7 @@
   right: 70px;
   bottom: 50px;
   animation: 0.5s ease-out 0s 1 zoom;
+  z-index: 10;
 
   & > .sell-button {
     backdrop-filter: blur(5px);
