@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 class P2PWebSocketStoreImplementation {
   ticks: number = 0;
-  currency: string = "";
+  currency: string = "ETH";
 
   constructor() {
     makeObservable(this, {
