@@ -16,9 +16,8 @@ const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
     <>
       <Card className="market-card">
         {authStore.user !== null &&
-          authStore.user.id === contract.seller_id && (
-            <div className="owned-contract" />
-          )}
+          authStore.user.id === contract.seller_id &&
+          active === "market" && <div className="owned-contract" />}
 
         <CardMedia
           component="img"

@@ -82,6 +82,25 @@ class AuthStoreImplementation {
     });
   };
 
+  async fetchWallet(): Promise<void> {
+    try {
+      const res = await Promise.race([
+        axios.get(`${domain}/wallet/currentWalletBalance`, {
+          headers: headers(this.user!.token),
+        }),
+        createTimeoutPromise(10000),
+      ]);
+
+      this.setUserWallet(res.data.details);
+    } catch (error: unknown) {
+      const message = errorChecking(error as AxiosError<ErrorResponse>);
+
+      toast.error(`Error: ${message}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  }
+
   async resetPassword(values: ResetPasswordFormT): Promise<void> {
     const id = toast.loading("Please wait...");
 

@@ -119,6 +119,11 @@ function Nav() {
     }
   }, []);
 
+  React.useEffect(() => {
+    authStore.fetchWallet();
+    console.log("fetch");
+  }, []);
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
