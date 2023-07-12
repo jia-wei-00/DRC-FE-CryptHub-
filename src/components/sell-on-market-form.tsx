@@ -155,6 +155,9 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                inputMode: "numeric",
+              }}
               label="Coin to sell"
               variant="standard"
               error={!!errors["coin_amount"]}

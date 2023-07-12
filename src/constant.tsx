@@ -18,7 +18,7 @@ export const headers = (token: string) => {
   };
 };
 
-export const domain = `http://${import.meta.env.VITE_API_DOMAIN}`;
+export const domain = import.meta.env.VITE_API_DOMAIN;
 
 export const steps = [
   {
