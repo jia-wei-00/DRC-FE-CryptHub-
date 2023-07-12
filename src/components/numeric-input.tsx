@@ -1,37 +1,18 @@
 import React from "react";
-import {
-  Control,
-  Controller,
-  FieldErrors,
-  FieldValues,
-  UseFormGetValues,
-  UseFormSetValue,
-} from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
 import { Remove, Add } from "@mui/icons-material";
+import { CurrencyFormatterT } from "../types";
 
-type AddP2PContractFormT = {
-  coin_amount?: number;
-  price?: number;
-};
-
-interface CoinInputProps {
-  control: any;
-  errors: FieldErrors<AddP2PContractFormT>;
-  getValues: any;
-  setValue: any;
-  currency: string;
-  name: keyof AddP2PContractFormT;
-}
-
-const CurrencyInput: React.FC<CoinInputProps> = ({
+const CurrencyInput: React.FC<CurrencyFormatterT> = ({
   control,
   errors,
   getValues,
   setValue,
   currency,
   name,
+  label,
 }) => {
   const handleAdd = () => {
     const price_value = getValues(name) as number;
@@ -66,7 +47,7 @@ const CurrencyInput: React.FC<CoinInputProps> = ({
             inputProps={{
               inputMode: "numeric",
             }}
-            label="Coin to sell"
+            label={label}
             variant="standard"
             error={!!errors.coin_amount}
             helperText={errors.coin_amount?.message}

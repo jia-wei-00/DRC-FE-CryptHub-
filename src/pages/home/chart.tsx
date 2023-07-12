@@ -34,6 +34,26 @@ const Chart: React.FC = () => {
   const options: Highcharts.Options = {
     chart: {
       backgroundColor: "transparent",
+      events: {
+        load: function () {
+          const chart = this;
+          const series = this.series[0];
+          const xAxis = chart.xAxis[0];
+
+          // Get the maximum x-value (newest data point)
+          const lastPoint = series.data[series.data.length - 1];
+          const newEnd = lastPoint ? lastPoint.x : undefined;
+
+          // Calculate the new start value based on the desired visible range
+          const desiredVisibleRange = 10; // Number of data points you want to be visible initially
+          const newStart = newEnd ? newEnd - desiredVisibleRange : undefined;
+
+          // Set the extremes of the xAxis
+          if (newStart !== undefined && newEnd !== undefined) {
+            xAxis.setExtremes(newStart, newEnd);
+          }
+        },
+      },
     },
     tooltip:
       websocketStore.interval === "1t" ||

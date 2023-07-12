@@ -1,4 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
+import {
+  Control,
+  FieldErrors,
+  UseFormGetValues,
+  UseFormSetValue,
+} from "react-hook-form";
 
 export type InputData = {
   name?: string;
@@ -206,4 +212,15 @@ export type HandleModalDispatchT = {
 
 export type ErrorResponse = {
   message: string;
+};
+
+//numeric input form type
+export type CurrencyFormatterT = {
+  control: Control<AddP2PContractFormT>;
+  errors: FieldErrors<AddP2PContractFormT>;
+  getValues: UseFormGetValues<AddP2PContractFormT>;
+  setValue: UseFormSetValue<AddP2PContractFormT>;
+  currency: string;
+  name: keyof AddP2PContractFormT;
+  label: string;
 };

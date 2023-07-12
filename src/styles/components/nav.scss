@@ -22,7 +22,7 @@
     align-items: center;
     column-gap: 15px;
 
-    button {
+    & > .login-btn {
       height: 30px;
     }
   }
@@ -135,6 +135,8 @@
   .deposit-input-box {
     display: flex !important;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
 
     input {
       text-align: center;

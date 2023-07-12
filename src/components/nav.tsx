@@ -262,7 +262,7 @@ function Nav() {
                 <>
                   <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} id="profile">
-                      <Avatar alt={authStore.user.name} src="no" />
+                      <Avatar>{authStore.user.name.charAt(0)}</Avatar>
                     </IconButton>
                   </Tooltip>
                 </>
@@ -270,6 +270,7 @@ function Nav() {
                 <Button
                   onClick={() => authStore.setAuthModal(!authStore.auth_modal)}
                   variant="contained"
+                  className="login-btn"
                 >
                   Login
                 </Button>
