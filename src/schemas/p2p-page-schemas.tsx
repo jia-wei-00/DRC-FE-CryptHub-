@@ -7,7 +7,7 @@ export const addP2PSchema: (
   object({
     coin_amount: number()
       .positive("Amount must be a positive number")
-      .max(5, "Amount must be less than or equal to 5"),
+      .max(10, "Amount must be less than or equal to 10"),
     price: number()
       .positive("Amount must be a positive number")
       .max(

@@ -5,6 +5,9 @@ import TransactionHistory from "./transaction-history";
 import ResetPasswordForm from "./reset-password";
 import WalletHistoryT from "./wallet-history";
 import P2PHistory from "./p2p-history";
+import { useNavigate } from "react-router-dom";
+import { authStore } from "../../stores";
+import { observer } from "mobx-react-lite";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -48,6 +51,13 @@ const Profile = () => {
   };
 
   const matches = useMediaQuery("(min-width:1023px)");
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (authStore.user === null) {
+      navigate("/");
+    }
+  }, [authStore.user]);
 
   return (
     <Box className="profile-box">
@@ -82,4 +92,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default observer(Profile);

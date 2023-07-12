@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { authStore } from "./stores";
+import { authStore, p2pStore } from "./stores";
 import { ErrorResponse } from "./types";
 
 export const createTimeoutPromise = (timeout: number): Promise<never> => {
@@ -15,16 +15,9 @@ export const handleErrors = (error: string) => {
     case "AUTHENTICATION_FAILED":
       authStore.reset();
       return "Session expired please login again!";
-    case "CANNOT_BUY_OWN_CONTRACT":
-      return "Cannot buy your own contract!";
-    case "ACCOUNT_NOT_VERIFIED":
-      return "Please check your email to verify your account";
-    case "EMAIL_NOT_EXIST":
-      return "Email does not exist";
-    case "DUPLICATE_EMAIL":
-      return "Email registered";
-    case "INVALID_PASSWORD":
-      return "Invalid password";
+    case "Contract had already been bought/withdrawed":
+      p2pStore.fetchP2PMarket();
+      return error;
     default:
       return error;
   }

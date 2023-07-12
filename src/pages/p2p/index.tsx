@@ -57,7 +57,6 @@ const P2P: React.FC = () => {
     } else if (active === "ongoing") {
       if (authStore.user === null) return;
       p2pStore.fetchOnGoingContracts();
-      console.log("fetching ongoing");
     }
   }, [active, authStore.user, authStore.wallet]);
 

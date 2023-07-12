@@ -21,6 +21,7 @@ import { websocketStoreP2P } from "../stores";
 import { observer } from "mobx-react-lite";
 import ReactLoading from "react-loading";
 import { NumericFormat } from "react-number-format";
+import CurrencyInput from "./numeric-input";
 
 const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
   const [coinAmount, setCoinAmount] = React.useState<number>(0);
@@ -35,6 +36,10 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
     getValues,
     watch,
   } = useForm<AddP2PContractFormT>({
+    defaultValues: {
+      coin_amount: 0,
+      price: 0,
+    },
     resolver: zodResolver(addP2PSchema(websocketStoreP2P.ticks, coinAmount)),
   });
 
@@ -116,28 +121,10 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
           <MenuItem value="BTC">BTC</MenuItem>
         </Select>
       </FormControl>
-      <Box className="deposit-input-box">
+      {/* <Box className="deposit-input-box">
         <IconButton onClick={handleSubtractCoin} aria-label="subtract">
           <Remove />
         </IconButton>
-
-        {/* <NumericFormat
-          {...register("coin_amount", { valueAsNumber: true })}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                {websocketStoreP2P.currency}
-              </InputAdornment>
-            ),
-          }}
-          label="Coin to sell"
-          variant="standard"
-          error={!!errors["coin_amount"]}
-          defaultValue={0}
-          helperText={!!errors.coin_amount && errors.coin_amount.message}
-          decimalScale={2}
-          customInput={TextField}
-        /> */}
 
         <Controller
           control={control}
@@ -159,12 +146,11 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
               label="Coin to sell"
               variant="standard"
               error={!!errors["coin_amount"]}
-              defaultValue={0}
+              defaultValue={field.value}
               helperText={!!errors.coin_amount && errors.coin_amount.message}
               decimalScale={2}
               customInput={TextField}
               allowNegative={false}
-              // isAllowed={(field) => field.value <= 100}
             />
           )}
         />
@@ -172,8 +158,24 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
         <IconButton onClick={handleAddCoin} aria-label="add">
           <Add />
         </IconButton>
-      </Box>
-      <Box className="deposit-input-box">
+      </Box> */}
+      <CurrencyInput
+        control={control}
+        errors={errors}
+        getValues={getValues}
+        setValue={setValue}
+        currency={websocketStoreP2P.currency}
+        name="coin_amount"
+      />
+      <CurrencyInput
+        control={control}
+        errors={errors}
+        getValues={getValues}
+        setValue={setValue}
+        currency="USD"
+        name="price"
+      />
+      {/* <Box className="deposit-input-box">
         <IconButton onClick={handleSubtract} aria-label="subtract">
           <Remove />
         </IconButton>
@@ -192,7 +194,7 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
         <IconButton onClick={handleAdd} aria-label="add">
           <Add />
         </IconButton>
-      </Box>
+      </Box> */}
       <Button
         type="submit"
         variant="contained"
