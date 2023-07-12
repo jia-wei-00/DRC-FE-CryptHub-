@@ -241,13 +241,13 @@ function Nav() {
                       </InputLabel>
                       <Select label="wallet" defaultValue={0}>
                         <MenuItem value={0}>
-                          {authStore.wallet.USD && authStore.wallet.USD} USD
+                          {authStore.wallet ? authStore.wallet.USD : 0} USD
                         </MenuItem>
                         <MenuItem value={1}>
-                          {authStore.wallet.ETH && authStore.wallet.USD} ETH
+                          {authStore.wallet ? authStore.wallet.ETH : 0} ETH
                         </MenuItem>
                         <MenuItem value={2}>
-                          {authStore.wallet.BTC && authStore.wallet.USD} BTC
+                          {authStore.wallet ? authStore.wallet.BTC : 0} BTC
                         </MenuItem>
                         <Divider />
 
