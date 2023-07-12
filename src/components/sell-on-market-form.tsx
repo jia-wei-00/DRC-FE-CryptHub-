@@ -90,8 +90,6 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
     setValue("coin_amount", Number.isNaN(price_value) ? 0 : price_value - 1);
   };
 
-  console.log("rerender");
-
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)} className="deposit-form">
       Insert the details
@@ -104,10 +102,10 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
         )}
       </span>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Currency</InputLabel>
+        <InputLabel id="wallet-currency-select-label">Currency</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId="wallet-currency-select-label"
+          id="wallet-currency-select"
           label="Currency"
           value={websocketStoreP2P.currency}
           onChange={(e) =>

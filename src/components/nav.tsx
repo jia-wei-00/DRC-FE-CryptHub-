@@ -261,15 +261,8 @@ function Nav() {
               {authStore.user ? (
                 <>
                   <Tooltip title="Open settings">
-                    <IconButton
-                      onClick={handleOpenUserMenu}
-                      sx={{ p: 0 }}
-                      id="profile"
-                    >
-                      <Avatar
-                        alt={authStore.user.name}
-                        src="/static/images/avatar/2.jpg"
-                      />
+                    <IconButton onClick={handleOpenUserMenu} id="profile">
+                      <Avatar alt={authStore.user.name} src="no" />
                     </IconButton>
                   </Tooltip>
                 </>

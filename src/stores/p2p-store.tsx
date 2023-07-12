@@ -13,11 +13,13 @@ import { errorChecking } from "../functions";
 
 class P2PStoreImplementation {
   p2p_contracts: P2PContractsT[] = [];
+  p2p_ongoing_contracts: P2PContractsT[] = [];
   p2p_completed_history: P2PCompletedHistoryT[] = [];
 
   constructor() {
     makeObservable(this, {
       p2p_contracts: observable,
+      p2p_ongoing_contracts: observable,
       p2p_completed_history: observable,
       setP2PContracts: action.bound,
       addP2PContract: action.bound,
@@ -26,6 +28,7 @@ class P2PStoreImplementation {
       fetchP2PMarket: action.bound,
       fetchP2PHistory: action.bound,
       setP2PCompletedHistory: action.bound,
+      setP2POngoingContracts: action.bound,
     });
   }
 
@@ -38,6 +41,12 @@ class P2PStoreImplementation {
   setP2PContracts(values: P2PContractsT[]) {
     runInAction(() => {
       this.p2p_contracts = values;
+    });
+  }
+
+  setP2POngoingContracts(values: P2PContractsT[]) {
+    runInAction(() => {
+      this.p2p_ongoing_contracts = values;
     });
   }
 
@@ -161,7 +170,7 @@ class P2PStoreImplementation {
         headers: headers(authStore.user.token),
       });
 
-      this.setP2PContracts(res.data.details);
+      this.setP2POngoingContracts(res.data.details);
     } catch (error: unknown) {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
 

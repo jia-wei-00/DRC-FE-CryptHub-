@@ -7,7 +7,7 @@ export const registerSchema: ZodType = object({
       /^(?=.*[a-zA-Z])[a-zA-Z0-9]*$/,
       "Only character and number is allowed"
     )
-    .min(5, "Username must be more than 5 characters")
+    .min(4, "Username must be more than 4 characters")
     .max(12, "Username must be less than 12 characters"),
   email: string().nonempty("Email is required").email("Email is invalid"),
   password: string()
