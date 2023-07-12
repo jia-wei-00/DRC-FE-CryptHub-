@@ -90,6 +90,8 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
     setValue("coin_amount", Number.isNaN(price_value) ? 0 : price_value - 1);
   };
 
+  console.log("rerender");
+
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)} className="deposit-form">
       Insert the details
@@ -161,6 +163,7 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
               decimalScale={2}
               customInput={TextField}
               allowNegative={false}
+              // isAllowed={(field) => field.value <= 100}
             />
           )}
         />
