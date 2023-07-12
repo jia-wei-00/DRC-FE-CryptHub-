@@ -240,13 +240,13 @@ function Nav() {
                       </InputLabel>
                       <Select label="wallet" defaultValue={0}>
                         <MenuItem value={0}>
-                          {authStore.wallet.USD} USD
+                          {authStore.wallet.USD && authStore.wallet.USD} USD
                         </MenuItem>
                         <MenuItem value={1}>
-                          {authStore.wallet.ETH} ETH
+                          {authStore.wallet.ETH && authStore.wallet.USD} ETH
                         </MenuItem>
                         <MenuItem value={2}>
-                          {authStore.wallet.BTC} BTC
+                          {authStore.wallet.BTC && authStore.wallet.USD} BTC
                         </MenuItem>
                         <Divider />
 
