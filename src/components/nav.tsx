@@ -120,8 +120,9 @@ function Nav() {
   }, []);
 
   React.useEffect(() => {
-    authStore.fetchWallet();
-    console.log("fetch");
+    if (authStore.user !== null) {
+      authStore.fetchWallet();
+    }
   }, []);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
