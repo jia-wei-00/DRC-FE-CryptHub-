@@ -1,28 +1,25 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { HandleModalDispatchT, PriceT } from "../types";
+import { AddP2PContractFormT, HandleModalDispatchT, PriceT } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authStore } from "../stores";
-import {
-  Box,
-  Button,
-  IconButton,
-  InputAdornment,
-  TextField,
-} from "@mui/material";
-import { Add, Remove } from "@mui/icons-material";
+import { Button } from "@mui/material";
 import { depositSchema } from "../schemas";
 import { MODALACTIONS } from "../constant";
+import CurrencyInput from "./numeric-input";
 
 const DepositForm: React.FC<HandleModalDispatchT> = ({ dispatch }) => {
   const {
-    register,
+    control,
     formState: { errors, isSubmitSuccessful },
     reset,
     handleSubmit,
     setValue,
     getValues,
-  } = useForm<PriceT>({
+  } = useForm<AddP2PContractFormT>({
+    defaultValues: {
+      price: 0,
+    },
     resolver: zodResolver(depositSchema),
   });
 
@@ -38,39 +35,17 @@ const DepositForm: React.FC<HandleModalDispatchT> = ({ dispatch }) => {
     authStore.deposit(values);
   };
 
-  const handleAdd = () => {
-    const price_value = getValues("price");
-    if (price_value >= 30000) return;
-    setValue("price", Number.isNaN(price_value) ? 0 : price_value + 1);
-  };
-
-  const handleSubtract = () => {
-    const price_value = getValues("price");
-    if (price_value <= 0) return;
-    setValue("price", Number.isNaN(price_value) ? 0 : price_value - 1);
-  };
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)} className="deposit-form">
       Put your deposit amount
-      <Box className="deposit-input-box">
-        <IconButton onClick={handleSubtract} aria-label="subtract">
-          <Remove />
-        </IconButton>
-        <TextField
-          InputProps={{
-            endAdornment: <InputAdornment position="end">USD</InputAdornment>,
-          }}
-          type="number"
-          variant="standard"
-          error={!!errors["price"]}
-          defaultValue={0}
-          helperText={!!errors.price && errors.price.message}
-          {...register("price", { valueAsNumber: true })}
-        />
-        <IconButton onClick={handleAdd} aria-label="add">
-          <Add />
-        </IconButton>
-      </Box>
+      <CurrencyInput
+        control={control}
+        errors={errors}
+        getValues={getValues}
+        setValue={setValue}
+        currency="USD"
+        name="price"
+      />
       <Button type="submit" variant="contained">
         Deposit
       </Button>

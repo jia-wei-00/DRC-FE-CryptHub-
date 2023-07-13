@@ -195,6 +195,8 @@ class AuthStoreImplementation {
       runInAction(() => {
         this.wallet.USD = res.data.details.balance;
       });
+
+      this.fetchWallet();
     } catch (error: unknown) {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
 
@@ -234,6 +236,8 @@ class AuthStoreImplementation {
       runInAction(() => {
         this.wallet.USD = res.data.details.balance;
       });
+
+      this.fetchWallet();
     } catch (error: unknown) {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
 

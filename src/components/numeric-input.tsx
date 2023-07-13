@@ -49,8 +49,8 @@ const CurrencyInput: React.FC<CurrencyFormatterT> = ({
             }}
             label={label}
             variant="standard"
-            error={!!errors.coin_amount}
-            helperText={errors.coin_amount?.message}
+            error={!!errors[name]}
+            helperText={errors[name]?.message}
             decimalScale={2}
             customInput={TextField}
             allowNegative={false}

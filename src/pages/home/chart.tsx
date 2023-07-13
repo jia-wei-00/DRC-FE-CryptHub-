@@ -13,70 +13,32 @@ const Chart: React.FC = () => {
     ) {
       websocketStore.subscribeTicks();
     }
-
-    // return () => {
-    //   websocketStore.unsubscribeTicks();
-    // };
   }, [websocketStore.subscribe_currency]);
 
-  const candlestickData = websocketStore.candlesticks.map((candle) =>
-    websocketStore.chart_type === "line"
-      ? [candle.epoch! * 1000, candle.close]
-      : {
-          x: candle.epoch! * 1000,
-          open: candle.open,
-          high: candle.high,
-          low: candle.low,
-          close: candle.close,
-        }
-  );
+  const candlestickData = websocketStore.candlesticks.map((candle) => ({
+    x: candle.epoch! * 1000,
+    ...(websocketStore.chart_type === "line" && { y: candle.close }),
+    open: candle.open,
+    high: candle.high,
+    low: candle.low,
+    close: candle.close,
+  }));
 
   const options: Highcharts.Options = {
     chart: {
       backgroundColor: "transparent",
-      events: {
-        load: function () {
-          const chart = this;
-          const series = this.series[0];
-          const xAxis = chart.xAxis[0];
-
-          // Get the maximum x-value (newest data point)
-          const lastPoint = series.data[series.data.length - 1];
-          const newEnd = lastPoint ? lastPoint.x : undefined;
-
-          // Calculate the new start value based on the desired visible range
-          const desiredVisibleRange = 10; // Number of data points you want to be visible initially
-          const newStart = newEnd ? newEnd - desiredVisibleRange : undefined;
-
-          // Set the extremes of the xAxis
-          if (newStart !== undefined && newEnd !== undefined) {
-            xAxis.setExtremes(newStart, newEnd);
-          }
-        },
-      },
     },
-    tooltip:
-      websocketStore.interval === "1t" ||
-      websocketStore.chart_type === "candles"
-        ? {}
-        : {
-            shared: true,
-            formatter: function () {
-              const index = this.point.index; // Accessing the index of the data point
-
-              const data = websocketStore.candlesticks[index];
-
-              // Generate the tooltip HTML content including the index
-              const tooltipContent = `
-            Open: ${data.open}<br>
-            High: ${data.high}<br>
-            Low: ${data.low}<br>
-            Close: ${data.close}<br>
-          `;
-
-              return tooltipContent;
-            },
-          },
+    tooltip: {
+      pointFormat:
+        websocketStore.interval === "1t"
+          ? '<span style="color:{point.color}">\u25CF</span> {series.name}<br/>' +
+            "Spot Price: <b>{point.y}</b><br/>"
+          : '<span style="color:{point.color}">\u25CF</span> {series.name}<br/>' +
+            "Open: <b>{point.open}</b><br/>" +
+            "High: <b>{point.high}</b><br/>" +
+            "Low: <b>{point.low}</b><br/>" +
+            "Close: <b>{point.close}</b><br/>",
+    },
     navigator: {
       enabled: true,
       maskFill:
@@ -119,9 +81,6 @@ const Chart: React.FC = () => {
         style: {
           color: modeStore.mode === "dark" ? "white" : "",
         },
-        // formatter: function () {
-        //   return "$" + this.value;
-        // },
       },
     },
     plotOptions: {

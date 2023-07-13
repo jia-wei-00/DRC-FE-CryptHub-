@@ -29,7 +29,11 @@ export const loginSchema: ZodType = object({
   password: string()
     .nonempty("Password is required")
     .min(8, "Password must be more than 8 characters")
-    .max(32, "Password must be less than 32 characters"),
+    .max(32, "Password must be less than 32 characters")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).*$/,
+      "Password must contain at least one lowercase letter, one uppercase letter, one symbol, and one digit"
+    ),
 });
 
 export const forgetPasswordSchema: ZodType = object({

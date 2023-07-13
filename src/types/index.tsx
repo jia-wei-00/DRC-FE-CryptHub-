@@ -142,8 +142,8 @@ export type SellOnMarketT = {
 
 //add p2p contract form type
 export type AddP2PContractFormT = {
-  currency: string;
-  coin_amount: number;
+  currency?: string;
+  coin_amount?: number;
   price: number;
   active?: string;
 };
@@ -222,5 +222,5 @@ export type CurrencyFormatterT = {
   setValue: UseFormSetValue<AddP2PContractFormT>;
   currency: string;
   name: keyof AddP2PContractFormT;
-  label: string;
+  label?: string;
 };

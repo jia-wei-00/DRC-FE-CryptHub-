@@ -37,17 +37,13 @@ class TradeStoreImplementation {
         headers: headers(authStore.user!.token!),
       });
 
-      console.log(res);
-
-      console.log(authStore.user);
-
       authStore.setUserWallet({
         USD: Number(res.data.details.walletBalance.USD),
         BTC: Number(res.data.details.walletBalance.BTC),
         ETH: Number(res.data.details.walletBalance.ETH),
       });
 
-      console.log(authStore.user);
+      authStore.fetchWallet();
 
       toast.update(id, {
         render: res.data.message,
@@ -108,7 +104,7 @@ class TradeStoreImplementation {
         ETH: Number(res.data.details.walletBalance.ETH),
       });
 
-      console.log(authStore.user);
+      authStore.fetchWallet();
 
       toast.update(id, {
         render: res.data.message,

@@ -6,6 +6,7 @@ import { BuySellBoxT } from "../../types";
 import tradeStore from "../../stores/trade-store";
 import { Add, Remove } from "@mui/icons-material";
 import { BTCIcon, ETHIcon, USDIcon } from "../../assets/icons";
+import { NumericFormat } from "react-number-format";
 
 const BuySellBox: React.FC<BuySellBoxT> = ({
   current_price,
@@ -67,7 +68,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
         />
       </motion.div>
 
-      {/* Buy*/}
+      {/* Buy Form */}
       <motion.form onSubmit={buySellHandler}>
         <div className="side-bar-input">
           <div className="amount">
@@ -78,8 +79,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
             >
               <Remove />
             </IconButton>
-
-            <TextField
+            <NumericFormat
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -97,6 +97,9 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
               inputProps={{
                 min: 1,
               }}
+              decimalScale={2}
+              customInput={TextField}
+              allowNegative={false}
             />
 
             <IconButton
