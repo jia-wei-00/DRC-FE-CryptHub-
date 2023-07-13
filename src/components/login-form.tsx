@@ -93,6 +93,7 @@ const LoginForm: React.FC<HandleModalDispatchT> = ({ dispatch }) => {
                 <IconButton
                   aria-label="toggle password visibility"
                   onClick={() => setShowPassword((show) => !show)}
+                  tabIndex={-1}
                 >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>

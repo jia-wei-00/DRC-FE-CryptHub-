@@ -15,7 +15,6 @@ import { Column, Transaction } from "../../types";
 import dayjs, { Dayjs } from "dayjs";
 
 const columns: readonly Column[] = [
-  // { id: "id", label: "No", minWidth: 170 },
   { id: "type", label: "Trade Type", minWidth: 100 },
   {
     id: "currency",
@@ -65,7 +64,8 @@ function TransactionHistory() {
   const [fromDate, setFromDate] = React.useState<Dayjs>(
     dayjs().subtract(30, "day")
   );
-  const [toDate, setToDate] = React.useState<Dayjs>(dayjs());
+
+  const [toDate, setToDate] = React.useState<Dayjs>(dayjs().endOf("day"));
 
   React.useEffect(() => {
     authStore.fetchTransaction();
@@ -78,12 +78,16 @@ function TransactionHistory() {
           <DatePicker
             label="From"
             value={fromDate}
-            onChange={(date) => setFromDate(date!)}
+            onChange={(date) => {
+              setFromDate(dayjs(date).startOf("day"));
+            }}
           />
           <DatePicker
             label="To"
             value={toDate}
-            onChange={(date) => setToDate(date!)}
+            onChange={(date) => {
+              setToDate(dayjs(date).endOf("day"));
+            }}
           />
         </div>
       </LocalizationProvider>
@@ -100,9 +104,9 @@ function TransactionHistory() {
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
-              {authStore.transaction &&
-                authStore.transaction
+            {authStore.transaction.length > 0 ? (
+              <TableBody>
+                {authStore.transaction
                   .filter(
                     (transaction: Transaction) =>
                       transaction.date >= fromDate.valueOf() &&
@@ -130,7 +134,10 @@ function TransactionHistory() {
                       </TableRow>
                     );
                   })}
-            </TableBody>
+              </TableBody>
+            ) : (
+              <p className="no-data">No Data</p>
+            )}
           </Table>
         </TableContainer>
       </Paper>

@@ -91,9 +91,9 @@ function WalletHistory() {
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
-              {authStore.wallet_history &&
-                authStore.wallet_history
+            {authStore.wallet_history.length > 0 ? (
+              <TableBody>
+                {authStore.wallet_history
                   .filter(
                     (transaction: WalletHistoryT) =>
                       (transaction.created_at as number) >=
@@ -117,7 +117,10 @@ function WalletHistory() {
                       </TableRow>
                     );
                   })}
-            </TableBody>
+              </TableBody>
+            ) : (
+              <p className="no-data">No Data</p>
+            )}
           </Table>
         </TableContainer>
       </Paper>

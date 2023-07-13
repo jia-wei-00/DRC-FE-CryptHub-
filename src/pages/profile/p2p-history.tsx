@@ -95,9 +95,9 @@ function P2PHistory() {
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
-              {p2pStore.p2p_completed_history &&
-                p2pStore.p2p_completed_history
+            {p2pStore.p2p_completed_history.length > 0 ? (
+              <TableBody>
+                {p2pStore.p2p_completed_history
                   .filter(
                     (transaction: P2PCompletedHistoryT) =>
                       transaction.completed_at >= fromDate.valueOf() &&
@@ -120,7 +120,10 @@ function P2PHistory() {
                       </TableRow>
                     );
                   })}
-            </TableBody>
+              </TableBody>
+            ) : (
+              <p className="no-data">No Data</p>
+            )}
           </Table>
         </TableContainer>
       </Paper>

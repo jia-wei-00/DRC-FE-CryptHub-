@@ -114,6 +114,10 @@ class WebsocketStoreImplementation {
       });
     }
 
+    if (data.msg_type === "ping") {
+      console.log("pong");
+    }
+
     if (data.msg_type === "tick") {
       runInAction(() => {
         this.chart_data = [
@@ -201,6 +205,10 @@ class WebsocketStoreImplementation {
     this.api = new DerivAPIBasic({ connection: this.connection });
 
     await this.tickHistory(); // Subscribe to ticks
+
+    setInterval(() => {
+      this.api.ping();
+    }, 30000);
 
     this.connection.addEventListener("message", this.tickResponse);
   };

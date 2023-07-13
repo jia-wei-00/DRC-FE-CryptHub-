@@ -24,7 +24,7 @@ class TradeStoreImplementation {
 
     if (values.coin_amount >= authStore.wallet.USD) {
       return toast.update(id, {
-        render: "BALANCE INSUFFICIENT",
+        render: "Insufficient USD wallet balance",
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -65,7 +65,6 @@ class TradeStoreImplementation {
     }
   }
 
-  // coin_currency, current_selling_price, coin_amount
   async sellToken(
     current_selling_price: number,
     coin_amount: number
@@ -77,21 +76,6 @@ class TradeStoreImplementation {
       current_selling_price: current_selling_price,
       coin_amount: coin_amount,
     };
-
-    const coin_balance =
-      websocketStore.subscribe_currency === "ETH"
-        ? authStore.wallet.ETH
-        : authStore.wallet.BTC;
-
-    if (coin_amount > coin_balance) {
-      return toast.update(id, {
-        render: "BALANCE INSUFFICIENT",
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        closeButton: null,
-      });
-    }
 
     try {
       const res = await axios.post(`${domain}/trade/sell`, values, {

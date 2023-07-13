@@ -33,6 +33,11 @@
 
 .table-container {
   height: calc(100vh - 250px);
+
+  .no-data {
+    padding: 10px;
+    white-space: nowrap;
+  }
 }
 
 .reset-password-form {
