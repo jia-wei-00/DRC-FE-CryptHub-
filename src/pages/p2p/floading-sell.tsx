@@ -2,8 +2,8 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import { StorefrontRounded } from "@mui/icons-material";
-import { SellOnMarkerPlace } from "../../components/dialog";
 import { authStore } from "../../stores";
+import { SellOnMarkerPlace } from "../../components";
 
 export default function SellButton() {
   const [sellModal, setSellModal] = React.useState(false);

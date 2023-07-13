@@ -166,7 +166,7 @@
 }
 
 .red {
-  color: red;
+  color: $red;
 }
 
 .green {
@@ -180,12 +180,6 @@
 }
 
 #light {
-  .loading {
-    & > div {
-      fill: $light-bg !important;
-    }
-  }
-
   div {
     color: $third-color;
   }

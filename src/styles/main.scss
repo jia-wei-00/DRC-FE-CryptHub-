@@ -146,3 +146,25 @@ a {
 .align-center {
   align-items: center;
 }
+
+.Toastify__toast {
+  backdrop-filter: blur(3px);
+}
+
+#light {
+  .Toastify__toast {
+    background-color: rgba($main-color, 0.7);
+  }
+
+  .Toastify__toast-body {
+    & > div {
+      color: $light-bg;
+    }
+  }
+}
+
+#dark {
+  .Toastify__toast {
+    background-color: rgba($black, 0.5);
+  }
+}

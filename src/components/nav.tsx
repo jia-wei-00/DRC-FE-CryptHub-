@@ -29,7 +29,7 @@ import {
   DepositDialog,
   ForgotPasswordDialog,
   WithdrawDialog,
-} from "./dialog";
+} from ".";
 import logo from "../assets/logo.svg";
 import { Action, HandleModalReducerT, ModalState } from "../types";
 

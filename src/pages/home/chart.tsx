@@ -4,6 +4,7 @@ import HighchartsReact from "highcharts-react-official";
 import { websocketStore, modeStore } from "../../stores";
 import { observer } from "mobx-react-lite";
 import ReactLoading from "react-loading";
+import { Loading } from "../../components";
 
 const Chart: React.FC = () => {
   React.useEffect(() => {
@@ -119,7 +120,7 @@ const Chart: React.FC = () => {
       {websocketStore.chart_data.length === 0 &&
       websocketStore.candlesticks.length === 0 ? (
         <div className="loading">
-          <ReactLoading type="bars" height={"80px"} width={"80px"} />
+          <Loading height={"80px"} width={"80px"} />
         </div>
       ) : (
         <HighchartsReact

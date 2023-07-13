@@ -7,4 +7,8 @@ export {
   ForgotPasswordDialog,
   ChartSettingsDialog,
   SellOnMarkerPlace,
+  DepositDialog,
+  WithdrawDialog,
+  ConfirmationPopUp,
 } from "./dialog";
+export { Loading } from "./loading";

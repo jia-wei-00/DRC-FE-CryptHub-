@@ -12,10 +12,11 @@ import {
 } from "@mui/material";
 import { addP2PSchema } from "../schemas";
 import p2pStore from "../stores/p2p-store";
-import { websocketStoreP2P } from "../stores";
+import { modeStore, websocketStoreP2P } from "../stores";
 import { observer } from "mobx-react-lite";
 import ReactLoading from "react-loading";
 import CurrencyInput from "./numeric-input";
+import { Loading } from ".";
 
 const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
   const [coinAmount, setCoinAmount] = React.useState<number>(0);
@@ -70,7 +71,7 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
       <span className="add-contract-current-price">
         <Typography sx={{ margin: "0 10px" }}>Current Price:</Typography>
         {websocketStoreP2P.ticks === 0 ? (
-          <ReactLoading type="bars" height={"20px"} width={"20px"} />
+          <Loading height={"20px"} width={"20px"} />
         ) : (
           websocketStoreP2P.ticks
         )}
