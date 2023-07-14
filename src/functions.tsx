@@ -10,6 +10,7 @@ export const createTimeoutPromise = (timeout: number): Promise<never> => {
   });
 };
 
+//Rewrite all the successful message
 export const handleSuccess = (msg: string) => {
   switch (msg) {
     case "BUY_ORDER_SUCCESS":
