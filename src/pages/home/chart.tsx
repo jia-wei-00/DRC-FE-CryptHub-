@@ -3,7 +3,6 @@ import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import { websocketStore, modeStore } from "../../stores";
 import { observer } from "mobx-react-lite";
-import ReactLoading from "react-loading";
 import { Loading } from "../../components";
 
 const Chart: React.FC = () => {

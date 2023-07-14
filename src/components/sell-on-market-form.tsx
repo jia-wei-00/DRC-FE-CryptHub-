@@ -12,9 +12,8 @@ import {
 } from "@mui/material";
 import { addP2PSchema } from "../schemas";
 import p2pStore from "../stores/p2p-store";
-import { modeStore, websocketStoreP2P } from "../stores";
+import { websocketStoreP2P } from "../stores";
 import { observer } from "mobx-react-lite";
-import ReactLoading from "react-loading";
 import CurrencyInput from "./numeric-input";
 import { Loading } from ".";
 
