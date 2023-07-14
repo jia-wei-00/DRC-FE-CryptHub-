@@ -216,8 +216,8 @@ function Nav() {
               }}
               className="logo"
             >
-              <img src={logo} width={40} />
-              CRYPTHUB
+              <img src={logo} width={30} />
+              RYPTHUB
             </Typography>
           </Link>
 

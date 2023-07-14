@@ -102,7 +102,6 @@ class P2PStoreImplementation {
         closeButton: null,
       });
       walletStore.setUserWallet(res.data.details);
-      console.log(res, "buy_contract");
       this.fetchOnGoingContracts();
     } catch (error: unknown) {
       const message = errorChecking(error as AxiosError<ErrorResponse>);

@@ -56,8 +56,6 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
       p2pStore.fetchP2PMarket();
       setSellModal(false);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitSuccessful]);
 
   const onSubmitHandler: SubmitHandler<AddP2PContractFormT> = (values) => {

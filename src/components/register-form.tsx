@@ -41,7 +41,6 @@ const RegisterForm: React.FC = () => {
     if (isSubmitSuccessful) {
       reset();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitSuccessful]);
 
   const onSubmitHandler: SubmitHandler<InputData> = (values) => {

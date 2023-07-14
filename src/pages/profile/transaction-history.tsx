@@ -109,9 +109,11 @@ function TransactionHistory() {
 
             <TableBody>
               {loadingStore.history_loading ? (
-                <div className="absolute-middle">
-                  <Loading height={"30px"} width={"30px"} />
-                </div>
+                <TableRow className="absolute-middle">
+                  <TableCell>
+                    <Loading height={"30px"} width={"30px"} />
+                  </TableCell>
+                </TableRow>
               ) : historyStore.transaction.length > 0 ? (
                 historyStore.transaction
                   .filter(
@@ -142,7 +144,11 @@ function TransactionHistory() {
                     );
                   })
               ) : (
-                <Typography className="absolute-middle">No Data</Typography>
+                <TableRow className="absolute-middle">
+                  <TableCell>
+                    <Typography>No Data</Typography>
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>

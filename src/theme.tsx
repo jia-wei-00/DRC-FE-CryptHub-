@@ -82,13 +82,6 @@ export const lightTheme = createTheme({
         htmlColor: "#A27B5C",
       },
     },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          // color: "#FFFFFF",
-        },
-      },
-    },
     MuiAvatar: {
       styleOverrides: {
         root: {

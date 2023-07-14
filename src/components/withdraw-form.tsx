@@ -28,7 +28,6 @@ const WithdrawForm: React.FC<HandleModalDispatchT> = ({ dispatch }) => {
       reset();
       dispatch({ type: MODALACTIONS.WITHDRAW, payload: false });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitSuccessful]);
 
   const onSubmitHandler: SubmitHandler<PriceT> = (values) => {

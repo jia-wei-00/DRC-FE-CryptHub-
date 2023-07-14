@@ -1,11 +1,8 @@
-// import { HomePage, CoinPage, PortfolioPage } from "./pages";
-
 import { Placement } from "react-joyride";
-import { P2P } from "./pages";
-import HomePage from "./pages/home";
+import { P2P, Home } from "./pages";
 
 export const pages = [
-  { title: "Crypthub Trader", path: "/", element: <HomePage /> },
+  { title: "Crypthub Trader", path: "/", element: <Home /> },
   { title: "P2P Trader", path: "/p2pTrader", element: <P2P /> },
 ];
 

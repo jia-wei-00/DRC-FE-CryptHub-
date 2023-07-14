@@ -100,9 +100,11 @@ function P2PHistory() {
             </TableHead>
             <TableBody>
               {loadingStore.history_loading ? (
-                <div className="absolute-middle">
-                  <Loading height={"30px"} width={"30px"} />
-                </div>
+                <TableRow className="absolute-middle">
+                  <TableCell>
+                    <Loading height={"30px"} width={"30px"} />
+                  </TableCell>
+                </TableRow>
               ) : historyStore.p2p_completed_history.length > 0 ? (
                 historyStore.p2p_completed_history
                   .filter(
@@ -128,7 +130,11 @@ function P2PHistory() {
                     );
                   })
               ) : (
-                <Typography className="absolute-middle">No Data</Typography>
+                <TableRow className="absolute-middle">
+                  <TableCell>
+                    <Typography>No Data</Typography>
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>

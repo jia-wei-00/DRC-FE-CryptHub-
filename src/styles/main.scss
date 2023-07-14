@@ -35,7 +35,6 @@ body {
   #light {
     background: $main-color;
     color: $black;
-    // transition: $font-transition;
 
     a {
       color: $third-color;
@@ -172,6 +171,10 @@ a {
     & > div {
       color: $light-bg;
     }
+  }
+
+  .Toastify__close-button {
+    color: $light-bg;
   }
 
   ::-webkit-scrollbar {

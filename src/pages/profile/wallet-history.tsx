@@ -17,7 +17,6 @@ import { Typography } from "@mui/material";
 import { Loading } from "../../components";
 
 const columns: readonly WalletHistoryColumn[] = [
-  // { id: "id", label: "No", minWidth: 170 },
   { id: "dwt_type", label: "Type", minWidth: 100 },
   {
     id: "dwt_before",
@@ -95,9 +94,11 @@ function WalletHistory() {
             </TableHead>
             <TableBody>
               {loadingStore.history_loading ? (
-                <div className="absolute-middle">
-                  <Loading height={"30px"} width={"30px"} />
-                </div>
+                <TableRow className="absolute-middle">
+                  <TableCell>
+                    <Loading height={"30px"} width={"30px"} />
+                  </TableCell>
+                </TableRow>
               ) : historyStore.wallet_history.length > 0 ? (
                 historyStore.wallet_history
                   .filter(
@@ -124,7 +125,11 @@ function WalletHistory() {
                     );
                   })
               ) : (
-                <Typography className="absolute-middle">No Data</Typography>
+                <TableRow className="absolute-middle">
+                  <TableCell>
+                    <Typography>No Data</Typography>
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>
