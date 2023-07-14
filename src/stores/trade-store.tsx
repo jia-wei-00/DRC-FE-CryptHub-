@@ -3,7 +3,7 @@ import { action, makeObservable } from "mobx";
 import { toast } from "react-toastify";
 import { domain, headers } from "../constant";
 import { authStore, websocketStore } from ".";
-import { errorChecking } from "../functions";
+import { errorChecking, handleSuccess } from "../functions";
 import { ErrorResponse } from "../types";
 
 class TradeStoreImplementation {
@@ -45,8 +45,10 @@ class TradeStoreImplementation {
 
       authStore.fetchWallet();
 
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: res.data.message,
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -90,8 +92,10 @@ class TradeStoreImplementation {
 
       authStore.fetchWallet();
 
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: res.data.message,
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,

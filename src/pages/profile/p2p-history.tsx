@@ -58,9 +58,11 @@ const columns: readonly P2PCompletedHistoryColumn[] = [
 
 function P2PHistory() {
   const [fromDate, setFromDate] = React.useState<Dayjs | number>(
-    dayjs().subtract(30, "day")
+    dayjs().startOf("day").subtract(30, "day")
   );
-  const [toDate, setToDate] = React.useState<Dayjs | number>(dayjs());
+  const [toDate, setToDate] = React.useState<Dayjs | number>(
+    dayjs().endOf("day")
+  );
 
   React.useEffect(() => {
     p2pStore.fetchP2PHistory();
@@ -73,12 +75,12 @@ function P2PHistory() {
           <DatePicker
             label="From"
             value={fromDate}
-            onChange={(date) => setFromDate(date!)}
+            onChange={(date) => setFromDate(dayjs(date).startOf("day"))}
           />
           <DatePicker
             label="To"
             value={toDate}
-            onChange={(date) => setToDate(date!)}
+            onChange={(date) => setToDate(dayjs(date).endOf("day"))}
           />
         </div>
       </LocalizationProvider>

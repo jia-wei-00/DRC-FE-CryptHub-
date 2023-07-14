@@ -18,7 +18,11 @@ import {
   WalletHistoryT,
 } from "../types";
 import { MODALACTIONS, domain, headers } from "../constant";
-import { createTimeoutPromise, errorChecking } from "../functions";
+import {
+  createTimeoutPromise,
+  errorChecking,
+  handleSuccess,
+} from "../functions";
 import Cookies from "js-cookie";
 
 class AuthStoreImplementation {
@@ -105,15 +109,17 @@ class AuthStoreImplementation {
     const id = toast.loading("Please wait...");
 
     try {
-      await Promise.race([
+      const res = await Promise.race([
         axios.post(`${domain}/user/resetPassword`, values, {
           headers: headers(this.user!.token!),
         }),
         createTimeoutPromise(10000),
       ]);
 
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: "Successfully Reset Password",
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -184,8 +190,10 @@ class AuthStoreImplementation {
         createTimeoutPromise(10000),
       ]);
 
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: "Successfully Deposited",
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -225,8 +233,10 @@ class AuthStoreImplementation {
         createTimeoutPromise(10000),
       ]);
 
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: "Successfully Withdraw",
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -254,7 +264,7 @@ class AuthStoreImplementation {
   async signOut(): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      await Promise.race([
+      const res = await Promise.race([
         axios.post(
           `${domain}/user/logoutUser`,
           {}, // pass in empty body
@@ -263,8 +273,10 @@ class AuthStoreImplementation {
         createTimeoutPromise(10000),
       ]);
 
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: "Successfully Logout",
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -292,12 +304,15 @@ class AuthStoreImplementation {
   async signUp(values: InputData): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      await Promise.race([
+      const res = await Promise.race([
         axios.post(`${domain}/user/registerUser`, values),
         createTimeoutPromise(10000),
       ]);
+
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: `Check your email to activate account`,
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -324,12 +339,15 @@ class AuthStoreImplementation {
   ): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      await Promise.race([
+      const res = await Promise.race([
         axios.post(`${domain}/user/forgotPassword`, values),
         createTimeoutPromise(10000),
       ]);
+
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: `Check your email to reset password`,
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,

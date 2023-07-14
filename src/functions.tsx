@@ -10,6 +10,35 @@ export const createTimeoutPromise = (timeout: number): Promise<never> => {
   });
 };
 
+export const handleSuccess = (msg: string) => {
+  switch (msg) {
+    case "BUY_ORDER_SUCCESS":
+      return "Buy order successful";
+    case "DEPOSIT_SUCCESS":
+      return "Successfully deposited";
+    case "RESET_PASSWORD_SUCCESS":
+      return "Successfully reset password";
+    case "WITHDRAW_SUCCESS":
+      return "Successfully withdrawn";
+    case "LOGOUT_SUCCESS":
+      return "Successfully Logout";
+    case "USER_CREATED":
+      return "Check your email to activate account";
+    case "EMAIL_SENT":
+      return "Check your email to reset password";
+    case "CONTRACT_ADDED":
+      return "Contract added sucessfully";
+    case "CONTRACT_PURCHASE_SUCCESSFUL":
+      return "Buy Sucessfully";
+    case "CONTRACT_DELETED":
+      return "Contract withdraw sucessfully";
+    case "SELL_ORDER_SUCCESS":
+      return "Sell order successful";
+    default:
+      return msg;
+  }
+};
+
 export const handleErrors = (error: string) => {
   switch (error) {
     case "AUTHENTICATION_FAILED":

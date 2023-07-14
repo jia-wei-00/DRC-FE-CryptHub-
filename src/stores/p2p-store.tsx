@@ -9,7 +9,7 @@ import {
   P2PCompletedHistoryT,
   P2PContractsT,
 } from "../types";
-import { errorChecking } from "../functions";
+import { errorChecking, handleSuccess } from "../functions";
 
 class P2PStoreImplementation {
   p2p_contracts: P2PContractsT[] = [];
@@ -62,8 +62,11 @@ class P2PStoreImplementation {
       const res = await axios.post(`${domain}/p2p/addP2PContract`, data, {
         headers: headers(authStore.user!.token!),
       });
+
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: `Add Sucessfully`,
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -93,8 +96,11 @@ class P2PStoreImplementation {
       const res = await axios.post(`${domain}/p2p/buyContract`, data, {
         headers: headers(authStore.user!.token!),
       });
+
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: `Buy Sucessfully`,
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -126,8 +132,11 @@ class P2PStoreImplementation {
       const res = await axios.post(`${domain}/p2p/deleteContract`, data, {
         headers: headers(authStore.user!.token),
       });
+
+      const message = handleSuccess(res.data.message);
+
       toast.update(id, {
-        render: `Withdraw Sucessfully`,
+        render: message,
         type: "success",
         isLoading: false,
         autoClose: 5000,

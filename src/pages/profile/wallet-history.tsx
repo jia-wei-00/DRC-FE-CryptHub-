@@ -54,9 +54,9 @@ const columns: readonly WalletHistoryColumn[] = [
 
 function WalletHistory() {
   const [fromDate, setFromDate] = React.useState<Dayjs>(
-    dayjs().subtract(30, "day")
+    dayjs().startOf("day").subtract(30, "day")
   );
-  const [toDate, setToDate] = React.useState<Dayjs>(dayjs());
+  const [toDate, setToDate] = React.useState<Dayjs>(dayjs().endOf("day"));
 
   React.useEffect(() => {
     authStore.fetchWalletHistory();
@@ -69,12 +69,12 @@ function WalletHistory() {
           <DatePicker
             label="From"
             value={fromDate}
-            onChange={(date) => setFromDate(date!)}
+            onChange={(date) => setFromDate(dayjs(date).startOf("day"))}
           />
           <DatePicker
             label="To"
             value={toDate}
-            onChange={(date) => setToDate(date!)}
+            onChange={(date) => setToDate(dayjs(date).endOf("day"))}
           />
         </div>
       </LocalizationProvider>

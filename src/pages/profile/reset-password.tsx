@@ -66,6 +66,7 @@ const ResetPasswordForm: React.FC = () => {
                 <IconButton
                   aria-label="toggle password visibility"
                   onClick={() => setShowOldPassword((show) => !show)}
+                  tabIndex={-1}
                 >
                   {showOldPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -97,6 +98,7 @@ const ResetPasswordForm: React.FC = () => {
                 <IconButton
                   aria-label="toggle password visibility"
                   onClick={() => setShowPassword((show) => !show)}
+                  tabIndex={-1}
                 >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -128,6 +130,7 @@ const ResetPasswordForm: React.FC = () => {
                 <IconButton
                   aria-label="toggle password visibility"
                   onClick={() => setShowRepeatPassword((show) => !show)}
+                  tabIndex={-1}
                 >
                   {showRepeatPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
