@@ -9,6 +9,24 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  & > div {
+    display: flex;
+
+    & > div:first-child {
+      flex-grow: 1;
+      row-gap: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media only screen and (max-width: 1023px) {
+      flex-direction: column-reverse;
+      justify-content: center !important;
+      align-items: center !important;
+      text-align: center;
+    }
+  }
 }
 
 @keyframes rotation {
