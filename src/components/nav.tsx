@@ -1,5 +1,5 @@
 import * as React from "react";
-import { authStore, modeStore, walletStore } from "../stores";
+import { authStore, walletStore } from "../stores";
 import { MODALACTIONS, pages, settings } from "../constant";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/components/nav.scss";
@@ -31,7 +31,6 @@ import {
   WithdrawDialog,
 } from ".";
 import logo from "../assets/logo.svg";
-import lightLogo from "../assets/tab-icon.svg";
 import { Action, HandleModalReducerT, ModalState } from "../types";
 
 const DepositOption: React.FC<HandleModalReducerT> = ({ modal, dispatch }) => {
