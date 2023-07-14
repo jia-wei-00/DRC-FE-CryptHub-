@@ -28,7 +28,7 @@ const CurrencyInput: React.FC<CurrencyFormatterT> = ({
 
   return (
     <Box className="deposit-input-box">
-      <IconButton onClick={handleSubtract} aria-label="subtract">
+      <IconButton onClick={handleSubtract} aria-label="subtract" tabIndex={-1}>
         <Remove />
       </IconButton>
 
@@ -58,7 +58,7 @@ const CurrencyInput: React.FC<CurrencyFormatterT> = ({
         )}
       />
 
-      <IconButton onClick={handleAdd} aria-label="add">
+      <IconButton onClick={handleAdd} aria-label="add" tabIndex={-1}>
         <Add />
       </IconButton>
     </Box>
