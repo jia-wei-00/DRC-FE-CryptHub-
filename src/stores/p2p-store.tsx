@@ -3,13 +3,12 @@ import { toast } from "react-toastify";
 import { domain, headers } from "../constant";
 import axios, { AxiosError } from "axios";
 import { authStore, walletStore, websocketStoreP2P } from ".";
+import { AddP2PContractFormT, ErrorResponse, P2PContractsT } from "../types";
 import {
-  AddP2PContractFormT,
-  ErrorResponse,
-  P2PCompletedHistoryT,
-  P2PContractsT,
-} from "../types";
-import { errorChecking, handleSuccess } from "../functions";
+  createTimeoutPromise,
+  errorChecking,
+  handleSuccess,
+} from "../functions";
 
 class P2PStoreImplementation {
   p2p_contracts: P2PContractsT[] = [];
@@ -49,9 +48,12 @@ class P2PStoreImplementation {
     };
 
     try {
-      const res = await axios.post(`${domain}/p2p/addP2PContract`, data, {
-        headers: headers(authStore.user!.token!),
-      });
+      const res = await Promise.race([
+        axios.post(`${domain}/p2p/addP2PContract`, data, {
+          headers: headers(authStore.user!.token!),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       const message = handleSuccess(res.data.message);
 
@@ -83,9 +85,12 @@ class P2PStoreImplementation {
     };
 
     try {
-      const res = await axios.post(`${domain}/p2p/buyContract`, data, {
-        headers: headers(authStore.user!.token!),
-      });
+      const res = await Promise.race([
+        axios.post(`${domain}/p2p/buyContract`, data, {
+          headers: headers(authStore.user!.token!),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       const message = handleSuccess(res.data.message);
 
@@ -119,9 +124,12 @@ class P2PStoreImplementation {
     };
 
     try {
-      const res = await axios.post(`${domain}/p2p/deleteContract`, data, {
-        headers: headers(authStore.user!.token),
-      });
+      const res = await Promise.race([
+        axios.post(`${domain}/p2p/deleteContract`, data, {
+          headers: headers(authStore.user!.token),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       const message = handleSuccess(res.data.message);
 
@@ -151,7 +159,10 @@ class P2PStoreImplementation {
 
   async fetchP2PMarket(): Promise<void> {
     try {
-      const res = await axios.get(`${domain}/p2p/getOpenContracts`);
+      const res = await Promise.race([
+        axios.get(`${domain}/p2p/getOpenContracts`),
+        createTimeoutPromise(10000),
+      ]);
       this.setP2PContracts(res.data.details);
     } catch (error: unknown) {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
@@ -165,9 +176,12 @@ class P2PStoreImplementation {
   async fetchOnGoingContracts(): Promise<void> {
     if (authStore.user === null) return;
     try {
-      const res = await axios.get(`${domain}/p2p/getOngoingContracts`, {
-        headers: headers(authStore.user.token),
-      });
+      const res = await Promise.race([
+        axios.get(`${domain}/p2p/getOngoingContracts`, {
+          headers: headers(authStore.user.token),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       this.setP2POngoingContracts(res.data.details);
     } catch (error: unknown) {

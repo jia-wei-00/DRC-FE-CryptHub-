@@ -152,9 +152,12 @@ class HistoryStoreImplementation {
     this.setP2PCompletedHistory([]);
     loadingStore.setHistoryLoading(true);
     try {
-      const res = await axios.get(`${domain}/p2p/getCompletedContracts`, {
-        headers: headers(authStore.user!.token!),
-      });
+      const res = await Promise.race([
+        axios.get(`${domain}/p2p/getCompletedContracts`, {
+          headers: headers(authStore.user!.token!),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       const values = res.data.details.map((value: P2PCompletedHistoryT) => {
         const created_date = new Date(value.created_at).getTime();

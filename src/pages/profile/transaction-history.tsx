@@ -73,8 +73,6 @@ function TransactionHistory() {
     historyStore.fetchTransaction();
   }, []);
 
-  console.log(loadingStore.history_loading);
-
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>

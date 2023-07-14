@@ -3,7 +3,11 @@ import { action, makeObservable } from "mobx";
 import { toast } from "react-toastify";
 import { domain, headers } from "../constant";
 import { authStore, walletStore, websocketStore } from ".";
-import { errorChecking, handleSuccess } from "../functions";
+import {
+  createTimeoutPromise,
+  errorChecking,
+  handleSuccess,
+} from "../functions";
 import { ErrorResponse } from "../types";
 
 class TradeStoreImplementation {
@@ -38,9 +42,12 @@ class TradeStoreImplementation {
     }
 
     try {
-      const res = await axios.post(`${domain}/trade/buy`, values, {
-        headers: headers(authStore.user!.token!),
-      });
+      const res = await Promise.race([
+        axios.post(`${domain}/trade/buy`, values, {
+          headers: headers(authStore.user!.token!),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       walletStore.setUserWallet({
         USD: Number(res.data.details.walletBalance.USD),
@@ -85,9 +92,12 @@ class TradeStoreImplementation {
     };
 
     try {
-      const res = await axios.post(`${domain}/trade/sell`, values, {
-        headers: headers(authStore.user!.token!),
-      });
+      const res = await Promise.race([
+        axios.post(`${domain}/trade/sell`, values, {
+          headers: headers(authStore.user!.token!),
+        }),
+        createTimeoutPromise(10000),
+      ]);
 
       walletStore.setUserWallet({
         USD: Number(res.data.details.walletBalance.USD),

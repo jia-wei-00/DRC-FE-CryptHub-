@@ -16,7 +16,7 @@ import { motion } from "framer-motion";
 import SellButton from "./floading-sell";
 import { observer } from "mobx-react-lite";
 import p2pStore from "../../stores/p2p-store";
-import { authStore } from "../../stores";
+import { authStore, walletStore } from "../../stores";
 import { ConfirmationPopUp } from "../../components";
 
 const P2P: React.FC = () => {
@@ -58,7 +58,7 @@ const P2P: React.FC = () => {
       if (authStore.user === null) return;
       p2pStore.fetchOnGoingContracts();
     }
-  }, [active, authStore.user, authStore.wallet]);
+  }, [active, authStore.user, walletStore.wallet]);
 
   return (
     <Container maxWidth="xl" className="p2p-container">
