@@ -28,7 +28,7 @@ export const handleSuccess = (msg: string) => {
       return "Check your email to reset password";
     case "CONTRACT_ADDED":
       return "Contract added sucessfully";
-    case "CONTRACT_PURCHASE_SUCCESSFUL":
+    case "CONTRACT_PURCHASE_SUCCESFUL":
       return "Buy Sucessfully";
     case "CONTRACT_DELETED":
       return "Contract withdraw sucessfully";
