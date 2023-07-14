@@ -25,7 +25,7 @@ class WalletStoreImplementation {
 
     // Make the store persistable
     makePersistable(this, {
-      name: `crypthub_${authStore.user!.id}_wallet`,
+      name: `crypthub_${authStore.user?.id}_wallet`,
       properties: ["wallet"],
       storage: window.localStorage,
     });
