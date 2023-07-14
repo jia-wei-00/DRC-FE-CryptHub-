@@ -1,21 +1,15 @@
 import { makeObservable, action, observable, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { makePersistable } from "mobx-persist-store";
 import axios, { AxiosError } from "axios";
 import {
   Action,
   ErrorResponse,
   InputData,
   ModalState,
-  PriceT,
   ResetPassword,
   ResetPasswordFormT,
-  Transaction,
-  TransactionDateFromAPI,
   User,
-  Wallet,
-  WalletHistoryT,
 } from "../types";
 import { MODALACTIONS, domain, headers } from "../constant";
 import {
@@ -24,39 +18,25 @@ import {
   handleSuccess,
 } from "../functions";
 import Cookies from "js-cookie";
+import { walletStore } from ".";
 
 class AuthStoreImplementation {
   user: User | null = null;
-  wallet: Wallet = { BTC: 0, ETH: 0, USD: 0 };
   auth_modal: boolean = false;
-  transaction: Transaction[] = [];
-  wallet_history: WalletHistoryT[] = [];
 
   constructor() {
     makeObservable(this, {
       user: observable,
-      wallet: observable,
       auth_modal: observable,
-      transaction: observable,
-      wallet_history: observable,
-      fetchWalletHistory: action.bound,
       setUser: action.bound,
       signOut: action.bound,
       setAuthModal: action.bound,
       reset: action.bound,
-      fetchTransaction: action.bound,
     });
 
     const user_data = Cookies.get("crypthub_user");
 
     this.setUser(user_data ? JSON.parse(user_data) : null);
-
-    // Make the store persistable
-    makePersistable(this, {
-      name: "crypthub_user_wallet",
-      properties: ["wallet"],
-      storage: window.localStorage,
-    });
   }
 
   reset() {
@@ -79,31 +59,6 @@ class AuthStoreImplementation {
       this.user = authUser;
     });
   };
-
-  setUserWallet = (wallet: Wallet): void => {
-    runInAction(() => {
-      this.wallet = wallet;
-    });
-  };
-
-  async fetchWallet(): Promise<void> {
-    try {
-      const res = await Promise.race([
-        axios.get(`${domain}/wallet/currentWalletBalance`, {
-          headers: headers(this.user!.token),
-        }),
-        createTimeoutPromise(10000),
-      ]);
-
-      this.setUserWallet(res.data.details);
-    } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
-      toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
-  }
 
   async resetPassword(values: ResetPasswordFormT): Promise<void> {
     const id = toast.loading("Please wait...");
@@ -150,7 +105,7 @@ class AuthStoreImplementation {
         userCredential.data.details;
 
       this.setUser({ id, email, name, token });
-      this.setUserWallet({ BTC, ETH, USD });
+      walletStore.setUserWallet({ BTC, ETH, USD });
 
       Cookies.set("crypthub_user", JSON.stringify(this.user), { expires: 1 });
 
@@ -166,92 +121,6 @@ class AuthStoreImplementation {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
 
       toast.update(toast_id, {
-        render: message,
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        closeButton: null,
-      });
-    }
-  }
-
-  async deposit(values: PriceT): Promise<void> {
-    const id = toast.loading("Please wait...");
-
-    const amount = {
-      amount: values.price,
-    };
-
-    try {
-      const res = await Promise.race([
-        axios.post(`${domain}/wallet/walletDeposit`, amount, {
-          headers: headers(this.user!.token!),
-        }),
-        createTimeoutPromise(10000),
-      ]);
-
-      const message = handleSuccess(res.data.message);
-
-      toast.update(id, {
-        render: message,
-        type: "success",
-        isLoading: false,
-        autoClose: 5000,
-        closeButton: null,
-      });
-
-      runInAction(() => {
-        this.wallet.USD = res.data.details.balance;
-      });
-
-      this.fetchWallet();
-    } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
-      toast.update(id, {
-        render: message,
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        closeButton: null,
-      });
-    }
-  }
-
-  async withdraw(values: PriceT): Promise<void> {
-    const id = toast.loading("Please wait...");
-
-    const amount = {
-      amount: values.price,
-    };
-
-    try {
-      const res = await Promise.race([
-        axios.post(`${domain}/wallet/walletWithdraw`, amount, {
-          headers: headers(this.user!.token!),
-        }),
-        createTimeoutPromise(10000),
-      ]);
-
-      const message = handleSuccess(res.data.message);
-
-      toast.update(id, {
-        render: message,
-        type: "success",
-        isLoading: false,
-        autoClose: 5000,
-        closeButton: null,
-      });
-
-      runInAction(() => {
-        this.wallet.USD = res.data.details.balance;
-      });
-
-      this.fetchWallet();
-    } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
-      toast.update(id, {
         render: message,
         type: "error",
         isLoading: false,
@@ -366,98 +235,6 @@ class AuthStoreImplementation {
         isLoading: false,
         autoClose: 5000,
         closeButton: null,
-      });
-    }
-  }
-
-  async fetchTransaction(): Promise<void> {
-    try {
-      const res = await Promise.race([
-        axios.get(`${domain}/transaction/getAllTransactions`, {
-          headers: headers(this.user!.token!),
-        }),
-        createTimeoutPromise(10000),
-      ]);
-
-      const transaction = res.data.details.map(
-        (data: TransactionDateFromAPI) => {
-          const {
-            transaction_id: id,
-            trade_type: type,
-            currency,
-            coin_amount,
-            transaction_amount,
-            transaction_date: string_date,
-            commission_deduction_5,
-          } = data;
-
-          const date = new Date(string_date).getTime();
-
-          let commission = commission_deduction_5;
-
-          if (commission === 0) {
-            commission = "-";
-          }
-
-          return {
-            id,
-            type,
-            currency,
-            coin_amount,
-            transaction_amount,
-            commission,
-            date,
-          };
-        }
-      );
-
-      runInAction(() => {
-        this.transaction = transaction;
-      });
-    } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
-      toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
-  }
-
-  async fetchWalletHistory(): Promise<void> {
-    try {
-      const res = await Promise.race([
-        axios.get(`${domain}/wallet/walletTransaction`, {
-          headers: headers(this.user!.token!),
-        }),
-        createTimeoutPromise(10000),
-      ]);
-
-      const transaction = res.data.details.map((data: WalletHistoryT) => {
-        const { dwt_type, dwt_before, dwt_after, dwt_amount, created_at } =
-          data;
-
-        const date = new Date(created_at).getTime();
-        const before = Number(dwt_before);
-        const after = Number(dwt_after);
-        const amount = Number(dwt_amount);
-
-        return {
-          dwt_type,
-          dwt_before: before,
-          dwt_after: after,
-          dwt_amount: amount,
-          created_at: date,
-        };
-      });
-
-      runInAction(() => {
-        this.wallet_history = transaction;
-      });
-    } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
-      toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_RIGHT,
       });
     }
   }

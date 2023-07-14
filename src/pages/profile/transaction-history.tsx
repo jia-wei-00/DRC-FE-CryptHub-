@@ -7,12 +7,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { observer } from "mobx-react-lite";
-import { authStore } from "../../stores";
+import { historyStore, loadingStore } from "../../stores";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Column, Transaction } from "../../types";
 import dayjs, { Dayjs } from "dayjs";
+import { Loading } from "../../components";
+import { Typography } from "@mui/material";
 
 const columns: readonly Column[] = [
   { id: "type", label: "Trade Type", minWidth: 100 },
@@ -68,8 +70,10 @@ function TransactionHistory() {
   const [toDate, setToDate] = React.useState<Dayjs>(dayjs().endOf("day"));
 
   React.useEffect(() => {
-    authStore.fetchTransaction();
+    historyStore.fetchTransaction();
   }, []);
+
+  console.log(loadingStore.history_loading);
 
   return (
     <>
@@ -104,9 +108,14 @@ function TransactionHistory() {
                 ))}
               </TableRow>
             </TableHead>
-            {authStore.transaction.length > 0 ? (
-              <TableBody>
-                {authStore.transaction
+
+            <TableBody>
+              {loadingStore.history_loading ? (
+                <div className="absolute-middle">
+                  <Loading height={"30px"} width={"30px"} />
+                </div>
+              ) : historyStore.transaction.length > 0 ? (
+                historyStore.transaction
                   .filter(
                     (transaction: Transaction) =>
                       transaction.date >= fromDate.valueOf() &&
@@ -133,11 +142,11 @@ function TransactionHistory() {
                         })}
                       </TableRow>
                     );
-                  })}
-              </TableBody>
-            ) : (
-              <p className="no-data">No Data</p>
-            )}
+                  })
+              ) : (
+                <Typography className="absolute-middle">No Data</Typography>
+              )}
+            </TableBody>
           </Table>
         </TableContainer>
       </Paper>

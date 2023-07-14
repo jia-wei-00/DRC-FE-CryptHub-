@@ -77,7 +77,7 @@ const Profile = () => {
         <Tab label="Reset Password" {...a11yProps(3)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <TransactionHistory />
+        {<TransactionHistory />}
       </TabPanel>
       <TabPanel value={value} index={1}>
         <WalletHistoryT />

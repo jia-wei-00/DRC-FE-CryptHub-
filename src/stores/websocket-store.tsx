@@ -114,10 +114,6 @@ class WebsocketStoreImplementation {
       });
     }
 
-    if (data.msg_type === "ping") {
-      console.log("pong");
-    }
-
     if (data.msg_type === "tick") {
       runInAction(() => {
         this.chart_data = [

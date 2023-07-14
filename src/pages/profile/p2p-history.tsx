@@ -7,15 +7,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { observer } from "mobx-react-lite";
-import { p2pStore } from "../../stores";
+import { historyStore, loadingStore } from "../../stores";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { P2PCompletedHistoryColumn, P2PCompletedHistoryT } from "../../types";
 import dayjs, { Dayjs } from "dayjs";
+import { Typography } from "@mui/material";
+import { Loading } from "../../components";
 
 const columns: readonly P2PCompletedHistoryColumn[] = [
-  // { id: "id", label: "No", minWidth: 170 },
   { id: "transaction_type", label: "Type", align: "right", minWidth: 100 },
   { id: "currency", label: "Currency", align: "right", minWidth: 100 },
   {
@@ -65,7 +66,7 @@ function P2PHistory() {
   );
 
   React.useEffect(() => {
-    p2pStore.fetchP2PHistory();
+    historyStore.fetchP2PHistory();
   }, []);
 
   return (
@@ -97,9 +98,13 @@ function P2PHistory() {
                 ))}
               </TableRow>
             </TableHead>
-            {p2pStore.p2p_completed_history.length > 0 ? (
-              <TableBody>
-                {p2pStore.p2p_completed_history
+            <TableBody>
+              {loadingStore.history_loading ? (
+                <div className="absolute-middle">
+                  <Loading height={"30px"} width={"30px"} />
+                </div>
+              ) : historyStore.p2p_completed_history.length > 0 ? (
+                historyStore.p2p_completed_history
                   .filter(
                     (transaction: P2PCompletedHistoryT) =>
                       transaction.completed_at >= fromDate.valueOf() &&
@@ -121,11 +126,11 @@ function P2PHistory() {
                         })}
                       </TableRow>
                     );
-                  })}
-              </TableBody>
-            ) : (
-              <p className="no-data">No Data</p>
-            )}
+                  })
+              ) : (
+                <Typography className="absolute-middle">No Data</Typography>
+              )}
+            </TableBody>
           </Table>
         </TableContainer>
       </Paper>

@@ -92,6 +92,10 @@ class P2PWebSocketStoreImplementation {
 
     await this.tickSubscribe(); // Subscribe to ticks
 
+    setInterval(() => {
+      this.api.ping();
+    }, 30000);
+
     this.connection.addEventListener("message", this.tickResponse);
   };
 

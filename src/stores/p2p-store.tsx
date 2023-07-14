@@ -2,7 +2,7 @@ import { action, makeObservable, observable, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import { domain, headers } from "../constant";
 import axios, { AxiosError } from "axios";
-import { authStore, websocketStoreP2P } from ".";
+import { authStore, walletStore, websocketStoreP2P } from ".";
 import {
   AddP2PContractFormT,
   ErrorResponse,
@@ -14,27 +14,17 @@ import { errorChecking, handleSuccess } from "../functions";
 class P2PStoreImplementation {
   p2p_contracts: P2PContractsT[] = [];
   p2p_ongoing_contracts: P2PContractsT[] = [];
-  p2p_completed_history: P2PCompletedHistoryT[] = [];
 
   constructor() {
     makeObservable(this, {
       p2p_contracts: observable,
       p2p_ongoing_contracts: observable,
-      p2p_completed_history: observable,
       setP2PContracts: action.bound,
       addP2PContract: action.bound,
       buyContract: action.bound,
       withdrawContract: action.bound,
       fetchP2PMarket: action.bound,
-      fetchP2PHistory: action.bound,
-      setP2PCompletedHistory: action.bound,
       setP2POngoingContracts: action.bound,
-    });
-  }
-
-  setP2PCompletedHistory(values: P2PCompletedHistoryT[]) {
-    runInAction(() => {
-      this.p2p_completed_history = values;
     });
   }
 
@@ -72,7 +62,7 @@ class P2PStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-      authStore.setUserWallet(res.data.details.wallet_balance);
+      walletStore.setUserWallet(res.data.details.wallet_balance);
     } catch (error: unknown) {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
 
@@ -106,7 +96,7 @@ class P2PStoreImplementation {
         autoClose: 5000,
         closeButton: null,
       });
-      authStore.setUserWallet(res.data.details);
+      walletStore.setUserWallet(res.data.details);
       console.log(res, "buy_contract");
       this.fetchOnGoingContracts();
     } catch (error: unknown) {
@@ -143,7 +133,7 @@ class P2PStoreImplementation {
         closeButton: null,
       });
 
-      authStore.setUserWallet(res.data.details);
+      walletStore.setUserWallet(res.data.details);
 
       this.fetchOnGoingContracts();
     } catch (error: unknown) {
@@ -180,36 +170,6 @@ class P2PStoreImplementation {
       });
 
       this.setP2POngoingContracts(res.data.details);
-    } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
-      toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_CENTER,
-      });
-    }
-  }
-
-  async fetchP2PHistory(): Promise<void> {
-    try {
-      const res = await axios.get(`${domain}/p2p/getCompletedContracts`, {
-        headers: headers(authStore.user!.token!),
-      });
-
-      const values = res.data.details.map((value: P2PCompletedHistoryT) => {
-        const created_date = new Date(value.created_at).getTime();
-        const completed_date = new Date(value.completed_at).getTime();
-
-        return {
-          coin_amount: value.coin_amount,
-          completed_at: completed_date,
-          created_at: created_date,
-          currency: value.currency,
-          selling_price: value.selling_price,
-          transaction_type: value.transaction_type,
-        };
-      });
-
-      this.setP2PCompletedHistory(values);
     } catch (error: unknown) {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
 

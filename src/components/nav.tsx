@@ -1,5 +1,5 @@
 import * as React from "react";
-import { authStore } from "../stores";
+import { authStore, walletStore } from "../stores";
 import { MODALACTIONS, pages, settings } from "../constant";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/components/nav.scss";
@@ -121,7 +121,7 @@ function Nav() {
 
   React.useEffect(() => {
     if (authStore.user !== null) {
-      authStore.fetchWallet();
+      walletStore.fetchWallet();
     }
   }, []);
 
@@ -241,13 +241,13 @@ function Nav() {
                       </InputLabel>
                       <Select label="wallet" defaultValue={0}>
                         <MenuItem value={0}>
-                          {authStore.wallet ? authStore.wallet.USD : 0} USD
+                          {walletStore.wallet ? walletStore.wallet.USD : 0} USD
                         </MenuItem>
                         <MenuItem value={1}>
-                          {authStore.wallet ? authStore.wallet.ETH : 0} ETH
+                          {walletStore.wallet ? walletStore.wallet.ETH : 0} ETH
                         </MenuItem>
                         <MenuItem value={2}>
-                          {authStore.wallet ? authStore.wallet.BTC : 0} BTC
+                          {walletStore.wallet ? walletStore.wallet.BTC : 0} BTC
                         </MenuItem>
                         <Divider />
 
@@ -299,12 +299,14 @@ function Nav() {
                       WALLET
                     </InputLabel>
                     <Select label="wallet" defaultValue={0}>
-                      <MenuItem value={0}>{authStore.wallet.USD} USD</MenuItem>
+                      <MenuItem value={0}>
+                        {walletStore.wallet.USD} USD
+                      </MenuItem>
                       <MenuItem value={1}>
-                        {authStore.wallet.ETH.toFixed(4)} ETH
+                        {walletStore.wallet.ETH.toFixed(4)} ETH
                       </MenuItem>
                       <MenuItem value={2}>
-                        {authStore.wallet.BTC.toFixed(4)} BTC
+                        {walletStore.wallet.BTC.toFixed(4)} BTC
                       </MenuItem>
                       <Divider />
 

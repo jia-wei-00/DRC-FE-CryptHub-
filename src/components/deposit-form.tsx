@@ -2,7 +2,7 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { AddP2PContractFormT, HandleModalDispatchT, PriceT } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authStore } from "../stores";
+import { walletStore } from "../stores";
 import { Button } from "@mui/material";
 import { depositSchema } from "../schemas";
 import { MODALACTIONS } from "../constant";
@@ -32,7 +32,7 @@ const DepositForm: React.FC<HandleModalDispatchT> = ({ dispatch }) => {
   }, [isSubmitSuccessful]);
 
   const onSubmitHandler: SubmitHandler<PriceT> = (values) => {
-    authStore.deposit(values);
+    walletStore.deposit(values);
   };
 
   return (

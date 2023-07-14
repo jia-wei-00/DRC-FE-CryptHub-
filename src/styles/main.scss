@@ -8,6 +8,7 @@
   font-family: "Poppins", sans-serif;
   transition: $transition;
 
+  //Remove increase decrease button inside input field type number
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -151,6 +152,17 @@ a {
   backdrop-filter: blur(3px);
 }
 
+::-webkit-scrollbar {
+  height: 5px;
+  width: 4px;
+  background: $black;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $white;
+  -webkit-border-radius: 1ex;
+}
+
 #light {
   .Toastify__toast {
     background-color: rgba($main-color, 0.7);
@@ -160,6 +172,14 @@ a {
     & > div {
       color: $light-bg;
     }
+  }
+
+  ::-webkit-scrollbar {
+    background: $main-color;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $light-bg;
   }
 }
 

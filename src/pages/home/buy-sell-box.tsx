@@ -44,7 +44,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
     }
 
     active === "buy"
-      ? tradeStore.buyToken(price, buy_coin)
+      ? tradeStore.buyToken(Number(input), price, buy_coin)
       : tradeStore.sellToken(price, Number(input));
 
     setInput("");

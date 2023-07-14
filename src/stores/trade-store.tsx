@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { action, makeObservable } from "mobx";
 import { toast } from "react-toastify";
 import { domain, headers } from "../constant";
-import { authStore, websocketStore } from ".";
+import { authStore, walletStore, websocketStore } from ".";
 import { errorChecking, handleSuccess } from "../functions";
 import { ErrorResponse } from "../types";
 
@@ -13,16 +13,21 @@ class TradeStoreImplementation {
     });
   }
 
-  async buyToken(current_price: number, input_price: number): Promise<void> {
+  async buyToken(
+    input: number,
+    current_price: number,
+    coin_amount: number
+  ): Promise<void> {
     const id = toast.loading("Please wait...");
 
     const values = {
+      input_amount: input,
       coin_currency: websocketStore.subscribe_currency,
       current_price: current_price,
-      coin_amount: input_price,
+      coin_amount: coin_amount,
     };
 
-    if (values.coin_amount >= authStore.wallet.USD) {
+    if (values.coin_amount >= walletStore.wallet.USD) {
       return toast.update(id, {
         render: "Insufficient USD wallet balance",
         type: "error",
@@ -37,13 +42,13 @@ class TradeStoreImplementation {
         headers: headers(authStore.user!.token!),
       });
 
-      authStore.setUserWallet({
+      walletStore.setUserWallet({
         USD: Number(res.data.details.walletBalance.USD),
         BTC: Number(res.data.details.walletBalance.BTC),
         ETH: Number(res.data.details.walletBalance.ETH),
       });
 
-      authStore.fetchWallet();
+      walletStore.fetchWallet();
 
       const message = handleSuccess(res.data.message);
 
@@ -84,13 +89,13 @@ class TradeStoreImplementation {
         headers: headers(authStore.user!.token!),
       });
 
-      authStore.setUserWallet({
+      walletStore.setUserWallet({
         USD: Number(res.data.details.walletBalance.USD),
         BTC: Number(res.data.details.walletBalance.BTC),
         ETH: Number(res.data.details.walletBalance.ETH),
       });
 
-      authStore.fetchWallet();
+      walletStore.fetchWallet();
 
       const message = handleSuccess(res.data.message);
 
