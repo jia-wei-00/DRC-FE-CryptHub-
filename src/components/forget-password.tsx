@@ -35,7 +35,7 @@ const ForgotPasswordForm: React.FC<HandleModalReducerT> = ({
   }, [isSubmitSuccessful]);
 
   const onSubmitHandler: SubmitHandler<InputData> = (values) => {
-    authStore.forgotPassword(values, modal, dispatch);
+    authStore.forgotPassword(values, modal!, dispatch);
   };
 
   return (

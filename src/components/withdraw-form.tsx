@@ -1,6 +1,6 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { HandleModalDispatchT, PriceT } from "../types";
+import { HandleModalReducerT, PriceT } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { walletStore } from "../stores";
 import { Button } from "@mui/material";
@@ -8,7 +8,7 @@ import { depositSchema } from "../schemas";
 import { MODALACTIONS } from "../constant";
 import CurrencyInput from "./numeric-input";
 
-const WithdrawForm: React.FC<HandleModalDispatchT> = ({ dispatch }) => {
+const WithdrawForm: React.FC<HandleModalReducerT> = ({ dispatch }) => {
   const {
     control,
     formState: { errors, isSubmitSuccessful },
