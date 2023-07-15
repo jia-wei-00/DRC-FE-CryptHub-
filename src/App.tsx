@@ -9,8 +9,33 @@ import { Nav } from "./components";
 import { pages } from "./constant";
 import { ErrorPage, Profile } from "./pages";
 import Auth from "./auth";
+import React from "react";
+import { Steps } from "intro.js-react";
+import "intro.js/introjs.css";
 
 const App: React.FC = () => {
+  const [stepsEnabled, setStepsEnabled] = React.useState(true);
+  const [initialStep] = React.useState(0);
+  const [tour] = React.useState({
+    options: {
+      showProgress: true,
+    },
+    steps: [
+      {
+        element: "#profile",
+        intro: "Profile with all transaction history and account settings",
+      },
+      {
+        element: "#wallet",
+        intro: "Wallet",
+      },
+      {
+        element: "#dark-light-toggle",
+        intro: "Tittel film liste",
+      },
+    ],
+  });
+
   return (
     <div id={modeStore.mode}>
       <ThemeProvider theme={modeStore.mode === "dark" ? darkTheme : lightTheme}>
@@ -32,6 +57,13 @@ const App: React.FC = () => {
         <ToastContainer
           theme={modeStore.mode === "dark" ? "dark" : "light"}
           position="top-center"
+        />
+        <Steps
+          enabled={stepsEnabled}
+          steps={tour.steps}
+          initialStep={initialStep}
+          onExit={() => setStepsEnabled(false)}
+          options={tour.options}
         />
       </ThemeProvider>
     </div>

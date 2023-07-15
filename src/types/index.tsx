@@ -202,11 +202,7 @@ export type Action = {
 };
 
 export type HandleModalReducerT = {
-  modal: ModalState;
-  dispatch: Dispatch<Action>;
-};
-
-export type HandleModalDispatchT = {
+  modal?: ModalState;
   dispatch: Dispatch<Action>;
 };
 

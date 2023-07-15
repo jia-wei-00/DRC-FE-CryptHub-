@@ -41,7 +41,7 @@ const DepositOption: React.FC<HandleModalReducerT> = ({ modal, dispatch }) => {
         onClick={() =>
           dispatch({
             type: MODALACTIONS.DEPOSIT,
-            payload: !modal.deposit_modal,
+            payload: !modal!.deposit_modal,
           })
         }
       >
@@ -59,7 +59,7 @@ const WithdrawOption: React.FC<HandleModalReducerT> = ({ modal, dispatch }) => {
         onClick={() => {
           dispatch({
             type: MODALACTIONS.WITHDRAW,
-            payload: !modal.withdraw_modal,
+            payload: !modal!.withdraw_modal,
           });
         }}
       >

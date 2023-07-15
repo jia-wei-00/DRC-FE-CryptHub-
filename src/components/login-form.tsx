@@ -1,8 +1,8 @@
 import * as React from "react";
 import { authStore } from "../stores";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../schemas/login-page-schemas";
-import { HandleModalDispatchT, InputData } from "../types";
+import { loginSchema } from "../schemas";
+import { HandleModalReducerT, InputData } from "../types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import {
@@ -24,7 +24,7 @@ import {
 import "../styles/components/login-form.scss";
 import { MODALACTIONS } from "../constant";
 
-const LoginForm: React.FC<HandleModalDispatchT> = ({ dispatch }) => {
+const LoginForm: React.FC<HandleModalReducerT> = ({ dispatch }) => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
 
   const {
