@@ -51,7 +51,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
   };
 
   return (
-    <div className="card" id="buy-sell ">
+    <div className="card" id="buy-sell">
       <motion.div className="buy-sell-toggle">
         <Button onClick={() => setActive("buy")}>Buy</Button>
         <Button onClick={() => setActive("sell")}>Sell</Button>

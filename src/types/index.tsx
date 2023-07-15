@@ -35,14 +35,9 @@ export type Candlesticks = {
   epoch?: EpochTimeStamp;
 };
 
-export type ChartSettingsT = {
-  openSettings: boolean;
-  setOpenSettings: Dispatch<SetStateAction<boolean>>;
-};
-
-export type ProfileT = {
-  openProfile: boolean;
-  setOpenProfile: Dispatch<SetStateAction<boolean>>;
+export type BooleanState = {
+  state: boolean;
+  setState: Dispatch<SetStateAction<boolean>>;
 };
 
 export type User = {

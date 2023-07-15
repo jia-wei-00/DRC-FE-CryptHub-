@@ -1,5 +1,5 @@
 import * as React from "react";
-import { authStore, walletStore } from "../stores";
+import { authStore, tourStore, walletStore } from "../stores";
 import { MODALACTIONS, pages, settings } from "../constant";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/components/nav.scss";
@@ -32,6 +32,7 @@ import {
 } from ".";
 import logo from "../assets/logo.svg";
 import { Action, HandleModalReducerT, ModalState } from "../types";
+import { Help } from "@mui/icons-material";
 
 const DepositOption: React.FC<HandleModalReducerT> = ({ modal, dispatch }) => {
   return (
@@ -157,6 +158,11 @@ function Nav() {
     }
   };
 
+  const handleTourGuide = () => {
+    navigate("/");
+    tourStore.setTour({ home: true });
+  };
+
   return (
     <AppBar position="static" className="app-bar">
       <Container maxWidth="xl">
@@ -233,6 +239,11 @@ function Nav() {
             <div className="nav-end">
               {matches && (
                 <>
+                  <Tooltip title="Tour guide">
+                    <IconButton onClick={handleTourGuide}>
+                      <Help />
+                    </IconButton>
+                  </Tooltip>
                   <CustomizedSwitches />
                   {authStore.user && (
                     <FormControl size="small" id="wallet">
@@ -261,7 +272,10 @@ function Nav() {
               {authStore.user ? (
                 <>
                   <Tooltip title="Open settings">
-                    <IconButton onClick={handleOpenUserMenu} id="profile">
+                    <IconButton
+                      onClick={handleOpenUserMenu}
+                      id="profile-button"
+                    >
                       <Avatar>{authStore.user.name.charAt(0)}</Avatar>
                     </IconButton>
                   </Tooltip>

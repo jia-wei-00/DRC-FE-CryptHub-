@@ -134,6 +134,12 @@
   align-items: start;
 }
 
+.sell-p2p-input-field {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+}
+
 .owned-contract {
   position: absolute;
   top: 0;

@@ -4,15 +4,14 @@ import Fab from "@mui/material/Fab";
 import { StorefrontRounded } from "@mui/icons-material";
 import { authStore } from "../../stores";
 import { SellOnMarkerPlace } from "../../components";
+import { BooleanState } from "../../types";
 
-export default function SellButton() {
-  const [sellModal, setSellModal] = React.useState(false);
-
+const SellButton: React.FC<BooleanState> = ({ state, setState }) => {
   const handleSellModal = () => {
     if (authStore.user === null) {
       return authStore.setAuthModal(true);
     }
-    setSellModal(!sellModal);
+    setState(!state);
   };
 
   return (
@@ -24,7 +23,9 @@ export default function SellButton() {
         </Fab>
       </Box>
 
-      <SellOnMarkerPlace sellModal={sellModal} setSellModal={setSellModal} />
+      <SellOnMarkerPlace sellModal={state} setSellModal={setState} />
     </>
   );
-}
+};
+
+export default SellButton;

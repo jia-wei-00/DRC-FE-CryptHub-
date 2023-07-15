@@ -13,9 +13,15 @@ import {
   DialogActions,
   DialogTitle,
 } from "@mui/material";
-import { ChartSettingsT, HandleModalReducerT, SellOnMarketT } from "../types";
+import { BooleanState, HandleModalReducerT, SellOnMarketT } from "../types";
 import { motion } from "framer-motion";
-import { websocketStore, modeStore, authStore, modalStore } from "../stores";
+import {
+  websocketStore,
+  modeStore,
+  authStore,
+  modalStore,
+  tourStore,
+} from "../stores";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
 import { CandlestickChart, Timeline } from "@mui/icons-material";
@@ -26,6 +32,7 @@ import DepositForm from "./deposit-form";
 import WithdrawForm from "./withdraw-form";
 import SellOnMarketForm from "./sell-on-market-form";
 import { MODALACTIONS } from "../constant";
+import { useNavigate } from "react-router-dom";
 
 export const ForgotPasswordDialog: React.FC<HandleModalReducerT> = ({
   modal,
@@ -33,11 +40,11 @@ export const ForgotPasswordDialog: React.FC<HandleModalReducerT> = ({
 }) => {
   return (
     <Dialog
-      open={modal.forgot_password_modal}
+      open={modal!.forgot_password_modal}
       onClose={() =>
         dispatch({
           type: MODALACTIONS.FORGOTPASSWORD,
-          payload: !modal.forgot_password_modal,
+          payload: !modal!.forgot_password_modal,
         })
       }
       PaperProps={{
@@ -97,7 +104,7 @@ export const AuthDialog: React.FC<HandleModalReducerT> = observer(
                 </Button>
                 <motion.div
                   animate={
-                    modal.auth_modal_active === "register"
+                    modal!.auth_modal_active === "register"
                       ? { x: "100%" }
                       : { x: 0 }
                   }
@@ -111,7 +118,7 @@ export const AuthDialog: React.FC<HandleModalReducerT> = observer(
               </motion.div>
               <motion.div
                 animate={
-                  modal.auth_modal_active === "login"
+                  modal!.auth_modal_active === "login"
                     ? { height: "auto" }
                     : { height: 0, opacity: 0 }
                 }
@@ -120,7 +127,7 @@ export const AuthDialog: React.FC<HandleModalReducerT> = observer(
               </motion.div>
               <motion.div
                 animate={
-                  modal.auth_modal_active === "register"
+                  modal!.auth_modal_active === "register"
                     ? { height: "auto", marginTop: "-15px" }
                     : { height: 0, opacity: 0 }
                 }
@@ -135,8 +142,8 @@ export const AuthDialog: React.FC<HandleModalReducerT> = observer(
   }
 );
 
-export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
-  ({ openSettings, setOpenSettings }) => {
+export const ChartSettingsDialog: React.FC<BooleanState> = observer(
+  ({ state, setState }) => {
     const handleChangeChart = (
       _: React.MouseEvent<HTMLElement>,
       type: string
@@ -204,8 +211,8 @@ export const ChartSettingsDialog: React.FC<ChartSettingsT> = observer(
 
     return (
       <Dialog
-        open={openSettings}
-        onClose={() => setOpenSettings(false)}
+        open={state}
+        onClose={() => setState(false)}
         PaperProps={{
           style: {
             backgroundColor: "transparent",
@@ -270,7 +277,7 @@ export const DepositDialog: React.FC<HandleModalReducerT> = ({
 }) => {
   return (
     <Dialog
-      open={modal.deposit_modal}
+      open={modal!.deposit_modal}
       onClose={() => dispatch({ type: MODALACTIONS.DEPOSIT, payload: false })}
       PaperProps={{
         style: {
@@ -296,7 +303,7 @@ export const WithdrawDialog: React.FC<HandleModalReducerT> = ({
 }) => {
   return (
     <Dialog
-      open={modal.withdraw_modal!}
+      open={modal!.withdraw_modal!}
       onClose={() => dispatch({ type: MODALACTIONS.WITHDRAW, payload: false })}
       PaperProps={{
         style: {
@@ -371,18 +378,65 @@ export const ConfirmationPopUp: React.FC = observer(() => {
             </DialogContent>
             <DialogActions>
               <Button
+                onClick={() => modalStore.setConfirmationModal(null)}
+                color="error"
+                variant="contained"
+              >
+                No
+              </Button>
+              <Button
                 onClick={handleConfirmation}
                 color="success"
                 variant="contained"
               >
                 Yes
               </Button>
+            </DialogActions>
+          </CardContent>
+        </Card>
+      </div>
+    </Dialog>
+  );
+});
+
+export const TourDialog: React.FC = observer(() => {
+  const navigate = useNavigate();
+
+  const handleOpenTour = () => {
+    tourStore.setTourModal(false);
+    navigate("/");
+    tourStore.setTour({ home: true });
+  };
+
+  return (
+    <Dialog
+      open={tourStore.tour_modal}
+      PaperProps={{
+        style: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        },
+      }}
+    >
+      <div className="wrapper">
+        <Card className="card">
+          <CardContent>
+            <DialogTitle>Welcome</DialogTitle>
+            <DialogContent>Do you want a tour guide?</DialogContent>
+            <DialogActions>
               <Button
-                onClick={() => modalStore.setConfirmationModal(null)}
+                onClick={() => tourStore.setTourModal(false)}
                 color="error"
                 variant="contained"
               >
-                No
+                Skip
+              </Button>
+              <Button
+                onClick={handleOpenTour}
+                color="success"
+                variant="contained"
+              >
+                Yes
               </Button>
             </DialogActions>
           </CardContent>

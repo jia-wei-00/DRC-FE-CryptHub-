@@ -1,4 +1,3 @@
-import { Placement } from "react-joyride";
 import { P2P, Home } from "./pages";
 
 export const pages = [
@@ -17,42 +16,85 @@ export const headers = (token: string) => {
 
 export const domain = import.meta.env.VITE_API_DOMAIN;
 
-export const steps = [
-  {
-    title: "Theme toggle",
-    content: "Click this to toggle dark and light theme",
-    target: "#dark-light-toggle",
-    placement: "bottom" as Placement,
-  },
-  {
-    title: "Wallet",
-    content: "Click this to see your wallet, deposit and withdraw USD",
-    target: "#wallet",
-    placement: "bottom" as Placement,
-  },
-  {
-    title: "Profile",
-    content: "Click this to see your profile or logout",
-    target: "#profile",
-    placement: "bottom" as Placement,
-  },
-  {
-    title: "Chart Settings",
-    content: "This is the settings you can change the chart details",
-    target: "#chart-settings",
-    placement: "left" as Placement,
-  },
-  {
-    title: "Buy and Sell",
-    content: "Click this the section to buy or sell token",
-    target: "#buy-sell",
-    placement: "top" as Placement,
-  },
-];
-
 export const MODALACTIONS = {
   DEPOSIT: "deposit",
   WITHDRAW: "withdraw",
   FORGOTPASSWORD: "forgot_password",
   AUTHACTIVE: "auth_active",
+};
+
+export const sellP2PModalTour = {
+  options: {
+    showProgress: true,
+  },
+  steps: [
+    {
+      element: ".add-contract-current-price",
+      intro: "Current market price for ETH and BTC",
+    },
+    {
+      element: "#wallet-currency-select",
+      intro: "Choose crrency you want to sell",
+    },
+    {
+      element: ".sell-p2p-input-field",
+      intro: "Input coin amount to sell and selling price",
+    },
+    {
+      element: "#sell-on-p2p",
+      intro: "Create the contract",
+    },
+  ],
+};
+
+export const P2PTour = {
+  options: {
+    showProgress: true,
+  },
+  steps: [
+    {
+      element: ".filter",
+      intro: "Filter market based on ETH or BTC",
+    },
+    {
+      element: "#market-tour",
+      intro: "To show all the contract on marketplace",
+    },
+    {
+      element: "#ongoing-tour",
+      intro: "Show all your contract on the marketplace",
+    },
+    {
+      element: ".market-sell-box",
+      intro: "Button to sell contract on the marketplace",
+    },
+  ],
+};
+
+export const homeTour = {
+  options: {
+    showProgress: true,
+  },
+  steps: [
+    {
+      element: "#profile-button",
+      intro: "Profile with all transaction history and account settings",
+    },
+    {
+      element: "#wallet",
+      intro: "Wallet",
+    },
+    {
+      element: "#dark-light-toggle",
+      intro: "Toggle light and dark theme",
+    },
+    {
+      element: "#chart-settings",
+      intro: "Chart settings",
+    },
+    {
+      element: "#buy-sell",
+      intro: "Buy or sell token",
+    },
+  ],
 };

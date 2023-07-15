@@ -1,40 +1,25 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { darkTheme, lightTheme } from "./theme";
 import "./styles/main.scss";
-import { authStore, modeStore } from "./stores";
+import { authStore, modeStore, tourStore } from "./stores";
 import { observer } from "mobx-react-lite";
 import { ToastContainer } from "react-toastify";
 import { Nav } from "./components";
-import { pages } from "./constant";
+import { homeTour, pages } from "./constant";
 import { ErrorPage, Profile } from "./pages";
 import Auth from "./auth";
 import React from "react";
 import { Steps } from "intro.js-react";
 import "intro.js/introjs.css";
+import { TourDialog } from "./components/dialog";
+import { useMediaQuery } from "@mui/material";
 
 const App: React.FC = () => {
-  const [stepsEnabled, setStepsEnabled] = React.useState(true);
+  const navigate = useNavigate();
+  const matches = useMediaQuery("(max-width:600px)");
+
   const [initialStep] = React.useState(0);
-  const [tour] = React.useState({
-    options: {
-      showProgress: true,
-    },
-    steps: [
-      {
-        element: "#profile",
-        intro: "Profile with all transaction history and account settings",
-      },
-      {
-        element: "#wallet",
-        intro: "Wallet",
-      },
-      {
-        element: "#dark-light-toggle",
-        intro: "Tittel film liste",
-      },
-    ],
-  });
 
   return (
     <div id={modeStore.mode}>
@@ -59,12 +44,21 @@ const App: React.FC = () => {
           position="top-center"
         />
         <Steps
-          enabled={stepsEnabled}
-          steps={tour.steps}
+          enabled={tourStore.tour.home}
+          steps={homeTour.steps}
           initialStep={initialStep}
-          onExit={() => setStepsEnabled(false)}
-          options={tour.options}
+          onExit={() => tourStore.setTour({ home: false })}
+          options={homeTour.options}
+          onBeforeExit={(step) => {
+            if (step === 4) {
+              navigate("/p2pTrader");
+              setTimeout(() => {
+                tourStore.setTour({ p2p: true });
+              }, 500);
+            }
+          }}
         />
+        {!matches && <TourDialog />}
       </ThemeProvider>
     </div>
   );

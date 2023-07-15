@@ -31,6 +31,7 @@ class AuthStoreImplementation {
       setUser: action.bound,
       signOut: action.bound,
       setAuthModal: action.bound,
+
       reset: action.bound,
     });
 

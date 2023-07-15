@@ -7,3 +7,4 @@ export { default as modalStore } from "./modal-store";
 export { default as loadingStore } from "./loading-store";
 export { default as historyStore } from "./history-store";
 export { default as walletStore } from "./wallet-store";
+export { default as tourStore } from "./tour-store";

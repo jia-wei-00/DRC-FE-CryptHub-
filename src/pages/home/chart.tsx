@@ -126,6 +126,7 @@ const Chart: React.FC = () => {
           highcharts={Highcharts}
           options={options}
           constructorType={"stockChart"}
+          id="chart-tour"
         />
       )}
     </>

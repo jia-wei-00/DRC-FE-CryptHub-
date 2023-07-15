@@ -43,10 +43,7 @@ const Home = () => {
         </motion.div>
       </motion.div>
 
-      <ChartSettingsDialog
-        openSettings={openSettings}
-        setOpenSettings={setOpenSettings}
-      />
+      <ChartSettingsDialog state={openSettings} setState={setOpenSettings} />
     </div>
   );
 };

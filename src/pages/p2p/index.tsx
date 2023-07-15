@@ -16,12 +16,15 @@ import { motion } from "framer-motion";
 import SellButton from "./floading-sell";
 import { observer } from "mobx-react-lite";
 import p2pStore from "../../stores/p2p-store";
-import { authStore, walletStore } from "../../stores";
+import { authStore, tourStore, walletStore } from "../../stores";
 import { ConfirmationPopUp } from "../../components";
+import { Steps } from "intro.js-react";
+import { P2PTour } from "../../constant";
 
 const P2P: React.FC = () => {
   const [active, setActive] = React.useState("market");
   const [checked, setChecked] = React.useState([true, true]);
+  const [sellModal, setSellModal] = React.useState(false);
 
   const handleChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked([event.target.checked, event.target.checked]);
@@ -90,6 +93,7 @@ const P2P: React.FC = () => {
                 ? { color: "#a27b5c" }
                 : {}
             }
+            id="market-tour"
           >
             Marketplace
           </Button>
@@ -97,6 +101,7 @@ const P2P: React.FC = () => {
             <Button
               onClick={() => setActive("ongoing")}
               style={active !== "ongoing" ? { color: "#a27b5c" } : {}}
+              id="ongoing-tour"
             >
               On Going
             </Button>
@@ -147,8 +152,24 @@ const P2P: React.FC = () => {
                 ))}
         </Grid>
       </div>
-      <SellButton />
+      <SellButton state={sellModal} setState={setSellModal} />
       <ConfirmationPopUp />
+
+      <Steps
+        enabled={tourStore.tour.p2p}
+        steps={P2PTour.steps}
+        initialStep={0}
+        onExit={() => tourStore.setTour({ p2p: false })}
+        options={P2PTour.options}
+        onBeforeExit={(step) => {
+          if (step === 3) {
+            setSellModal(true);
+            setTimeout(() => {
+              tourStore.setTour({ sell_p2p: true });
+            }, 500);
+          }
+        }}
+      />
     </Container>
   );
 };
