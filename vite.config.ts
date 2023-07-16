@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       rollupOptions: {
-        external: [/^node:.*/],
+        external: ["intro.js/introjs.css"],
       },
     },
   };
