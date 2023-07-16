@@ -11,8 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { addP2PSchema } from "../schemas";
-import p2pStore from "../stores/p2p-store";
-import { tourStore, websocketStoreP2P } from "../stores";
+import { p2pStore, tourStore, websocketStoreP2P } from "../stores";
 import { observer } from "mobx-react-lite";
 import CurrencyInput from "./numeric-input";
 import { Loading } from ".";

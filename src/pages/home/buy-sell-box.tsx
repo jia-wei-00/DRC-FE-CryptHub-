@@ -1,9 +1,8 @@
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import { motion } from "framer-motion";
 import React from "react";
-import { authStore, modeStore, websocketStore } from "../../stores";
+import { authStore, modeStore, websocketStore, tradeStore } from "../../stores";
 import { BuySellBoxT } from "../../types";
-import tradeStore from "../../stores/trade-store";
 import { Add, Remove } from "@mui/icons-material";
 import { BTCIcon, ETHIcon, USDIcon } from "../../assets/icons";
 import { NumericFormat } from "react-number-format";

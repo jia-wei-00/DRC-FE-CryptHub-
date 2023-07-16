@@ -1,7 +1,7 @@
 import * as React from "react";
 import { authStore } from "../stores";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forgetPasswordSchema } from "../schemas/login-page-schemas";
+import { forgetPasswordSchema } from "../schemas";
 import { HandleModalReducerT, InputData } from "../types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {

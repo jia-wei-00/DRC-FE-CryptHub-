@@ -5,14 +5,13 @@ import "./styles/main.scss";
 import { authStore, modeStore, tourStore } from "./stores";
 import { observer } from "mobx-react-lite";
 import { ToastContainer } from "react-toastify";
-import { Nav } from "./components";
+import { Nav, TourDialog } from "./components";
 import { homeTour, pages } from "./constant";
 import { ErrorPage, Profile } from "./pages";
 import Auth from "./auth";
 import React from "react";
 import { Steps } from "intro.js-react";
 import "intro.js/introjs.css";
-import { TourDialog } from "./components/dialog";
 import { useMediaQuery } from "@mui/material";
 
 const App: React.FC = () => {

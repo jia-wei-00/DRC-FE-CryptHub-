@@ -101,7 +101,7 @@ class HistoryStoreImplementation {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
 
       toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_RIGHT,
+        position: toast.POSITION.TOP_CENTER,
       });
     }
   }
@@ -143,7 +143,7 @@ class HistoryStoreImplementation {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
 
       toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_RIGHT,
+        position: toast.POSITION.TOP_CENTER,
       });
     }
   }

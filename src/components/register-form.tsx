@@ -20,7 +20,7 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { InputData } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "../schemas/login-page-schemas";
+import { registerSchema } from "../schemas";
 import { authStore } from "../stores";
 
 const RegisterForm: React.FC = () => {

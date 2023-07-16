@@ -52,7 +52,7 @@ export const sellP2PModalTour = {
     },
     {
       element: "#sell-on-p2p",
-      intro: "Create the contract!",
+      intro: "Create the contract and happy trading!",
     },
   ],
 };

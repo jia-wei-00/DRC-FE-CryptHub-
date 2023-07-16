@@ -10,5 +10,6 @@ export {
   DepositDialog,
   WithdrawDialog,
   ConfirmationPopUp,
+  TourDialog,
 } from "./dialog";
 export { Loading } from "./loading";
