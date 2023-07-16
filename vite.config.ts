@@ -12,5 +12,10 @@ export default defineConfig(({ mode }) => {
     define: {
       __APP_ENV__: JSON.stringify(env.APP_ENV),
     },
+    build: {
+      rollupOptions: {
+        external: ["introjs.css"],
+      },
+    },
   };
 });
