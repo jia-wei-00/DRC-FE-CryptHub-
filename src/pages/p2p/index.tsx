@@ -17,7 +17,7 @@ import SellButton from "./floading-sell";
 import { observer } from "mobx-react-lite";
 import p2pStore from "../../stores/p2p-store";
 import { authStore, tourStore, walletStore } from "../../stores";
-import { ConfirmationPopUp, Loading } from "../../components";
+import { ConfirmationPopUp } from "../../components";
 import { Steps } from "intro.js-react";
 import { P2PTour } from "../../constant";
 
