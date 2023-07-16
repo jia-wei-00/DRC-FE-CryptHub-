@@ -17,7 +17,7 @@ import SellButton from "./floading-sell";
 import { observer } from "mobx-react-lite";
 import p2pStore from "../../stores/p2p-store";
 import { authStore, tourStore, walletStore } from "../../stores";
-import { ConfirmationPopUp } from "../../components";
+import { ConfirmationPopUp, Loading } from "../../components";
 import { Steps } from "intro.js-react";
 import { P2PTour } from "../../constant";
 
@@ -117,8 +117,11 @@ const P2P: React.FC = () => {
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 2, sm: 8, md: 12 }}
         >
-          {active === "market"
-            ? p2pStore.p2p_contracts
+          {active === "market" ? (
+            p2pStore.p2p_contracts.length === 0 ? (
+              <div className="absolute-middle">No Contract</div>
+            ) : (
+              p2pStore.p2p_contracts
                 .filter((contract) => {
                   if (checked[0] && checked[1]) {
                     return true; // Show all items if both checkboxes are checked
@@ -134,22 +137,27 @@ const P2P: React.FC = () => {
                     <ItemCard active={active} contract={contract} />
                   </Grid>
                 ))
-            : p2pStore.p2p_ongoing_contracts
-                .filter((contract) => {
-                  if (checked[0] && checked[1]) {
-                    return true; // Show all items if both checkboxes are checked
-                  } else if (checked[0] && contract.currency === "ETH") {
-                    return true; // Show only "ETH" items if the "ETH" checkbox is checked
-                  } else if (checked[1] && contract.currency === "BTC") {
-                    return true; // Show only "BTC" items if the "BTC" checkbox is checked
-                  }
-                  return false;
-                })
-                .map((contract, index) => (
-                  <Grid item xs={2} sm={4} md={3} key={index}>
-                    <ItemCard active={active} contract={contract} />
-                  </Grid>
-                ))}
+            )
+          ) : p2pStore.p2p_ongoing_contracts.length === 0 ? (
+            <div className="absolute-middle">No Contract</div>
+          ) : (
+            p2pStore.p2p_ongoing_contracts
+              .filter((contract) => {
+                if (checked[0] && checked[1]) {
+                  return true; // Show all items if both checkboxes are checked
+                } else if (checked[0] && contract.currency === "ETH") {
+                  return true; // Show only "ETH" items if the "ETH" checkbox is checked
+                } else if (checked[1] && contract.currency === "BTC") {
+                  return true; // Show only "BTC" items if the "BTC" checkbox is checked
+                }
+                return false;
+              })
+              .map((contract, index) => (
+                <Grid item xs={2} sm={4} md={3} key={index}>
+                  <ItemCard active={active} contract={contract} />
+                </Grid>
+              ))
+          )}
         </Grid>
       </div>
       <SellButton state={sellModal} setState={setSellModal} />

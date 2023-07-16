@@ -119,7 +119,7 @@ const Chart: React.FC = () => {
       {websocketStore.chart_data.length === 0 &&
       websocketStore.candlesticks.length === 0 ? (
         <div className="loading">
-          <Loading height={"80px"} width={"80px"} />
+          <Loading height={"50px"} width={"50px"} />
         </div>
       ) : (
         <HighchartsReact

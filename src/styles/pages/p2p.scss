@@ -36,6 +36,7 @@
 
   & > .market-card {
     flex-grow: 1;
+    position: relative;
     padding: 10px;
 
     & > .p2p-head-stack {
@@ -96,6 +97,13 @@
   & > div {
     border-radius: 5px;
   }
+}
+
+.absolute-middle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .market-sell-box {
