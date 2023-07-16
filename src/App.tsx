@@ -11,6 +11,7 @@ import { ErrorPage, Profile } from "./pages";
 import Auth from "./auth";
 import React from "react";
 import { Steps } from "intro.js-react";
+import "intro.js/introjs.css";
 import { TourDialog } from "./components/dialog";
 import { useMediaQuery } from "@mui/material";
 
