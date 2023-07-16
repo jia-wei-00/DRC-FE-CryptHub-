@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogActions,
   DialogTitle,
+  Divider,
 } from "@mui/material";
 import { BooleanState, HandleModalReducerT, SellOnMarketT } from "../types";
 import { motion } from "framer-motion";
@@ -421,7 +422,8 @@ export const TourDialog: React.FC = observer(() => {
       <div className="wrapper">
         <Card className="card">
           <CardContent>
-            <DialogTitle>Welcome</DialogTitle>
+            <DialogTitle>Welcome {authStore.user!.name}</DialogTitle>
+            <Divider />
             <DialogContent>Do you want a tour guide?</DialogContent>
             <DialogActions>
               <Button

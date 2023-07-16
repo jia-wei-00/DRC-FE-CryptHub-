@@ -1,5 +1,5 @@
 import * as React from "react";
-import { authStore, tourStore, walletStore } from "../stores";
+import { authStore, modeStore, tourStore, walletStore } from "../stores";
 import { MODALACTIONS, pages, settings } from "../constant";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/components/nav.scss";
@@ -32,7 +32,7 @@ import {
 } from ".";
 import logo from "../assets/logo.svg";
 import { Action, HandleModalReducerT, ModalState } from "../types";
-import { Help } from "@mui/icons-material";
+import { HelpOutline } from "@mui/icons-material";
 
 const DepositOption: React.FC<HandleModalReducerT> = ({ modal, dispatch }) => {
   return (
@@ -229,7 +229,7 @@ function Nav() {
 
           <Box className="link-column mobile-hide">
             {pages.map((page, index) => (
-              <Link key={index} className="link" to={page.path}>
+              <Link key={index} className="link" to={page.path} id={page.id}>
                 {page.title}
               </Link>
             ))}
@@ -239,11 +239,19 @@ function Nav() {
             <div className="nav-end">
               {matches && (
                 <>
-                  <Tooltip title="Tour guide">
-                    <IconButton onClick={handleTourGuide}>
-                      <Help />
-                    </IconButton>
-                  </Tooltip>
+                  {authStore.user && (
+                    <Tooltip title="Tour guide">
+                      <IconButton onClick={handleTourGuide}>
+                        <HelpOutline
+                          sx={
+                            modeStore.mode === "light"
+                              ? { color: "#e9e0d1" }
+                              : null
+                          }
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                   <CustomizedSwitches />
                   {authStore.user && (
                     <FormControl size="small" id="wallet">

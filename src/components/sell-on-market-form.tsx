@@ -127,7 +127,7 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
         onExit={() => tourStore.setTour({ sell_p2p: false })}
         options={sellP2PModalTour.options}
         onBeforeExit={(step) => {
-          if (step === 3) {
+          if (step === sellP2PModalTour.steps.length - 1) {
             setSellModal(false);
           }
         }}

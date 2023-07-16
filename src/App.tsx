@@ -19,8 +19,6 @@ const App: React.FC = () => {
   const navigate = useNavigate();
   const matches = useMediaQuery("(max-width:600px)");
 
-  const [initialStep] = React.useState(0);
-
   return (
     <div id={modeStore.mode}>
       <ThemeProvider theme={modeStore.mode === "dark" ? darkTheme : lightTheme}>
@@ -46,11 +44,11 @@ const App: React.FC = () => {
         <Steps
           enabled={tourStore.tour.home}
           steps={homeTour.steps}
-          initialStep={initialStep}
+          initialStep={0}
           onExit={() => tourStore.setTour({ home: false })}
           options={homeTour.options}
           onBeforeExit={(step) => {
-            if (step === 4) {
+            if (step === homeTour.steps.length - 1) {
               navigate("/p2pTrader");
               setTimeout(() => {
                 tourStore.setTour({ p2p: true });

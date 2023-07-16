@@ -1,8 +1,18 @@
 import { P2P, Home } from "./pages";
 
 export const pages = [
-  { title: "Crypthub Trader", path: "/", element: <Home /> },
-  { title: "P2P Trader", path: "/p2pTrader", element: <P2P /> },
+  {
+    title: "Crypthub Trader",
+    path: "/",
+    element: <Home />,
+    id: "home-page-tour",
+  },
+  {
+    title: "P2P Trader",
+    path: "/p2pTrader",
+    element: <P2P />,
+    id: "p2p-page-tour",
+  },
 ];
 
 export const settings = [{ title: "Profile" }, { title: "Logout" }];
@@ -30,19 +40,19 @@ export const sellP2PModalTour = {
   steps: [
     {
       element: ".add-contract-current-price",
-      intro: "Current market price for ETH and BTC",
+      intro: "Current market price for ETH and BTC.",
     },
     {
       element: "#wallet-currency-select",
-      intro: "Choose crrency you want to sell",
+      intro: "Choose the currency you want to sell.",
     },
     {
       element: ".sell-p2p-input-field",
-      intro: "Input coin amount to sell and selling price",
+      intro: "Input coin amount to sell and selling price.",
     },
     {
       element: "#sell-on-p2p",
-      intro: "Create the contract",
+      intro: "Create the contract!",
     },
   ],
 };
@@ -54,19 +64,19 @@ export const P2PTour = {
   steps: [
     {
       element: ".filter",
-      intro: "Filter market based on ETH or BTC",
+      intro: "Filter market based on ETH or BTC.",
     },
     {
       element: "#market-tour",
-      intro: "To show all the contract on marketplace",
+      intro: "Display all available contracts on the marketplace.",
     },
     {
       element: "#ongoing-tour",
-      intro: "Show all your contract on the marketplace",
+      intro: "Display all contracts created by you on the marketplace.",
     },
     {
       element: ".market-sell-box",
-      intro: "Button to sell contract on the marketplace",
+      intro: "Button to sell contract on the marketplace.",
     },
   ],
 };
@@ -78,23 +88,34 @@ export const homeTour = {
   steps: [
     {
       element: "#profile-button",
-      intro: "Profile with all transaction history and account settings",
+      intro:
+        "Access comprehensive transaction history and efficiently manage your profile here.",
     },
     {
       element: "#wallet",
-      intro: "Wallet",
+      intro:
+        "Gain insights into your wallet balance, facilitate deposits, and execute withdrawals.",
     },
     {
       element: "#dark-light-toggle",
-      intro: "Toggle light and dark theme",
+      intro: "Toggle between light and dark themes.",
+    },
+    {
+      element: "#home-page-tour",
+      intro: "Crypthub trader page.",
     },
     {
       element: "#chart-settings",
-      intro: "Chart settings",
+      intro:
+        "Chart settings enable customization of currency, chart type, and interval for optimal visualization and analysis.",
     },
     {
       element: "#buy-sell",
-      intro: "Buy or sell token",
+      intro: "Initiate token transactions by buying or selling here.",
+    },
+    {
+      element: "#p2p-page-tour",
+      intro: "Now go to P2P Trader.",
     },
   ],
 };

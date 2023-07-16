@@ -162,7 +162,7 @@ const P2P: React.FC = () => {
         onExit={() => tourStore.setTour({ p2p: false })}
         options={P2PTour.options}
         onBeforeExit={(step) => {
-          if (step === 3) {
+          if (step === P2PTour.steps.length - 1) {
             setSellModal(true);
             setTimeout(() => {
               tourStore.setTour({ sell_p2p: true });
