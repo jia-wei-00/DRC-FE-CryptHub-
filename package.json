@@ -19,7 +19,6 @@
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
     "dotenv": "^16.3.1",
-    "firebase": "^9.22.2",
     "framer-motion": "^10.12.16",
     "highcharts": "^11.1.0",
     "highcharts-react-official": "^3.2.0",
