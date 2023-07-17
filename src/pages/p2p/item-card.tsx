@@ -43,12 +43,6 @@ const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
             <Button
               size="small"
               onClick={() =>
-                //   authStore.user
-                //     ? modalStore.setConfirmationModal(
-                //         () => p2pStore.buyContract(contract),
-                //         "buy"
-                //       )
-                //     : authStore.setAuthModal(true)
                 modalStore.setConfirmationModal(
                   () => p2pStore.buyContract(contract),
                   "buy_p2p",
