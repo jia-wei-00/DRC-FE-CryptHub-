@@ -79,3 +79,5 @@ CryptHub is built using the following technologies:
 - [Zod](https://zod.dev/): A TypeScript-first schema validation library for runtime type checking.
 
 - [JS Cookie](https://github.com/js-cookie/js-cookie#readme): A library for handling cookies in JavaScript.
+
+- [React Toastify](https://fkhadra.github.io/react-toastify/introduction): A popular notification library for React applications, offering easy and customizable toast notifications.
