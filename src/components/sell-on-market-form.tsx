@@ -11,10 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import { addP2PSchema } from "../schemas";
-import { p2pStore, tourStore, websocketStoreP2P } from "../stores";
+import { modalStore, p2pStore, tourStore, websocketStoreP2P } from "../stores";
 import { observer } from "mobx-react-lite";
 import CurrencyInput from "./numeric-input";
-import { Loading } from ".";
+import { ConfirmationPopUp, Loading } from ".";
 import { Steps } from "intro.js-react";
 import { sellP2PModalTour } from "../constant";
 
@@ -34,7 +34,7 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
       coin_amount: 0,
       price: 0,
     },
-    resolver: zodResolver(addP2PSchema(websocketStoreP2P.ticks, coinAmount)),
+    resolver: zodResolver(addP2PSchema(websocketStoreP2P.ticks)),
   });
 
   React.useEffect(() => {
@@ -54,13 +54,19 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
   React.useEffect(() => {
     if (isSubmitSuccessful) {
       reset();
-      p2pStore.fetchP2PMarket();
-      setSellModal(false);
     }
   }, [isSubmitSuccessful]);
 
   const onSubmitHandler: SubmitHandler<AddP2PContractFormT> = (values) => {
-    p2pStore.addP2PContract(values);
+    modalStore.setConfirmationModal(
+      () => p2pStore.addP2PContract(values, setSellModal),
+      "sell_p2p",
+      null,
+      websocketStoreP2P.currency,
+      null,
+      null,
+      values.coin_amount!
+    );
   };
 
   return (
@@ -107,7 +113,7 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
             setValue={setValue}
             currency="USD"
             name="price"
-            label="Price"
+            label="price"
           />
         </div>
         <Button
@@ -131,6 +137,7 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
           }
         }}
       />
+      {modalStore.confirmation_modal.open && <ConfirmationPopUp />}
     </>
   );
 };

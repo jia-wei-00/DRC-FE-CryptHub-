@@ -39,7 +39,10 @@ class P2PStoreImplementation {
     });
   }
 
-  async addP2PContract(values: AddP2PContractFormT): Promise<void> {
+  async addP2PContract(
+    values: AddP2PContractFormT,
+    setSellModal: React.Dispatch<React.SetStateAction<boolean>>
+  ): Promise<void> {
     const id = toast.loading("Please wait...");
     const data = {
       currency: websocketStoreP2P.currency,
@@ -65,6 +68,8 @@ class P2PStoreImplementation {
         closeButton: null,
       });
       walletStore.setUserWallet(res.data.details.wallet_balance);
+      setSellModal(false);
+      p2pStore.fetchP2PMarket();
     } catch (error: unknown) {
       const message = errorChecking(error as AxiosError<ErrorResponse>);
 

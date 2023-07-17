@@ -13,3 +13,4 @@ export {
   TourDialog,
 } from "./dialog";
 export { Loading } from "./loading";
+export { default as CurrencyInput } from "./numeric-input";

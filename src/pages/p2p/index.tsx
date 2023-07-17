@@ -17,7 +17,7 @@ import { motion } from "framer-motion";
 import SellButton from "./floading-sell";
 import { observer } from "mobx-react-lite";
 import p2pStore from "../../stores/p2p-store";
-import { authStore, tourStore, walletStore } from "../../stores";
+import { authStore, modalStore, tourStore, walletStore } from "../../stores";
 import { ConfirmationPopUp } from "../../components";
 import { Steps } from "intro.js-react";
 import { P2PTour } from "../../constant";
@@ -98,38 +98,37 @@ const P2P: React.FC = () => {
           </Box>
         </div>
 
-        {extend && (
-          <div className="filter-slider">
-            <Divider />
-            <Typography variant="body2" id="price-slider">
-              Price Range:
-            </Typography>
-            <Slider
-              value={value.price}
-              onChange={(_, new_value) =>
-                setValue({ ...value, price: new_value as number[] })
-              }
-              size="small"
-              valueLabelDisplay="auto"
-              min={0}
-              max={60000}
-              step={100}
-            />
-            <Typography variant="body2" id="coin-slider">
-              Coin Range:
-            </Typography>
-            <Slider
-              value={value.coin}
-              onChange={(_, new_value) =>
-                setValue({ ...value, coin: new_value as number[] })
-              }
-              size="small"
-              valueLabelDisplay="auto"
-              min={0}
-              max={50}
-            />
-          </div>
-        )}
+        <div className={`filter-slider ${extend && "extend"}`}>
+          <Divider />
+          <Typography variant="body2" id="price-slider">
+            Price Range:
+          </Typography>
+          <Slider
+            value={value.price}
+            onChange={(_, new_value) =>
+              setValue({ ...value, price: new_value as number[] })
+            }
+            size="small"
+            valueLabelDisplay="auto"
+            min={0}
+            max={60000}
+            step={100}
+          />
+          <Typography variant="body2" id="coin-slider">
+            Coin Range:
+          </Typography>
+          <Slider
+            value={value.coin}
+            onChange={(_, new_value) =>
+              setValue({ ...value, coin: new_value as number[] })
+            }
+            size="small"
+            valueLabelDisplay="auto"
+            min={0}
+            max={50}
+          />
+        </div>
+
         <div className="extend-arrow" onClick={() => setExtend(!extend)}>
           {!extend ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
         </div>
@@ -191,7 +190,7 @@ const P2P: React.FC = () => {
         </Grid>
       </div>
       <SellButton state={sellModal} setState={setSellModal} />
-      <ConfirmationPopUp />
+      {modalStore.confirmation_modal.open && <ConfirmationPopUp />}
 
       <Steps
         enabled={tourStore.tour.p2p}

@@ -43,12 +43,21 @@ const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
             <Button
               size="small"
               onClick={() =>
-                authStore.user
-                  ? modalStore.setConfirmationModal(
-                      () => p2pStore.buyContract(contract),
-                      "buy"
-                    )
-                  : authStore.setAuthModal(true)
+                //   authStore.user
+                //     ? modalStore.setConfirmationModal(
+                //         () => p2pStore.buyContract(contract),
+                //         "buy"
+                //       )
+                //     : authStore.setAuthModal(true)
+                modalStore.setConfirmationModal(
+                  () => p2pStore.buyContract(contract),
+                  "buy_p2p",
+                  null,
+                  "USD",
+                  contract.currency,
+                  contract.coin_amount,
+                  contract.selling_price
+                )
               }
               disabled={
                 authStore.user !== null &&
@@ -63,11 +72,16 @@ const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
               onClick={() =>
                 modalStore.setConfirmationModal(
                   () => p2pStore.withdrawContract(contract),
-                  "withdraw"
+                  "delete",
+                  null,
+                  null,
+                  contract.currency,
+                  contract.coin_amount,
+                  null
                 )
               }
             >
-              WITHDRAW
+              Delete
             </Button>
           )}
         </CardActions>

@@ -13,6 +13,7 @@ import {
   DialogActions,
   DialogTitle,
   Divider,
+  useMediaQuery,
 } from "@mui/material";
 import { BooleanState, HandleModalReducerT, SellOnMarketT } from "../types";
 import { motion } from "framer-motion";
@@ -22,10 +23,11 @@ import {
   authStore,
   modalStore,
   tourStore,
+  walletStore,
 } from "../stores";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
-import { CandlestickChart, Timeline } from "@mui/icons-material";
+import { ArrowRightAlt, CandlestickChart, Timeline } from "@mui/icons-material";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import ForgotPasswordForm from "./forget-password";
@@ -34,6 +36,7 @@ import WithdrawForm from "./withdraw-form";
 import SellOnMarketForm from "./sell-on-market-form";
 import { MODALACTIONS } from "../constant";
 import { useNavigate } from "react-router-dom";
+import "../styles/components/dialog.scss";
 
 export const ForgotPasswordDialog: React.FC<HandleModalReducerT> = ({
   modal,
@@ -352,17 +355,68 @@ export const SellOnMarkerPlace: React.FC<SellOnMarketT> = ({
 };
 
 export const ConfirmationPopUp: React.FC = observer(() => {
+  const [wallet, setWallet] = React.useState<{
+    USD: number;
+    BTC: number;
+    ETH: number;
+  }>({
+    USD: walletStore.wallet.USD,
+    BTC: walletStore.wallet.BTC,
+    ETH: walletStore.wallet.ETH,
+  });
+
   const handleConfirmation = async () => {
     if (modalStore.confirmation_modal.modal_function) {
       await modalStore.confirmation_modal.modal_function();
     }
-    modalStore.setConfirmationModal(null);
+    modalStore.setConfirmationModal(null, null, null, null, null, null, null);
   };
+
+  const matches = useMediaQuery("(max-width:450px)");
+
+  const modal_props = modalStore.confirmation_modal;
+  const type = modal_props.type;
+  const pay_currency = modal_props.pay_currency;
+  const get_currency = modal_props.get_currency;
+
+  React.useEffect(() => {
+    if (type === "delete") {
+      setWallet({
+        ...wallet,
+        [get_currency as keyof typeof wallet]:
+          wallet[get_currency as keyof typeof wallet] + modal_props.receive!,
+      });
+    } else if (type === "sell_p2p") {
+      setWallet({
+        ...wallet,
+        [pay_currency as keyof typeof wallet]:
+          wallet[pay_currency as keyof typeof wallet] - modal_props.pay!,
+      });
+    } else if (type === "buy_p2p") {
+      setWallet({
+        ...wallet,
+        [pay_currency as keyof typeof wallet]:
+          wallet[pay_currency as keyof typeof wallet] - modal_props.pay!,
+        [get_currency as keyof typeof wallet]:
+          wallet[get_currency as keyof typeof wallet] + modal_props.receive!,
+      });
+    }
+  }, []);
 
   return (
     <Dialog
       open={modalStore.confirmation_modal.open}
-      onClose={() => modalStore.setConfirmationModal(null)}
+      onClose={() =>
+        modalStore.setConfirmationModal(
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        )
+      }
       PaperProps={{
         style: {
           backgroundColor: "transparent",
@@ -373,13 +427,82 @@ export const ConfirmationPopUp: React.FC = observer(() => {
       <div className="wrapper">
         <Card className="card">
           <CardContent>
-            <DialogTitle>Alert</DialogTitle>
+            <DialogTitle>PRESS YES TO PROCEED</DialogTitle>
             <DialogContent>
-              Press yes to {modalStore.confirmation_modal.text}!
+              {/* Press yes to {modalStore.confirmation_modal.text}! */}
+              <div className="pay-get">
+                <div>
+                  {modal_props.pay && (
+                    <>
+                      Payout: <br />
+                    </>
+                  )}
+                  {modal_props.receive && <>Receive:</>}
+                </div>
+                <div>
+                  {modal_props.pay && (
+                    <>
+                      {modal_props.pay + modal_props.pay_currency!}
+                      <br />
+                    </>
+                  )}
+                  {modal_props.receive &&
+                    modal_props.receive + modal_props.get_currency!}
+                </div>
+              </div>
+              <div
+                className={`before-after ${
+                  modeStore.mode === "light" && "before-after-box"
+                }`}
+              >
+                <div>
+                  <div>Before:</div>
+                  <div>
+                    <span>USD</span>
+                    {walletStore.wallet.USD.toFixed(2)}
+                  </div>
+                  <div>
+                    <span>ETH</span>
+                    {walletStore.wallet.ETH.toFixed(4)}
+                  </div>
+                  <div>
+                    <span>BTC</span>
+                    {walletStore.wallet.BTC.toFixed(4)}
+                  </div>
+                </div>
+                <ArrowRightAlt
+                  className={`arrow-icon ${matches && "rotate-arrow"}`}
+                />
+                <div>
+                  <div>After:</div>
+                  <div>
+                    <span>USD</span>
+                    {wallet.USD.toFixed(2)}
+                  </div>
+                  <div>
+                    <span>ETH</span>
+                    {wallet.ETH.toFixed(4)}
+                  </div>
+                  <div>
+                    <span>BTC</span>
+                    {wallet.BTC.toFixed(4)}
+                  </div>
+                </div>
+              </div>
             </DialogContent>
             <DialogActions>
               <Button
-                onClick={() => modalStore.setConfirmationModal(null)}
+                onClick={() =>
+                  modalStore.setConfirmationModal(
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                  )
+                }
                 color="error"
                 variant="contained"
               >
@@ -422,7 +545,7 @@ export const TourDialog: React.FC = observer(() => {
       <div className="wrapper">
         <Card className="card">
           <CardContent>
-            <DialogTitle>Welcome {authStore.user!.name}</DialogTitle>
+            <DialogTitle>Welcome {authStore.user?.name}</DialogTitle>
             <Divider />
             <DialogContent>Do you want a tour guide?</DialogContent>
             <DialogActions>

@@ -6,6 +6,7 @@ import { BuySellBoxT } from "../../types";
 import { Add, Remove } from "@mui/icons-material";
 import { BTCIcon, ETHIcon, USDIcon } from "../../assets/icons";
 import { NumericFormat } from "react-number-format";
+import { CurrencyInput } from "../../components";
 
 const BuySellBox: React.FC<BuySellBoxT> = ({
   current_price,
@@ -108,6 +109,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
               <Add />
             </IconButton>
           </div>
+          {/* <CurrencyInput /> */}
           <Button
             variant="contained"
             color={active === "buy" ? "success" : "error"}

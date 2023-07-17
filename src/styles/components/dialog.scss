@@ -1,0 +1,48 @@
+@import "../variables";
+
+.before-after {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+
+  & > .arrow-icon {
+    margin: 10px 20px;
+  }
+
+  & > .rotate-arrow {
+    transform: rotate(90deg);
+  }
+
+  & > div {
+    width: 100%;
+
+    & > div {
+      display: flex;
+      justify-content: space-between;
+
+      & > span {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 450px) {
+    flex-direction: column;
+
+    & > div {
+      border: 1px solid $white-half;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  }
+}
+
+.before-after-box > div {
+  border: 1px solid rgba($color: $light-bg, $alpha: 0.5);
+}
+
+.pay-get {
+  display: flex;
+  column-gap: 20px;
+}

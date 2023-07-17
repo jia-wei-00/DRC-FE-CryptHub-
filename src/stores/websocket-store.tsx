@@ -62,10 +62,10 @@ class WebsocketStoreImplementation {
             ticks_history:
               this.subscribe_currency === "BTC" ? "cryBTCUSD" : "cryETHUSD",
             adjust_start_time: 1,
-            count: this.interval === "1m" ? 200 : 2000,
+            count: this.interval === "60" ? 500 : 2000,
             end: "latest",
             granularity: this.interval,
-            start: this.interval === "1m" ? 1 : 1671811200,
+            start: Math.floor(Date.now() / 1000) - 6 * 30 * 24 * 60 * 60,
             style: "candles",
           }
     );

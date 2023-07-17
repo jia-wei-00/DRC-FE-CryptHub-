@@ -32,7 +32,7 @@ export const handleSuccess = (msg: string) => {
     case "CONTRACT_PURCHASE_SUCCESFUL":
       return "Buy Sucessfully";
     case "CONTRACT_DELETED":
-      return "Contract withdraw sucessfully";
+      return "Contract deleted";
     case "SELL_ORDER_SUCCESS":
       return "Sell order successful";
     default:
@@ -58,7 +58,11 @@ export const errorChecking = (error: AxiosError<ErrorResponse>) => {
 
   if (axios.isAxiosError(error)) {
     if (error.response) {
-      message = handleErrors(error.response.data.message);
+      if (error.response.data.message) {
+        message = handleErrors(error.response.data.message);
+      } else {
+        message = error.response.data.errors[0].msg;
+      }
     } else if (error.message) {
       message = error.message;
     } else {

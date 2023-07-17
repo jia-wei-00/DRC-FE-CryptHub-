@@ -203,6 +203,9 @@ export type HandleModalReducerT = {
 
 export type ErrorResponse = {
   message: string;
+  errors: {
+    msg: string;
+  }[];
 };
 
 //numeric input form type

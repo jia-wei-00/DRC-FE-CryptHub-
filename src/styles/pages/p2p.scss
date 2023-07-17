@@ -73,6 +73,12 @@
     }
   }
 
+  .filter-slider {
+    & > hr {
+      margin: 20px 0;
+    }
+  }
+
   @media only screen and (max-width: 1023px) {
     flex-direction: column;
 
@@ -90,18 +96,20 @@
       max-width: unset;
     }
 
-    .filter-slider {
-      & > hr {
-        margin: 20px 0;
-      }
-    }
-
     .extend-arrow {
       display: flex !important;
 
       &:hover {
         cursor: pointer;
       }
+    }
+
+    .filter-slider {
+      display: none;
+    }
+
+    .extend {
+      display: unset !important;
     }
   }
 }
