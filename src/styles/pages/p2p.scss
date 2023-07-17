@@ -32,6 +32,20 @@
     & > hr {
       margin: 10px 0;
     }
+
+    & > .extend-arrow {
+      display: none;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @media only screen and (max-width: 1023px) {
+      padding-bottom: 30px;
+    }
   }
 
   & > .market-card {
@@ -74,6 +88,20 @@
 
     & > .market-card > .p2p-head-stack {
       max-width: unset;
+    }
+
+    .filter-slider {
+      & > hr {
+        margin: 20px 0;
+      }
+    }
+
+    .extend-arrow {
+      display: flex !important;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 }

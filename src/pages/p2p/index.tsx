@@ -22,11 +22,13 @@ import { ConfirmationPopUp } from "../../components";
 import { Steps } from "intro.js-react";
 import { P2PTour } from "../../constant";
 import { filterContracts } from "../../functions";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 
 const P2P: React.FC = () => {
   const [active, setActive] = React.useState("market");
   const [checked, setChecked] = React.useState([true, true]);
   const [sellModal, setSellModal] = React.useState(false);
+  const [extend, setExtend] = React.useState<boolean>(false);
   const [value, setValue] = React.useState<{ coin: number[]; price: number[] }>(
     { coin: [0, 50], price: [0, 60000] }
   );
@@ -95,35 +97,41 @@ const P2P: React.FC = () => {
             />
           </Box>
         </div>
-        <Divider />
-        <div>
-          <Typography variant="body2" id="price-slider">
-            Price Range:
-          </Typography>
-          <Slider
-            value={value.price}
-            onChange={(_, new_value) =>
-              setValue({ ...value, price: new_value as number[] })
-            }
-            size="small"
-            valueLabelDisplay="auto"
-            min={0}
-            max={60000}
-            step={100}
-          />
-          <Typography variant="body2" id="coin-slider">
-            Coin Range:
-          </Typography>
-          <Slider
-            value={value.coin}
-            onChange={(_, new_value) =>
-              setValue({ ...value, coin: new_value as number[] })
-            }
-            size="small"
-            valueLabelDisplay="auto"
-            min={0}
-            max={50}
-          />
+
+        {extend && (
+          <div className="filter-slider">
+            <Divider />
+            <Typography variant="body2" id="price-slider">
+              Price Range:
+            </Typography>
+            <Slider
+              value={value.price}
+              onChange={(_, new_value) =>
+                setValue({ ...value, price: new_value as number[] })
+              }
+              size="small"
+              valueLabelDisplay="auto"
+              min={0}
+              max={60000}
+              step={100}
+            />
+            <Typography variant="body2" id="coin-slider">
+              Coin Range:
+            </Typography>
+            <Slider
+              value={value.coin}
+              onChange={(_, new_value) =>
+                setValue({ ...value, coin: new_value as number[] })
+              }
+              size="small"
+              valueLabelDisplay="auto"
+              min={0}
+              max={50}
+            />
+          </div>
+        )}
+        <div className="extend-arrow" onClick={() => setExtend(!extend)}>
+          {!extend ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
         </div>
       </div>
       <div className="market-card">
