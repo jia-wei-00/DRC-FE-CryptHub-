@@ -1,6 +1,10 @@
 # CryptHub
 
-[CryptHub](https://crypthub-app.vercel.app) is a powerful web application designed for tracking and monitoring cryptocurrency prices and trends. It also provides a platform for peer-to-peer (P2P) trading, enabling users to engage in direct cryptocurrency trades. With CryptHub, users can stay up-to-date with the latest market data, make informed investment decisions, and connect with other cryptocurrency enthusiasts.
+[CryptHub](https://crypthub-app.vercel.app) is a powerful web application designed for tracking and monitoring cryptocurrency prices and trends. It provides users with live chart data, showcasing both historical and real-time market information. With CryptHub, users can analyze the performance of various cryptocurrencies over time and make informed investment decisions.
+
+CryptHub offers a user-friendly interface that displays interactive charts, allowing users to explore historical price movements, identify patterns, and stay updated with live market data. Whether you're a seasoned trader or a crypto enthusiast, CryptHub equips you with the tools and information necessary to navigate the cryptocurrency market effectively.
+
+Please note that CryptHub does not provide news content. However, it focuses on delivering accurate and up-to-date cryptocurrency price data and comprehensive charting features. Join CryptHub today to leverage its live chart data and make informed decisions in the dynamic world of cryptocurrencies.
 
 ## Table of Contents
 
@@ -81,3 +85,5 @@ CryptHub is built using the following technologies:
 - [JS Cookie](https://github.com/js-cookie/js-cookie#readme): A library for handling cookies in JavaScript.
 
 - [React Toastify](https://fkhadra.github.io/react-toastify/introduction): A popular notification library for React applications, offering easy and customizable toast notifications.
+
+Feel free to explore and leverage these technologies to enhance your own projects.

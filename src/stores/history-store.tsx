@@ -159,8 +159,6 @@ class HistoryStoreImplementation {
         createTimeoutPromise(10000),
       ]);
 
-      console.log(res);
-
       const values = res.data.details.map((value: P2PCompletedHistoryT) => {
         const created_date = new Date(value.created_at).getTime();
         const completed_date = new Date(value.completed_at).getTime();
