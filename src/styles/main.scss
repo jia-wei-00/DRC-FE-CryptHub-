@@ -151,6 +151,28 @@ a {
   backdrop-filter: blur(3px);
 }
 
+.custom-introjs-theme {
+  background-color: $black-half !important;
+  backdrop-filter: blur(4px) !important;
+  color: $white !important;
+}
+
+.custom-introjs-highlight {
+  border: 0.5px solid rgba(255, 255, 255, 0.4);
+}
+
+.introjs-progressbar {
+  background-color: $main-color-d !important;
+}
+
+.introjs-skipbutton:hover {
+  color: $white !important;
+}
+
+.introjs-arrow {
+  border-bottom-color: $black-half !important;
+}
+
 ::-webkit-scrollbar {
   height: 5px;
   width: 4px;
@@ -189,5 +211,23 @@ a {
 #dark {
   .Toastify__toast {
     background-color: rgba($black, 0.5);
+  }
+
+  .custom-introjs-theme {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+    backdrop-filter: blur(4px) !important;
+    color: white !important;
+  }
+
+  .custom-introjs-highlight {
+    border: 0.5px solid rgba(255, 255, 255, 0.4);
+  }
+
+  .introjs-progressbar {
+    background-color: $main-color-d !important;
+  }
+
+  .introjs-skipbutton:hover {
+    color: white !important;
   }
 }

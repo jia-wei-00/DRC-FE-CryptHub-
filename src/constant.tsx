@@ -36,6 +36,9 @@ export const MODALACTIONS = {
 export const sellP2PModalTour = {
   options: {
     showProgress: true,
+    tooltipClass: "custom-introjs-theme",
+    highlightClass: "custom-introjs-highlight",
+    showStepNumbers: false,
   },
   steps: [
     {
@@ -60,6 +63,9 @@ export const sellP2PModalTour = {
 export const P2PTour = {
   options: {
     showProgress: true,
+    tooltipClass: "custom-introjs-theme",
+    highlightClass: "custom-introjs-highlight",
+    showStepNumbers: false,
   },
   steps: [
     {
@@ -84,6 +90,9 @@ export const P2PTour = {
 export const homeTour = {
   options: {
     showProgress: true,
+    tooltipClass: "custom-introjs-theme",
+    highlightClass: "custom-introjs-highlight",
+    showStepNumbers: false,
   },
   steps: [
     {
