@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { authStore, p2pStore } from "./stores";
-import { ErrorResponse } from "./types";
+import { ErrorResponse, P2PContractsT } from "./types";
 
 export const createTimeoutPromise = (timeout: number): Promise<never> => {
   return new Promise((_, reject) => {
@@ -69,4 +69,45 @@ export const errorChecking = (error: AxiosError<ErrorResponse>) => {
   }
 
   return message;
+};
+
+//filter contracts for p2p market
+export const filterContracts = (
+  contracts: P2PContractsT[],
+  checked: boolean[],
+  value: { coin: number[]; price: number[] }
+): P2PContractsT[] => {
+  return contracts
+    .filter((contract) => {
+      if (checked[0] && checked[1]) {
+        return true; // Show all items if both checkboxes are checked
+      } else if (checked[0] && contract.currency === "ETH") {
+        return true; // Show only "ETH" items if the "ETH" checkbox is checked
+      } else if (checked[1] && contract.currency === "BTC") {
+        return true; // Show only "BTC" items if the "BTC" checkbox is checked
+      }
+      return false;
+    })
+    .filter((contract) => {
+      const price = contract.selling_price;
+      if (price >= value.price[0]) {
+        if (value.price[1] >= 60000) {
+          return true; // No upper limit if the max value is above 60,000
+        } else {
+          return price <= value.price[1]; // Apply the upper limit if it's below or equal to 60,000
+        }
+      }
+      return false;
+    })
+    .filter((contract) => {
+      const price = contract.coin_amount;
+      if (price >= value.coin[0]) {
+        if (value.coin[1] >= 50) {
+          return true; // No upper limit if the max value is above 50
+        } else {
+          return price <= value.coin[1]; // Apply the upper limit if it's below or equal to 50
+        }
+      }
+      return false;
+    });
 };

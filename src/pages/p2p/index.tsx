@@ -6,6 +6,7 @@ import {
   Divider,
   FormControlLabel,
   Grid,
+  Slider,
   Stack,
   Typography,
 } from "@mui/material";
@@ -20,11 +21,24 @@ import { authStore, tourStore, walletStore } from "../../stores";
 import { ConfirmationPopUp } from "../../components";
 import { Steps } from "intro.js-react";
 import { P2PTour } from "../../constant";
+import { filterContracts } from "../../functions";
 
 const P2P: React.FC = () => {
   const [active, setActive] = React.useState("market");
   const [checked, setChecked] = React.useState([true, true]);
   const [sellModal, setSellModal] = React.useState(false);
+  const [value, setValue] = React.useState<{ coin: number[]; price: number[] }>(
+    { coin: [0, 50], price: [0, 60000] }
+  );
+
+  const filtered_market = React.useMemo(
+    () => filterContracts(p2pStore.p2p_contracts, checked, value),
+    [p2pStore.p2p_contracts, checked, value]
+  );
+  const filtered_ongoing = React.useMemo(
+    () => filterContracts(p2pStore.p2p_ongoing_contracts, checked, value),
+    [p2pStore.p2p_ongoing_contracts, checked, value]
+  );
 
   const handleChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked([event.target.checked, event.target.checked]);
@@ -37,19 +51,6 @@ const P2P: React.FC = () => {
   const handleChange3 = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked([checked[0], event.target.checked]);
   };
-
-  const children = (
-    <Box sx={{ display: "flex", flexDirection: "column", ml: 3 }}>
-      <FormControlLabel
-        label="ETH"
-        control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
-      />
-      <FormControlLabel
-        label="BTC"
-        control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
-      />
-    </Box>
-  );
 
   React.useEffect(() => {
     if (authStore.user === null) {
@@ -79,7 +80,50 @@ const P2P: React.FC = () => {
               />
             }
           />
-          {children}
+          <Box sx={{ display: "flex", flexDirection: "column", ml: 3 }}>
+            <FormControlLabel
+              label="ETH"
+              control={
+                <Checkbox checked={checked[0]} onChange={handleChange2} />
+              }
+            />
+            <FormControlLabel
+              label="BTC"
+              control={
+                <Checkbox checked={checked[1]} onChange={handleChange3} />
+              }
+            />
+          </Box>
+        </div>
+        <Divider />
+        <div>
+          <Typography variant="body2" id="price-slider">
+            Price Range:
+          </Typography>
+          <Slider
+            value={value.price}
+            onChange={(_, new_value) =>
+              setValue({ ...value, price: new_value as number[] })
+            }
+            size="small"
+            valueLabelDisplay="auto"
+            min={1000}
+            max={60000}
+            step={100}
+          />
+          <Typography variant="body2" id="coin-slider">
+            Coin Range:
+          </Typography>
+          <Slider
+            value={value.coin}
+            onChange={(_, new_value) =>
+              setValue({ ...value, coin: new_value as number[] })
+            }
+            size="small"
+            valueLabelDisplay="auto"
+            min={0}
+            max={50}
+          />
         </div>
       </div>
       <div className="market-card">
@@ -121,42 +165,20 @@ const P2P: React.FC = () => {
             p2pStore.p2p_contracts.length === 0 ? (
               <div className="absolute-middle">No Contract</div>
             ) : (
-              p2pStore.p2p_contracts
-                .filter((contract) => {
-                  if (checked[0] && checked[1]) {
-                    return true; // Show all items if both checkboxes are checked
-                  } else if (checked[0] && contract.currency === "ETH") {
-                    return true; // Show only "ETH" items if the "ETH" checkbox is checked
-                  } else if (checked[1] && contract.currency === "BTC") {
-                    return true; // Show only "BTC" items if the "BTC" checkbox is checked
-                  }
-                  return false;
-                })
-                .map((contract, index) => (
-                  <Grid item xs={2} sm={4} md={3} key={index}>
-                    <ItemCard active={active} contract={contract} />
-                  </Grid>
-                ))
-            )
-          ) : p2pStore.p2p_ongoing_contracts.length === 0 ? (
-            <div className="absolute-middle">No Contract</div>
-          ) : (
-            p2pStore.p2p_ongoing_contracts
-              .filter((contract) => {
-                if (checked[0] && checked[1]) {
-                  return true; // Show all items if both checkboxes are checked
-                } else if (checked[0] && contract.currency === "ETH") {
-                  return true; // Show only "ETH" items if the "ETH" checkbox is checked
-                } else if (checked[1] && contract.currency === "BTC") {
-                  return true; // Show only "BTC" items if the "BTC" checkbox is checked
-                }
-                return false;
-              })
-              .map((contract, index) => (
+              filtered_market.map((contract, index) => (
                 <Grid item xs={2} sm={4} md={3} key={index}>
                   <ItemCard active={active} contract={contract} />
                 </Grid>
               ))
+            )
+          ) : p2pStore.p2p_ongoing_contracts.length === 0 ? (
+            <div className="absolute-middle">No Contract</div>
+          ) : (
+            filtered_ongoing.map((contract, index) => (
+              <Grid item xs={2} sm={4} md={3} key={index}>
+                <ItemCard active={active} contract={contract} />
+              </Grid>
+            ))
           )}
         </Grid>
       </div>
