@@ -1,6 +1,6 @@
 # CryptHub
 
-CryptHub is a powerful web application designed for tracking and monitoring cryptocurrency prices and trends. It also provides a platform for peer-to-peer (P2P) trading, enabling users to engage in direct cryptocurrency trades. With CryptHub, users can stay up-to-date with the latest market data, make informed investment decisions, and connect with other cryptocurrency enthusiasts.
+[CryptHub](https://crypthub-app.vercel.app) is a powerful web application designed for tracking and monitoring cryptocurrency prices and trends. It also provides a platform for peer-to-peer (P2P) trading, enabling users to engage in direct cryptocurrency trades. With CryptHub, users can stay up-to-date with the latest market data, make informed investment decisions, and connect with other cryptocurrency enthusiasts.
 
 ## Table of Contents
 
