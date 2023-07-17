@@ -33,13 +33,16 @@ export const MODALACTIONS = {
   AUTHACTIVE: "auth_active",
 };
 
+const introjsOptions = {
+  showProgress: true,
+  tooltipClass: "custom-introjs-theme",
+  highlightClass: "custom-introjs-highlight",
+  showStepNumbers: false,
+  exitOnOverlayClick: false,
+};
+
 export const sellP2PModalTour = {
-  options: {
-    showProgress: true,
-    tooltipClass: "custom-introjs-theme",
-    highlightClass: "custom-introjs-highlight",
-    showStepNumbers: false,
-  },
+  options: introjsOptions,
   steps: [
     {
       element: ".add-contract-current-price",
@@ -61,12 +64,7 @@ export const sellP2PModalTour = {
 };
 
 export const P2PTour = {
-  options: {
-    showProgress: true,
-    tooltipClass: "custom-introjs-theme",
-    highlightClass: "custom-introjs-highlight",
-    showStepNumbers: false,
-  },
+  options: introjsOptions,
   steps: [
     {
       element: ".filter",
@@ -88,12 +86,7 @@ export const P2PTour = {
 };
 
 export const homeTour = {
-  options: {
-    showProgress: true,
-    tooltipClass: "custom-introjs-theme",
-    highlightClass: "custom-introjs-highlight",
-    showStepNumbers: false,
-  },
+  options: introjsOptions,
   steps: [
     {
       element: "#profile-button",
