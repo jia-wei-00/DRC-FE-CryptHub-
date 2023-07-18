@@ -30,7 +30,7 @@ export const handleSuccess = (msg: string) => {
     case "CONTRACT_ADDED":
       return "Contract added sucessfully";
     case "CONTRACT_PURCHASE_SUCCESFUL":
-      return "Buy Sucessfully";
+      return "Buy Sucessful";
     case "CONTRACT_DELETED":
       return "Contract deleted";
     case "SELL_ORDER_SUCCESS":
