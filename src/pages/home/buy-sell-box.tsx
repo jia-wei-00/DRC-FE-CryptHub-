@@ -105,44 +105,6 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
       {/* Buy Form */}
       <motion.form onSubmit={handleSubmit(buySellHandler)}>
         <div className="side-bar-input">
-          {/* <div className="amount">
-            <IconButton
-              aria-label="subtract"
-              onClick={() => setInput((Number(input) - 1).toString())}
-              disabled={Number(input) <= 0}
-            >
-              <Remove />
-            </IconButton>
-            <NumericFormat
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    {active === "buy"
-                      ? "USD"
-                      : websocketStore.subscribe_currency}
-                  </InputAdornment>
-                ),
-              }}
-              type="text"
-              placeholder="0"
-              variant="standard"
-              onChange={handleInputChange}
-              value={input}
-              inputProps={{
-                min: 1,
-              }}
-              decimalScale={2}
-              customInput={TextField}
-              allowNegative={false}
-            />
-
-            <IconButton
-              aria-label="add"
-              onClick={() => setInput((Number(input) + 1).toString())}
-            >
-              <Add />
-            </IconButton>
-          </div> */}
           <CurrencyInput
             control={control}
             errors={errors}

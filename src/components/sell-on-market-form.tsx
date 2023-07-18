@@ -19,6 +19,8 @@ import { Steps } from "intro.js-react";
 import { sellP2PModalTour } from "../constant";
 
 const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
+  const [coinAmount, setCoinAmount] = React.useState<number>(0);
+
   const {
     formState: { errors, isSubmitSuccessful },
     control,
@@ -32,8 +34,12 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
       coin_amount: 0,
       price: 0,
     },
-    resolver: zodResolver(addP2PSchema(websocketStoreP2P.ticks)),
+    resolver: zodResolver(addP2PSchema(websocketStoreP2P.ticks * coinAmount)),
   });
+
+  React.useEffect(() => {
+    setCoinAmount(Number(getValues("coin_amount")));
+  }, [watch("coin_amount")]);
 
   React.useEffect(() => {
     if (websocketStoreP2P.ticks === 0) {
@@ -132,7 +138,6 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
           }
         }}
       />
-      {modalStore.confirmation_modal.open && <ConfirmationPopUp />}
     </>
   );
 };
