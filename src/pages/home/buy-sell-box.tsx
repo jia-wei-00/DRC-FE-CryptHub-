@@ -1,4 +1,4 @@
-import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import { motion } from "framer-motion";
 import React from "react";
 import {
@@ -10,9 +10,7 @@ import {
   modalStore,
 } from "../../stores";
 import { AddP2PContractFormT, BuySellBoxT } from "../../types";
-import { Add, Remove } from "@mui/icons-material";
 import { BTCIcon, ETHIcon, USDIcon } from "../../assets/icons";
-import { NumericFormat } from "react-number-format";
 import { ConfirmationPopUp, CurrencyInput } from "../../components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -23,21 +21,6 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
   current_candles,
 }) => {
   const [active, setActive] = React.useState<string>("buy");
-  const [input, setInput] = React.useState<string>("");
-
-  //onchange function for USD input
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const inputValue = e.target.value.trim(); // Remove leading/trailing whitespace
-  //   let value = inputValue.replace(/[^0-9.]/g, ""); // Remove non-digit and non-decimal characters
-  //   const decimalCount = value.split(".").length - 1;
-
-  //   // Remove extra decimal points if present
-  //   if (decimalCount > 1) {
-  //     value = value.replace(/\./g, "");
-  //   }
-
-  //   setInput(value);
-  // };
 
   const {
     formState: { errors, isSubmitSuccessful },
@@ -69,19 +52,6 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
   const buy_coin = price === 0 ? 0 : watch("price") / price;
   const sell_coin = price === 0 ? 0 : watch("price") * price;
 
-  // const onSubmitHandler: SubmitHandler<AddP2PContractFormT> = (values) => {
-  // modalStore.setConfirmationModal(
-  //   () => p2pStore.addP2PContract(values, setSellModal),
-  //   "sell_p2p",
-  //   null,
-  //   websocketStoreP2P.currency,
-  //   null,
-  //   null,
-  //   values.coin_amount!
-  // );
-  // };
-
-  //function for buy and sell token
   const buySellHandler: SubmitHandler<AddP2PContractFormT> = (values) => {
     if (!authStore.user) {
       return authStore.setAuthModal(true);
@@ -95,7 +65,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
           "USD",
           websocketStore.subscribe_currency,
           buy_coin,
-          watch("price")
+          values.price
         )
       : modalStore.setConfirmationModal(
           () => tradeStore.sellToken(price, watch("price")),
@@ -104,14 +74,8 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
           websocketStore.subscribe_currency,
           "USD",
           sell_coin,
-          watch("price")
+          values.price
         );
-
-    // active === "buy"
-    //   ? tradeStore.buyToken(Number(input), price, buy_coin)
-    //   : tradeStore.sellToken(price, watch("price"));
-
-    // setInput("");
   };
 
   React.useEffect(() => {

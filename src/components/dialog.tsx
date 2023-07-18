@@ -427,7 +427,7 @@ export const ConfirmationPopUp: React.FC = observer(() => {
       <div className="wrapper">
         <Card className="card">
           <CardContent>
-            <DialogTitle>PRESS YES TO PROCEED</DialogTitle>
+            <DialogTitle>ARE YOU SURE YOU WANT TO PROCEED?</DialogTitle>
             <DialogContent>
               {/* Press yes to {modalStore.confirmation_modal.text}! */}
               <div className="pay-get">
