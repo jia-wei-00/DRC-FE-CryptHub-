@@ -14,7 +14,7 @@ import { addP2PSchema } from "../schemas";
 import { modalStore, p2pStore, tourStore, websocketStoreP2P } from "../stores";
 import { observer } from "mobx-react-lite";
 import CurrencyInput from "./numeric-input";
-import { ConfirmationPopUp, Loading } from ".";
+import { Loading } from ".";
 import { Steps } from "intro.js-react";
 import { sellP2PModalTour } from "../constant";
 
