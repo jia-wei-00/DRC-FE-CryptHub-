@@ -9,11 +9,17 @@ Please note that CryptHub does not provide news content. However, it focuses on 
 ## Table of Contents
 
 - [Project Links](#project-links)
+  - [Landing Page](#landing-page)
+  - [Web App](#web-app)
 - [Colour Palette](#colour-palette)
+  - [Light](#light)
+  - [Dark](#dark)
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Technologies Used](#technologies-used)
 - [File Structure Overview](#file-structure-overview)
+  - [Main Folder](#main-folders)
+  - [Details](#details)
 
 ## Project Links
 
@@ -32,16 +38,16 @@ Please note that CryptHub does not provide news content. However, it focuses on 
 ### Light
 
 - [Colour Palette Link](https://colorhunt.co/palette/a27b5ce9e0d1ffffff000000)
-- | Image                                                                                                                                | Primary | Secondary | Tertiary | Quaternary |
-  | ------------------------------------------------------------------------------------------------------------------------------------ | :-----: | --------: | -------- | ---------- |
-  | [<img src="./src/assets/light.png" alt="Light Palette" style="width: 50px;">](https://colorhunt.co/palette/a27b5ce9e0d1ffffff000000) | #A27B5C |   #E9E0D1 | #FFFFFF  | #000000    |
+- | Image                                                                                                                                |  Primary  | Secondary | Tertiary  | Quaternary |
+  | ------------------------------------------------------------------------------------------------------------------------------------ | :-------: | --------: | --------- | ---------- |
+  | [<img src="./src/assets/light.png" alt="Light Palette" style="width: 50px;">](https://colorhunt.co/palette/a27b5ce9e0d1ffffff000000) | `#A27B5C` | `#E9E0D1` | `#FFFFFF` | `#000000`  |
 
 ### Dark
 
 - [Colour Palette Link](https://colorhunt.co/palette/3f4e4fa27b5cffffff000000)
-- | Image                                                                                                                               | Primary | Secondary | Tertiary | Quaternary |
-  | ----------------------------------------------------------------------------------------------------------------------------------- | :-----: | --------: | -------- | ---------- |
-  | [<img src="./src/assets/dark.png" alt="Light Palette" style="width: 50px;">](https://colorhunt.co/palette/a27b5ce9e0d1ffffff000000) | #3F4E4F |   #A27B5C | #FFFFFF  | #000000    |
+- | Image                                                                                                                               |  Primary  | Secondary | Tertiary  | Quaternary |
+  | ----------------------------------------------------------------------------------------------------------------------------------- | :-------: | --------: | --------- | ---------- |
+  | [<img src="./src/assets/dark.png" alt="Light Palette" style="width: 50px;">](https://colorhunt.co/palette/a27b5ce9e0d1ffffff000000) | `#3F4E4F` | `#A27B5C` | `#FFFFFF` | `#000000`  |
 
 ## Features
 
