@@ -392,7 +392,7 @@ export const ConfirmationPopUp: React.FC = observer(() => {
         [pay_currency as keyof typeof wallet]:
           wallet[pay_currency as keyof typeof wallet] - modal_props.pay!,
       });
-    } else if (type === "buy_p2p") {
+    } else if (type === "buy_p2p" || type === "buy" || type === "sell") {
       setWallet({
         ...wallet,
         [pay_currency as keyof typeof wallet]:
@@ -442,12 +442,15 @@ export const ConfirmationPopUp: React.FC = observer(() => {
                 <div>
                   {modal_props.pay && (
                     <>
-                      {modal_props.pay + modal_props.pay_currency!}
+                      {modal_props.pay + " " + modal_props.pay_currency!}
                       <br />
                     </>
                   )}
                   {modal_props.receive &&
-                    modal_props.receive + modal_props.get_currency!}
+                    "~" +
+                      modal_props.receive.toFixed(4) +
+                      " " +
+                      modal_props.get_currency!}
                 </div>
               </div>
               <div
@@ -481,11 +484,11 @@ export const ConfirmationPopUp: React.FC = observer(() => {
                   </div>
                   <div>
                     <span>ETH</span>
-                    {wallet.ETH.toFixed(4)}
+                    {"~" + wallet.ETH.toFixed(4)}
                   </div>
                   <div>
                     <span>BTC</span>
-                    {wallet.BTC.toFixed(4)}
+                    {"~" + wallet.BTC.toFixed(4)}
                   </div>
                 </div>
               </div>

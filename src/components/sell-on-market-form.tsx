@@ -19,16 +19,14 @@ import { Steps } from "intro.js-react";
 import { sellP2PModalTour } from "../constant";
 
 const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
-  const [coinAmount, setCoinAmount] = React.useState<number>(0);
-
   const {
     formState: { errors, isSubmitSuccessful },
     control,
     reset,
     handleSubmit,
     setValue,
-    getValues,
     watch,
+    getValues,
   } = useForm<AddP2PContractFormT>({
     defaultValues: {
       coin_amount: 0,
@@ -46,10 +44,6 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
       websocketStoreP2P.unsubscribeTicks();
     };
   }, []);
-
-  React.useEffect(() => {
-    setCoinAmount(Number(getValues("coin_amount")));
-  }, [watch("coin_amount")]);
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
@@ -78,7 +72,8 @@ const SellOnMarketForm: React.FC<SellOnMarketT> = ({ setSellModal }) => {
           {websocketStoreP2P.ticks === 0 ? (
             <Loading height={"20px"} width={"20px"} />
           ) : (
-            websocketStoreP2P.ticks
+            websocketStoreP2P.ticks *
+            (watch("coin_amount")! === 0 ? 1 : watch("coin_amount")!)
           )}
         </span>
         <FormControl fullWidth>
