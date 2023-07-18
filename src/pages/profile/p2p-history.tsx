@@ -29,7 +29,7 @@ const columns: readonly P2PCompletedHistoryColumn[] = [
   },
   {
     id: "selling_price",
-    label: "Selling Price",
+    label: "Selling Price (USD)",
     minWidth: 170,
     align: "right",
     format: (value: number) =>

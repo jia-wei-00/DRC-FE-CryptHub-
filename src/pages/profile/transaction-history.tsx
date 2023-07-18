@@ -35,7 +35,7 @@ const columns: readonly Column[] = [
   },
   {
     id: "transaction_amount",
-    label: "Transaction Amount",
+    label: "Transaction Amount (USD)",
     minWidth: 170,
     align: "right",
     format: (value: number | Date) =>

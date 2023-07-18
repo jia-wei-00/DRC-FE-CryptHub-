@@ -20,14 +20,14 @@ const columns: readonly WalletHistoryColumn[] = [
   { id: "dwt_type", label: "Type", minWidth: 100 },
   {
     id: "dwt_before",
-    label: "Before",
+    label: "Before (USD)",
     minWidth: 170,
     align: "right",
     format: (value: number | Date) => value.toLocaleString("en-US"),
   },
   {
     id: "dwt_after",
-    label: "After",
+    label: "After (USD)",
     minWidth: 170,
     align: "right",
     format: (value: number | Date) =>
@@ -35,7 +35,7 @@ const columns: readonly WalletHistoryColumn[] = [
   },
   {
     id: "dwt_amount",
-    label: "Transaction Amount",
+    label: "Transaction Amount (USD)",
     minWidth: 170,
     align: "right",
     format: (value: number | Date) =>

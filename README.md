@@ -13,6 +13,7 @@ Please note that CryptHub does not provide news content. However, it focuses on 
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Technologies Used](#technologies-used)
+- [File Structure Overview](#file-structure-overview)
 
 ## Project Links
 
@@ -80,76 +81,102 @@ To clone CryptHub, follow these steps:
 
 CryptHub is built using the following technologies:
 
-- [React](https://react.dev/)
+- [React](https://react.dev/)\
+  A popular JavaScript library for building user interfaces. We use React to build our app.
 
-  A popular JavaScript library for building user interfaces. We use React to build out app.
+- [TypeScript](https://www.typescriptlang.org/)\
+  A strongly typed superset of JavaScript that adds static typing to the language. We use TypeScript with React for this project.
 
-- [Typescript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)\
+  A fast and lightweight build tool for modern web applications. We use this building tool to speed up the development process.
 
-  A strongly typed superset of JavaScript that adds static typing to the language. We use React Typescript for this project.
+- [Material UI](https://mui.com/)\
+  A widely used UI component library for React applications. We use this library for most of our components, such as inputs, containers, navigation bars, and more.
 
-- [Vite](https://vitejs.dev/)
+- [Framer Motion](https://www.framer.com/motion/)\
+  A library for creating smooth and interactive animations in React. We use this library to animate our transitions.
 
-  A fast and lightweight build tool for modern web applications. We use this building tools for fastened the development process.
+- [Axios](https://axios-http.com/docs/intro)\
+  A promise-based HTTP client for making API requests. We use this library to establish a connection with the backend server.
 
-- [Material UI](https://mui.com/)
+- [Dayjs](https://day.js.org/)\
+  A lightweight JavaScript library for date and time manipulation. We use this library to handle date and time conversions used in the history table.
 
-  A widely used UI component library for React applications. We use this library for most of our component like input, container, navigation bar and etc.
+- [Highcharts](https://www.highcharts.com/)\
+  A feature-rich charting library for interactive data visualization. We use this library to display live data on the trading page.
 
-- [Framer Motion](https://www.framer.com/motion/)
+- [Intro.js](https://introjs.com/docs)\
+  A step-by-step guide to introduce new users to the application's features. We use this library for our onboarding tour guide to familiarize users with our app's flow.
 
-  A library for creating smooth and interactive animations in React. We use this library for animate our transition.
+- [Mobx](https://mobx.js.org/README.html)\
+  A simple and scalable state management library for JavaScript applications. We use this state management library due to its excellent performance and simplicity. We use multiple stores in our project, such as mode-store, history-store, trade-store, and more.
 
-- [Axios](https://axios-http.com/docs/intro)
+- [Mobx Persist Store](https://www.npmjs.com/package/mobx-persist-store)\
+  A library for persisting Mobx store data. We use this to store user preferences like dark mode and light mode toggle value, and chart display settings.
 
-  A promise-based HTTP client for making API requests. We use this library to have connection with back-end server.
+- [React Hook Form](https://react-hook-form.com/)\
+  A library for building forms in React with easy form validation. We use this library for its excellent performance, as it only triggers rerendering when necessary.
 
-- [Dayjs](https://day.js.org/)
+- [React Loading](https://www.npmjs.com/package/react-loading)\
+  A library for displaying loading spinners in React applications. We use this library for our loading animation when fetching data from the API.
 
-  A lightweight JavaScript library for date and time manipulation. We use this library for convertion of the date and time used on the history table.
+- [React Number Format](https://s-yadav.github.io/react-number-format/docs/intro/)\
+  A library for formatting numbers in input fields. We use this library for formatting the currency input field. We've created a reusable component that includes add and subtract buttons, which is located in the components folder named "numeric-input.tsx".
 
-- [Highcharts](https://www.highcharts.com/)
+- [Sass](https://sass-lang.com/)\
+  A CSS preprocessor that adds power and elegance to CSS. We use this preprocessor because Sass allows us to do nesting in CSS code, use mixins, functions, and more.
 
-  A feature-rich charting library for interactive data visualization. We use this library for displaying the live data on the trading page.
+- [Zod](https://zod.dev/)\
+  A TypeScript-first schema validation library for runtime type checking. We use this validation library for all of our forms, such as register form, login form, reset password form, buy form, sell form, and more. We use Zod combined with react-hook-form and Material UI input to minimize rerendering while performing proper validation and displaying error messages returned from the Zod library.
 
-- [Intro.js](https://introjs.com/docs)
+- [JS Cookie](https://github.com/js-cookie/js-cookie#readme)\
+  A library for handling cookies in JavaScript. We use this for storing user tokens.
 
-  A step-by-step guide to introduce new users to the application's features. We use this libtary for out onboarding tour guide to let user familiar with our app flow.
+- [React Toastify](https://fkhadra.github.io/react-toastify/introduction)\
+  A popular notification library for React applications, offering easy and customizable toast notifications. We use this library for all of our notification messages, such as error messages, success messages, and loading notifications.
 
-- [Mobx](https://mobx.js.org/README.html)
+## File Structure Overview
 
-  A simple and scalable state management library for JavaScript applications. We use this state management library because of the excellent performance and simplicity, We use multiple store in our project like mode-store, history-store, trade-store, and etc.
+### Main Folders
 
-- [Mobx Persist Store](https://www.npmjs.com/package/mobx-persist-store)
+### `src`
 
-  A library for persisting Mobx store data. We use this to store user preferences like darkmode and lightmode toggle value, and chart display settings.
+The `src` folder contains the main source code of the application. It is organized into the following subfolders:
 
-- [React Hook Form](https://react-hook-form.com/)
+- `assets`: Stores all the project's assets (images and icons).
+- `components`: Contains reusable components (forms, inputs, popup dialogs).
+- `pages`: Houses page components.
+- `schemas`: Stores validation schemas using Zod.
+- `stores`: Contains MobX store-related files.
+- `styles`: Stores SCSS files for styling.
+- `types`: Contains TypeScript type definitions.
 
-  A library for building forms in React with easy form validation. We use this library because of the excellent performance. It will only trigger rerendering when is necessary.
+### Details
 
-- [React Loading](https://www.npmjs.com/package/react-loading)
-
-  A library for displaying loading spinners in React applications. We use this library for our loading animation when we fetching out data from the api.
-
-- [React Number Format](https://s-yadav.github.io/react-number-format/docs/intro/)
-
-  A library for formatting numbers in input fields. We use this library for formatting the currency input field. We created a reusable components that have add and subtract button build in inside components folder "numeric-input.tsx"
-
-- [Sass](https://sass-lang.com/)
-
-  A CSS preprocessor that adds power and elegance to CSS. We use this preprocessor because sass allow to do nesting in css code, mixin, function, and etc.
-
-- [Zod](https://zod.dev/)
-
-  A TypeScript-first schema validation library for runtime type checking. We use this validation library for all of our form like register form, login form, reset password form, buy form, sell form, and etc. We use zod combine with react-hook-form and Material UI input to minimal the rerending while doing proper validation and displaying the error return from zod library.
-
-- [JS Cookie](https://github.com/js-cookie/js-cookie#readme)
-
-  A library for handling cookies in JavaScript. We ue this for storing user token.
-
-- [React Toastify](https://fkhadra.github.io/react-toastify/introduction)
-
-  A popular notification library for React applications, offering easy and customizable toast notifications. We use this library for all of our notification messages like error message, success message, and loading.
-
-Feel free to explore and leverage these technologies to enhance your own projects.
+- `src`: Contains the main source code of the application.
+  - `assets`: Stores all the project's assets (images and icons).
+  - `components`: Contains reusable components (forms, inputs, popup dialogs).
+  - `pages`: Houses page components.
+    - `home`: Components for the home page.
+    - `p2p`: Components for the P2P page.
+    - `profile`: Components for the user profile page.
+    - `error`: Components for handling page-not-found scenarios.
+  - `schema`: Stores validation schemas using Zod.
+  - `store`: Contains MobX store-related files.
+    - `auth-store`: Handles authentication functions and data.
+    - `history-store`: Manages transaction history-related functions and data.
+    - `loading-store`: Handles loading state when fetching data from APIs.
+    - `modal-store`: Controls reusable global popup modals.
+    - `mode-store`: Manages light/dark mode toggle and uses MobX Persist Store to store the mode locally.
+    - `p2p-store`: Handles P2P function and data.
+    - `p2p-websocket-store`: Manages WebSocket calls and data for live trading in the P2P page.
+    - `tour-store`: Handles onboarding tour guide using Intro.js.
+    - `wallet-store`: Manages wallet data and functions.
+    - `websocket-store`: Handles live chart data for the CryptHub page.
+  - `styles`: Stores SCSS files for styling.
+  - `types`: Contains TypeScript type definitions.
+  - `auth.tsx`: Handles authentication navigation.
+  - `constants.tsx`: Stores constant data (page constants, request headers, onboarding tour descriptions, etc.).
+  - `functions.tsx`: Houses reusable functions (error handling, success message handling, request timeout handling, etc.).
+  - `theme.tsx`: Stores theme palette settings for Material UI.
+- `.env`: Contains the API key.
