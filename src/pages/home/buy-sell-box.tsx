@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import React from "react";
 import {
   authStore,
-  modeStore,
   websocketStore,
   tradeStore,
   walletStore,
