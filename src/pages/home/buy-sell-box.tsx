@@ -94,11 +94,6 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
         <motion.div
           animate={active === "buy" ? { x: 0 } : { x: "100%" }}
           className="indicator"
-          style={
-            modeStore.mode === "dark"
-              ? { backgroundColor: "rgba(255, 255, 255, 0.9)" }
-              : { backgroundColor: "#f6e6cb" }
-          }
         />
       </motion.div>
 
