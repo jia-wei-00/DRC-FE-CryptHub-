@@ -137,12 +137,12 @@ const P2P: React.FC = () => {
         <Stack direction="row" className="p2p-head-stack">
           <Button
             onClick={() => setActive("market")}
-            style={
+            className={
               authStore.user === null
-                ? { width: "50%" }
+                ? "toggle-market-btn-width"
                 : active !== "market"
-                ? { color: "#a27b5c" }
-                : {}
+                ? "bg-color"
+                : ""
             }
             id="market-tour"
           >
@@ -151,7 +151,7 @@ const P2P: React.FC = () => {
           {authStore.user !== null && (
             <Button
               onClick={() => setActive("ongoing")}
-              style={active !== "ongoing" ? { color: "#a27b5c" } : {}}
+              className={active !== "ongoing" ? "bg-color" : ""}
               id="ongoing-tour"
             >
               On Going

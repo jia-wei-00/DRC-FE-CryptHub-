@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import React from "react";
 import {
   authStore,
-  modeStore,
   websocketStore,
   tradeStore,
   walletStore,
@@ -94,11 +93,6 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
         <motion.div
           animate={active === "buy" ? { x: 0 } : { x: "100%" }}
           className="indicator"
-          style={
-            modeStore.mode === "dark"
-              ? { backgroundColor: "rgba(255, 255, 255, 0.9)" }
-              : { backgroundColor: "#f6e6cb" }
-          }
         />
       </motion.div>
 
