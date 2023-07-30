@@ -21,6 +21,9 @@ class ModalStoreImplementation {
     receive: null,
   };
 
+  verify_email_modal: boolean = false;
+  verify_email: string = "";
+
   constructor() {
     makeObservable(this, {
       confirmation_modal: observable,

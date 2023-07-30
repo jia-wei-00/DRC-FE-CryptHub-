@@ -44,7 +44,8 @@ function a11yProps(index: number) {
 }
 
 const Profile = () => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState<number>(0);
+  const [resetPassword, setResetPassword] = React.useState<boolean>(false);
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -74,7 +75,10 @@ const Profile = () => {
         <Tab label="Transaction History" {...a11yProps(0)} />
         <Tab label="Wallet History" {...a11yProps(1)} />
         <Tab label="P2P Completed History" {...a11yProps(2)} />
-        <Tab label="Reset Password" {...a11yProps(3)} />
+        <Tab
+          label="Reset Password"
+          onClick={() => setResetPassword(!resetPassword)}
+        />
       </Tabs>
       <TabPanel value={value} index={0}>
         {<TransactionHistory />}

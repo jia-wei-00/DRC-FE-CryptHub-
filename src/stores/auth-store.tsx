@@ -1,23 +1,12 @@
 import { makeObservable, action, observable, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios, { AxiosError } from "axios";
-import {
-  Action,
-  ErrorResponse,
-  InputData,
-  ModalState,
-  ResetPassword,
-  ResetPasswordFormT,
-  User,
-} from "../types";
-import { MODALACTIONS, domain, headers } from "../constant";
-import {
-  createTimeoutPromise,
-  errorChecking,
-  handleSuccess,
-} from "../functions";
+import { Action, InputData, ModalState, ResetPassword, User } from "../types";
+import { MODALACTIONS } from "../constant";
+import { createTimeoutPromise, firebaseError } from "../functions";
 import Cookies from "js-cookie";
+import db, { auth } from "../firebase";
+import { FirebaseError } from "@firebase/util";
 import { walletStore } from ".";
 
 class AuthStoreImplementation {
@@ -61,31 +50,25 @@ class AuthStoreImplementation {
     });
   };
 
-  async resetPassword(values: ResetPasswordFormT): Promise<void> {
+  async resetPassword(): Promise<void> {
     const id = toast.loading("Please wait...");
 
     try {
-      const res = await Promise.race([
-        axios.post(`${domain}/user/resetPassword`, values, {
-          headers: headers(this.user!.token!),
-        }),
+      await Promise.race([
+        auth.sendPasswordResetEmail(this.user!.email),
         createTimeoutPromise(10000),
       ]);
 
-      const message = handleSuccess(res.data.message);
-
       toast.update(id, {
-        render: message,
+        render: "Please check your email to reset password",
         type: "success",
         isLoading: false,
         autoClose: 5000,
         closeButton: null,
       });
     } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
       toast.update(id, {
-        render: message,
+        render: firebaseError(error as FirebaseError),
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -95,34 +78,55 @@ class AuthStoreImplementation {
   }
 
   async signIn(values: InputData): Promise<void> {
-    const toast_id = toast.loading("Please wait...");
+    const id = toast.loading("Please wait...");
+
     try {
+      const { email, password } = values;
+
       const userCredential = await Promise.race([
-        axios.post(`${domain}/user/loginUser`, values),
+        auth.signInWithEmailAndPassword(email, password),
         createTimeoutPromise(10000),
       ]);
 
-      const { id, email, name, token, BTC, ETH, USD } =
-        userCredential.data.details;
+      const user = userCredential.user;
 
-      this.setUser({ id, email, name, token });
-      walletStore.setUserWallet({ BTC, ETH, USD });
+      if (user && !user.emailVerified) {
+        user.sendEmailVerification();
 
-      Cookies.set("crypthub_user", JSON.stringify(this.user), { expires: 1 });
+        return toast.update(id, {
+          render: "Please check your email to verify your account!",
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+          closeButton: null,
+        });
+      }
 
-      this.setAuthModal(false);
-      toast.update(toast_id, {
-        render: `Welcome ${this.user!.name}`,
+      const { uid, displayName, refreshToken } = user!;
+
+      const details = {
+        id: uid,
+        email: email,
+        name: displayName!,
+        token: refreshToken,
+      };
+
+      Cookies.set("crypthub_user", JSON.stringify(details), { expires: 1 });
+
+      this.setUser(details);
+
+      toast.update(id, {
+        render: `Welcome ${displayName}`,
         type: "success",
         isLoading: false,
         autoClose: 5000,
         closeButton: null,
       });
-    } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
 
-      toast.update(toast_id, {
-        render: message,
+      this.setAuthModal(false);
+    } catch (error: unknown) {
+      toast.update(id, {
+        render: firebaseError(error as FirebaseError),
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -134,35 +138,20 @@ class AuthStoreImplementation {
   async signOut(): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      const res = await Promise.race([
-        axios.post(
-          `${domain}/user/logoutUser`,
-          {}, // pass in empty body
-          { headers: headers(this.user!.token!) }
-        ),
-        createTimeoutPromise(10000),
-      ]);
-
-      const message = handleSuccess(res.data.message);
+      await Promise.race([auth.signOut(), createTimeoutPromise(10000)]);
 
       toast.update(id, {
-        render: message,
+        render: "Sign out Successfull",
         type: "success",
         isLoading: false,
         autoClose: 5000,
         closeButton: null,
       });
 
-      runInAction(() => {
-        this.setUser(null);
-      });
-
-      Cookies.remove("crypthub_user");
+      this.reset();
     } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
       toast.update(id, {
-        render: message,
+        render: firebaseError(error as FirebaseError),
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -173,27 +162,42 @@ class AuthStoreImplementation {
 
   async signUp(values: InputData): Promise<void> {
     const id = toast.loading("Please wait...");
-    try {
-      const res = await Promise.race([
-        axios.post(`${domain}/user/registerUser`, values),
-        createTimeoutPromise(10000),
-      ]);
+    const { name, email, password } = values;
 
-      const message = handleSuccess(res.data.message);
+    try {
+      const userCredential = await auth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
+
+      // Update the user's display name
+      await userCredential.user?.updateProfile({
+        displayName: name,
+      });
+
+      const docRef = db.collection("user_data").doc(userCredential.user!.uid);
+
+      await docRef.set({
+        USD: 0,
+        BTC: 0,
+        ETH: 0,
+      });
+
+      // Send email verification to the user
+      await userCredential.user?.sendEmailVerification();
 
       toast.update(id, {
-        render: message,
+        render: "Please check your email to activate account!",
         type: "success",
         isLoading: false,
         autoClose: 5000,
         closeButton: null,
       });
+
       this.setAuthModal(false);
     } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
       toast.update(id, {
-        render: message,
+        render: firebaseError(error as FirebaseError),
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -209,15 +213,13 @@ class AuthStoreImplementation {
   ): Promise<void> {
     const id = toast.loading("Please wait...");
     try {
-      const res = await Promise.race([
-        axios.post(`${domain}/user/forgotPassword`, values),
+      await Promise.race([
+        auth.sendPasswordResetEmail(values.email),
         createTimeoutPromise(10000),
       ]);
 
-      const message = handleSuccess(res.data.message);
-
       toast.update(id, {
-        render: message,
+        render: "Please check your email to reset password",
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -228,10 +230,8 @@ class AuthStoreImplementation {
         payload: !modal.forgot_password_modal,
       });
     } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
       toast.update(id, {
-        render: message,
+        render: firebaseError(error as FirebaseError),
         type: "error",
         isLoading: false,
         autoClose: 5000,

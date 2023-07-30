@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { authStore, p2pStore } from "./stores";
 import { ErrorResponse, P2PContractsT } from "./types";
+import { FirebaseError } from "@firebase/util";
 
 export const createTimeoutPromise = (timeout: number): Promise<never> => {
   return new Promise((_, reject) => {
@@ -50,6 +51,15 @@ export const handleErrors = (error: string) => {
       return error;
     default:
       return error;
+  }
+};
+
+export const firebaseError = (error: FirebaseError) => {
+  if (error instanceof FirebaseError) {
+    const errorMessageWithoutPrefix = error.message.replace("Firebase: ", "");
+    return errorMessageWithoutPrefix;
+  } else {
+    return `Other Error: ${error}`;
   }
 };
 

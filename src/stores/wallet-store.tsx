@@ -1,18 +1,16 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
-import { ErrorResponse, PriceT, Wallet } from "../types";
+import { PriceT, Wallet } from "../types";
 import { makePersistable } from "mobx-persist-store";
 import { authStore } from ".";
-import axios, { AxiosError } from "axios";
-import { domain, headers } from "../constant";
-import {
-  createTimeoutPromise,
-  errorChecking,
-  handleSuccess,
-} from "../functions";
+import { createTimeoutPromise, firebaseError } from "../functions";
 import { toast } from "react-toastify";
+import db from "../firebase";
+import { FirebaseError } from "@firebase/util";
 
 class WalletStoreImplementation {
   wallet: Wallet = { BTC: 0, ETH: 0, USD: 0 };
+
+  db_wallet = db.collection("user_data").doc(authStore.user?.id);
 
   constructor() {
     makeObservable(this, {
@@ -39,18 +37,15 @@ class WalletStoreImplementation {
 
   async fetchWallet(): Promise<void> {
     try {
-      const res = await Promise.race([
-        axios.get(`${domain}/wallet/currentWalletBalance`, {
-          headers: headers(authStore.user!.token),
-        }),
-        createTimeoutPromise(10000),
-      ]);
-
-      this.setUserWallet(res.data.details);
+      this.db_wallet.onSnapshot((snapshot) => {
+        if (snapshot.exists) {
+          this.wallet = snapshot.data() as Wallet;
+        } else {
+          throw new Error("No such document!");
+        }
+      });
     } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
-      toast.error(`Error: ${message}`, {
+      toast.error(`Error: ${firebaseError(error as FirebaseError)}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
@@ -59,42 +54,25 @@ class WalletStoreImplementation {
   async deposit(values: PriceT): Promise<void> {
     const id = toast.loading("Please wait...");
 
-    const amount = {
-      amount: values.price,
-    };
-
     try {
-      const res = await Promise.race([
-        axios.post(`${domain}/wallet/walletDeposit`, amount, {
-          headers: headers(authStore.user!.token!),
+      await Promise.race([
+        this.db_wallet.update({
+          ...this.wallet,
+          USD: this.wallet.USD + values.price,
         }),
         createTimeoutPromise(10000),
       ]);
 
-      const message = handleSuccess(res.data.message);
-
       toast.update(id, {
-        render: message,
+        render: "Deposit Successful",
         type: "success",
         isLoading: false,
         autoClose: 5000,
         closeButton: null,
       });
-
-      runInAction(() => {
-        this.wallet.USD = res.data.details.balance;
-      });
-
-      this.fetchWallet();
     } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
-      toast.update(id, {
-        render: message,
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        closeButton: null,
+      toast.error(`Error: ${firebaseError(error as FirebaseError)}`, {
+        position: toast.POSITION.TOP_RIGHT,
       });
     }
   }
@@ -102,42 +80,25 @@ class WalletStoreImplementation {
   async withdraw(values: PriceT): Promise<void> {
     const id = toast.loading("Please wait...");
 
-    const amount = {
-      amount: values.price,
-    };
-
     try {
-      const res = await Promise.race([
-        axios.post(`${domain}/wallet/walletWithdraw`, amount, {
-          headers: headers(authStore.user!.token!),
+      await Promise.race([
+        this.db_wallet.update({
+          ...this.wallet,
+          USD: this.wallet.USD - values.price,
         }),
         createTimeoutPromise(10000),
       ]);
 
-      const message = handleSuccess(res.data.message);
-
       toast.update(id, {
-        render: message,
+        render: "Withdraw Successful",
         type: "success",
         isLoading: false,
         autoClose: 5000,
         closeButton: null,
       });
-
-      runInAction(() => {
-        this.wallet.USD = res.data.details.balance;
-      });
-
-      this.fetchWallet();
     } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
-      toast.update(id, {
-        render: message,
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        closeButton: null,
+      toast.error(`Error: ${firebaseError(error as FirebaseError)}`, {
+        position: toast.POSITION.TOP_RIGHT,
       });
     }
   }
