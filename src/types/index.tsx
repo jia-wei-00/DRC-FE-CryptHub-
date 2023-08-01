@@ -5,6 +5,7 @@ import {
   UseFormGetValues,
   UseFormSetValue,
 } from "react-hook-form";
+import firebase from "firebase/compat/app";
 
 export type InputData = {
   name?: string;
@@ -106,7 +107,7 @@ export type TransactionDateFromAPI = {
 };
 
 export type WalletHistoryColumn = {
-  id: "dwt_type" | "dwt_before" | "dwt_after" | "dwt_amount" | "created_at";
+  id: "type" | "before" | "after" | "amount" | "created_at";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -114,11 +115,11 @@ export type WalletHistoryColumn = {
 };
 
 export type WalletHistoryT = {
-  dwt_type: string;
-  dwt_before: number;
-  dwt_after: number;
-  dwt_amount: number;
-  created_at: EpochTimeStamp | string;
+  type: string;
+  before: number;
+  after: number;
+  amount: number;
+  created_at: number;
 };
 
 //reset password form type

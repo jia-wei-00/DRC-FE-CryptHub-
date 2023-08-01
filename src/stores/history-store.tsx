@@ -7,15 +7,23 @@ import {
   WalletHistoryT,
 } from "../types";
 import { authStore, loadingStore } from ".";
-import { createTimeoutPromise, errorChecking } from "../functions";
+import {
+  createTimeoutPromise,
+  errorChecking,
+  firebaseError,
+} from "../functions";
 import { toast } from "react-toastify";
 import axios, { AxiosError } from "axios";
 import { domain, headers } from "../constant";
+import db from "../firebase";
+import { FirebaseError } from "@firebase/util";
 
 class HistoryStoreImplementation {
   transaction: Transaction[] = [];
   wallet_history: WalletHistoryT[] = [];
   p2p_completed_history: P2PCompletedHistoryT[] = [];
+
+  db_transaction_history = db.collection("user_data").doc(authStore.user?.id);
 
   constructor() {
     makeObservable(this, {
@@ -55,53 +63,46 @@ class HistoryStoreImplementation {
 
     try {
       const res = await Promise.race([
-        axios.get(`${domain}/transaction/getAllTransactions`, {
-          headers: headers(authStore.user!.token),
-        }),
+        this.db_transaction_history.get(),
         createTimeoutPromise(10000),
       ]);
 
-      const transaction = res.data.details.map(
-        (data: TransactionDateFromAPI) => {
-          const {
-            transaction_id: id,
-            trade_type: type,
-            currency,
-            coin_amount,
-            transaction_amount,
-            transaction_date: string_date,
-            commission_deduction_5,
-          } = data;
+      const data = res.data()?.crypthub_trader_record;
 
-          const date = new Date(string_date).getTime();
-
-          let commission = commission_deduction_5;
-
-          if (commission === 0) {
-            commission = "-";
-          }
-
-          return {
-            id,
-            type,
-            currency,
-            coin_amount,
-            transaction_amount,
-            commission,
-            date,
-          };
-        }
+      const reorder = data?.sort(
+        (a: { transaction_date: number }, b: { transaction_date: number }) =>
+          b.transaction_date - a.transaction_date
       );
 
+      const transaction = reorder.map((data: TransactionDateFromAPI) => {
+        const {
+          trade_type: type,
+          currency,
+          coin_amount,
+          transaction_amount,
+          transaction_date: date,
+          commission_deduction_5,
+        } = data;
+        let commission = commission_deduction_5;
+        if (commission === 0) {
+          commission = "-";
+        }
+        return {
+          type,
+          currency,
+          coin_amount,
+          transaction_amount,
+          commission,
+          date,
+        };
+      });
       this.setTransaction(transaction);
-
       loadingStore.setHistoryLoading(false);
     } catch (error: unknown) {
       loadingStore.setHistoryLoading(false);
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
 
-      toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_CENTER,
+      toast.error(`Error: ${firebaseError(error as FirebaseError)}`, {
+        position: toast.POSITION.TOP_RIGHT,
       });
     }
   }
@@ -111,39 +112,25 @@ class HistoryStoreImplementation {
     loadingStore.setHistoryLoading(true);
     try {
       const res = await Promise.race([
-        axios.get(`${domain}/wallet/walletTransaction`, {
-          headers: headers(authStore.user!.token!),
-        }),
+        this.db_transaction_history.get(),
         createTimeoutPromise(10000),
       ]);
 
-      const transaction = res.data.details.map((data: WalletHistoryT) => {
-        const { dwt_type, dwt_before, dwt_after, dwt_amount, created_at } =
-          data;
+      const data = res.data()?.wallet_record;
 
-        const date = new Date(created_at).getTime();
-        const before = Number(dwt_before);
-        const after = Number(dwt_after);
-        const amount = Number(dwt_amount);
+      const reorder = data?.sort(
+        (a: { created_at: number }, b: { created_at: number }) =>
+          b.created_at - a.created_at
+      );
 
-        return {
-          dwt_type,
-          dwt_before: before,
-          dwt_after: after,
-          dwt_amount: amount,
-          created_at: date,
-        };
-      });
-
-      this.setWalletHistory(transaction);
+      this.setWalletHistory(reorder);
 
       loadingStore.setHistoryLoading(false);
     } catch (error: unknown) {
       loadingStore.setHistoryLoading(false);
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
 
-      toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_CENTER,
+      toast.error(`Error: ${firebaseError(error as FirebaseError)}`, {
+        position: toast.POSITION.TOP_RIGHT,
       });
     }
   }
@@ -177,10 +164,9 @@ class HistoryStoreImplementation {
       loadingStore.setHistoryLoading(false);
     } catch (error: unknown) {
       loadingStore.setHistoryLoading(false);
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
 
-      toast.error(`Error: ${message}`, {
-        position: toast.POSITION.TOP_CENTER,
+      toast.error(`Error: ${firebaseError(error as FirebaseError)}`, {
+        position: toast.POSITION.TOP_RIGHT,
       });
     }
   }

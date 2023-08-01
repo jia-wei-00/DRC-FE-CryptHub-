@@ -58,7 +58,7 @@ const BuySellBox: React.FC<BuySellBoxT> = ({
 
     active === "buy"
       ? modalStore.setConfirmationModal(
-          () => tradeStore.buyToken(values.price, price, buy_coin),
+          () => tradeStore.buyToken(values.price, buy_coin),
           "buy",
           null,
           "USD",

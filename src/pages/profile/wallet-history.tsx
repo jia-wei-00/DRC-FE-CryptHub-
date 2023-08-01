@@ -17,28 +17,28 @@ import { Typography } from "@mui/material";
 import { Loading } from "../../components";
 
 const columns: readonly WalletHistoryColumn[] = [
-  { id: "dwt_type", label: "Type", minWidth: 100 },
+  { id: "type", label: "Type", minWidth: 100 },
   {
-    id: "dwt_before",
+    id: "before",
     label: "Before (USD)",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) => value.toLocaleString("en-US"),
+    format: (value: number) => value.toLocaleString("en-US"),
   },
   {
-    id: "dwt_after",
+    id: "after",
     label: "After (USD)",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) =>
+    format: (value: number) =>
       value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
   },
   {
-    id: "dwt_amount",
+    id: "amount",
     label: "Transaction Amount (USD)",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) =>
+    format: (value: number) =>
       value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
   },
   {
@@ -46,9 +46,9 @@ const columns: readonly WalletHistoryColumn[] = [
     label: "Date",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) => {
-      const date = new Date(value);
-      return date.toLocaleString("eu-US");
+    format: (value: number) => {
+      const date = dayjs.unix(value).format("YYYY/MM/DD h:mm:ss A");
+      return date.toLocaleString();
     },
   },
 ];
@@ -103,9 +103,8 @@ function WalletHistory() {
                 historyStore.wallet_history
                   .filter(
                     (transaction: WalletHistoryT) =>
-                      (transaction.created_at as number) >=
-                        fromDate.valueOf() &&
-                      (transaction.created_at as number) <= toDate.valueOf()
+                      (transaction.created_at as number) >= fromDate.unix() &&
+                      (transaction.created_at as number) <= toDate.unix()
                   )
                   .map((row: WalletHistoryT, index: number) => {
                     return (

@@ -8,7 +8,9 @@ import {
   errorChecking,
   handleSuccess,
 } from "../functions";
-import { ErrorResponse } from "../types";
+import { ErrorResponse, Wallet } from "../types";
+import db, { union } from "../firebase";
+import firebase from "firebase/compat/app";
 
 class TradeStoreImplementation {
   constructor() {
@@ -17,21 +19,12 @@ class TradeStoreImplementation {
     });
   }
 
-  async buyToken(
-    input: number,
-    current_price: number,
-    coin_amount: number
-  ): Promise<void> {
+  user_data = db.collection("user_data").doc(authStore.user?.id);
+
+  async buyToken(input: number, coin_amount: number): Promise<void> {
     const id = toast.loading("Please wait...");
 
-    const values = {
-      input_amount: input,
-      coin_currency: websocketStore.subscribe_currency,
-      current_price: current_price,
-      coin_amount: coin_amount,
-    };
-
-    if (values.coin_amount >= walletStore.wallet.USD) {
+    if (coin_amount >= walletStore.wallet.USD) {
       return toast.update(id, {
         render: "Insufficient USD wallet balance",
         type: "error",
@@ -42,25 +35,21 @@ class TradeStoreImplementation {
     }
 
     try {
-      const res = await Promise.race([
-        axios.post(`${domain}/trade/buy`, values, {
-          headers: headers(authStore.user!.token!),
-        }),
-        createTimeoutPromise(10000),
-      ]);
-
-      walletStore.setUserWallet({
-        USD: Number(res.data.details.walletBalance.USD),
-        BTC: Number(res.data.details.walletBalance.BTC),
-        ETH: Number(res.data.details.walletBalance.ETH),
+      await this.user_data.update({
+        wallet: {
+          ...walletStore.wallet,
+          USD: walletStore.wallet.USD - input,
+          [websocketStore.subscribe_currency]:
+            walletStore.wallet[
+              websocketStore.subscribe_currency as keyof Wallet
+            ] + coin_amount,
+        },
       });
 
-      walletStore.fetchWallet();
-
-      const message = handleSuccess(res.data.message);
+      this.saveRecord("buy", coin_amount, input);
 
       toast.update(id, {
-        render: message,
+        render: "Buy coin successful",
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -85,32 +74,25 @@ class TradeStoreImplementation {
   ): Promise<void> {
     const id = toast.loading("Please wait...");
 
-    const values = {
-      coin_currency: websocketStore.subscribe_currency,
-      current_selling_price: current_selling_price,
-      coin_amount: coin_amount,
-    };
-
     try {
-      const res = await Promise.race([
-        axios.post(`${domain}/trade/sell`, values, {
-          headers: headers(authStore.user!.token!),
-        }),
-        createTimeoutPromise(10000),
-      ]);
-
-      walletStore.setUserWallet({
-        USD: Number(res.data.details.walletBalance.USD),
-        BTC: Number(res.data.details.walletBalance.BTC),
-        ETH: Number(res.data.details.walletBalance.ETH),
-      });
-
-      walletStore.fetchWallet();
-
-      const message = handleSuccess(res.data.message);
+      await this.user_data.update({
+        wallet: {
+          ...walletStore.wallet,
+          USD: walletStore.wallet.USD + coin_amount * current_selling_price,
+          [websocketStore.subscribe_currency]:
+            walletStore.wallet[
+              websocketStore.subscribe_currency as keyof Wallet
+            ] - coin_amount,
+        },
+      }),
+        this.saveRecord(
+          "sell",
+          coin_amount,
+          current_selling_price * coin_amount
+        );
 
       toast.update(id, {
-        render: message,
+        render: "Sell coin successful",
         type: "success",
         isLoading: false,
         autoClose: 5000,
@@ -127,6 +109,25 @@ class TradeStoreImplementation {
         closeButton: null,
       });
     }
+  }
+
+  async saveRecord(
+    type: string,
+    coin_amount: number,
+    transaction_amount: number
+  ): Promise<void> {
+    const commission = type === "buy" ? 0 : (transaction_amount * 5) / 100;
+
+    await this.user_data.update({
+      crypthub_trader_record: union({
+        trade_type: type,
+        currency: websocketStore.subscribe_currency,
+        coin_amount: coin_amount,
+        transaction_amount: transaction_amount - commission,
+        transaction_date: firebase.firestore.Timestamp.now().seconds,
+        commission_deduction_5: commission,
+      }),
+    });
   }
 }
 

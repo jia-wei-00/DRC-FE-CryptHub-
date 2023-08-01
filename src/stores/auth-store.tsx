@@ -178,9 +178,14 @@ class AuthStoreImplementation {
       const docRef = db.collection("user_data").doc(userCredential.user!.uid);
 
       await docRef.set({
-        USD: 0,
-        BTC: 0,
-        ETH: 0,
+        wallet: {
+          USD: 0,
+          BTC: 0,
+          ETH: 0,
+        },
+        crypthub_trader_record: [],
+        p2p_trader_record: [],
+        wallet_record: [],
       });
 
       // Send email verification to the user

@@ -23,14 +23,14 @@ const columns: readonly Column[] = [
     label: "Currency",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) => value.toLocaleString("en-US"),
+    format: (value: number) => value.toLocaleString("en-US"),
   },
   {
     id: "coin_amount",
     label: "Coin Amount",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) =>
+    format: (value: number) =>
       value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
   },
   {
@@ -38,7 +38,7 @@ const columns: readonly Column[] = [
     label: "Transaction Amount (USD)",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) =>
+    format: (value: number) =>
       value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
   },
   {
@@ -46,18 +46,17 @@ const columns: readonly Column[] = [
     label: "Commission (5%)",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) =>
+    format: (value: number) =>
       value.toLocaleString("en-US", { maximumFractionDigits: 20 }),
   },
-
   {
     id: "date",
     label: "Date",
     minWidth: 170,
     align: "right",
-    format: (value: number | Date) => {
-      const date = new Date(value);
-      return date.toLocaleString("eu-US");
+    format: (value: number) => {
+      const date = dayjs.unix(value).format("YYYY/MM/DD h:mm:ss A");
+      return date.toLocaleString();
     },
   },
 ];
@@ -118,8 +117,8 @@ function TransactionHistory() {
                 historyStore.transaction
                   .filter(
                     (transaction: Transaction) =>
-                      transaction.date >= fromDate.valueOf() &&
-                      transaction.date <= toDate.valueOf()
+                      transaction.date >= fromDate.unix() &&
+                      transaction.date <= toDate.unix()
                   )
                   .map((row: Transaction, index: number) => {
                     return (
