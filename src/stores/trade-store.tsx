@@ -1,8 +1,8 @@
 import { action, makeObservable } from "mobx";
 import { toast } from "react-toastify";
 import { authStore, walletStore, websocketStore } from ".";
-import { errorChecking, firebaseError } from "../functions";
-import { ErrorResponse, Wallet } from "../types";
+import { firebaseError } from "../functions";
+import { Wallet } from "../types";
 import { union } from "../firebase";
 import firebase from "firebase/compat/app";
 import { FirebaseError } from "@firebase/util";
