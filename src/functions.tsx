@@ -59,7 +59,7 @@ export const firebaseError = (error: FirebaseError) => {
     const errorMessageWithoutPrefix = error.message.replace("Firebase: ", "");
     return errorMessageWithoutPrefix;
   } else {
-    return `Other Error: ${error}`;
+    return `${error}`;
   }
 };
 

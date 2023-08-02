@@ -5,7 +5,6 @@ import {
   UseFormGetValues,
   UseFormSetValue,
 } from "react-hook-form";
-import firebase from "firebase/compat/app";
 
 export type InputData = {
   name?: string;
@@ -154,9 +153,9 @@ export type ItemCardT = {
 export type P2PContractsT = {
   coin_amount: number;
   contract_id: string;
-  created_at: EpochTimeStamp;
+  created_at: number;
   currency: string;
-  seller_id: number;
+  seller_id: string;
   selling_price: number;
 };
 

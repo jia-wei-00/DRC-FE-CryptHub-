@@ -1,16 +1,10 @@
-import {
-  action,
-  makeObservable,
-  observable,
-  reaction,
-  runInAction,
-} from "mobx";
+import { action, makeObservable, observable, runInAction } from "mobx";
 import { PriceT, Wallet } from "../types";
 import { makePersistable } from "mobx-persist-store";
 import { authStore, historyStore } from ".";
 import { createTimeoutPromise, firebaseError } from "../functions";
 import { toast } from "react-toastify";
-import db, { union } from "../firebase";
+import { union } from "../firebase";
 import { FirebaseError } from "@firebase/util";
 import firebase from "firebase/compat/app";
 

@@ -58,13 +58,12 @@ const P2P: React.FC = () => {
     if (authStore.user === null) {
       setActive("market");
     }
-    if (active === "market") {
-      p2pStore.fetchP2PMarket();
-    } else if (active === "ongoing") {
-      if (authStore.user === null) return;
-      p2pStore.fetchOnGoingContracts();
-    }
-  }, [active, authStore.user, walletStore.wallet]);
+  }, [authStore.user]);
+
+  React.useEffect(() => {
+    p2pStore.fetchOnGoingContracts();
+    p2pStore.fetchP2PMarket();
+  }, []);
 
   return (
     <Container maxWidth="xl" className="p2p-container">

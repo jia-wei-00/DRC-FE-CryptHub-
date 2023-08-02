@@ -59,10 +59,6 @@ function WalletHistory() {
   );
   const [toDate, setToDate] = React.useState<Dayjs>(dayjs().endOf("day"));
 
-  React.useEffect(() => {
-    historyStore.fetchWalletHistory();
-  }, []);
-
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -51,23 +51,17 @@ const columns: readonly P2PCompletedHistoryColumn[] = [
     minWidth: 170,
     align: "right",
     format: (value: number) => {
-      const date = new Date(value);
-      return date.toLocaleString("eu-US");
+      const date = dayjs.unix(value).format("YYYY/MM/DD h:mm:ss A");
+      return date.toLocaleString();
     },
   },
 ];
 
 function P2PHistory() {
-  const [fromDate, setFromDate] = React.useState<Dayjs | number>(
+  const [fromDate, setFromDate] = React.useState<Dayjs>(
     dayjs().startOf("day").subtract(30, "day")
   );
-  const [toDate, setToDate] = React.useState<Dayjs | number>(
-    dayjs().endOf("day")
-  );
-
-  React.useEffect(() => {
-    historyStore.fetchP2PHistory();
-  }, []);
+  const [toDate, setToDate] = React.useState<Dayjs>(dayjs().endOf("day"));
 
   return (
     <>
@@ -109,8 +103,8 @@ function P2PHistory() {
                 historyStore.p2p_completed_history
                   .filter(
                     (transaction: P2PCompletedHistoryT) =>
-                      transaction.completed_at >= fromDate.valueOf() &&
-                      transaction.completed_at <= toDate.valueOf()
+                      transaction.completed_at >= fromDate.unix() &&
+                      transaction.completed_at <= toDate.unix()
                   )
                   .map((row: P2PCompletedHistoryT, index: number) => {
                     return (

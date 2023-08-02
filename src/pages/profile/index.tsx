@@ -6,7 +6,7 @@ import ResetPasswordForm from "./reset-password";
 import WalletHistoryT from "./wallet-history";
 import P2PHistory from "./p2p-history";
 import { useNavigate } from "react-router-dom";
-import { authStore } from "../../stores";
+import { authStore, historyStore } from "../../stores";
 import { observer } from "mobx-react-lite";
 
 interface TabPanelProps {
@@ -59,6 +59,12 @@ const Profile = () => {
       navigate("/");
     }
   }, [authStore.user]);
+
+  React.useEffect(() => {
+    historyStore.fetchP2PHistory();
+    historyStore.fetchTransaction();
+    historyStore.fetchWalletHistory();
+  }, []);
 
   return (
     <Box className="profile-box">

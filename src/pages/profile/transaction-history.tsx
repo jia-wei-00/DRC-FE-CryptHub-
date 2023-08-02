@@ -68,10 +68,6 @@ function TransactionHistory() {
 
   const [toDate, setToDate] = React.useState<Dayjs>(dayjs().endOf("day"));
 
-  React.useEffect(() => {
-    historyStore.fetchTransaction();
-  }, []);
-
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
