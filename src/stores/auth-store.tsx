@@ -8,31 +8,43 @@ import Cookies from "js-cookie";
 import db, { auth } from "../firebase";
 import { FirebaseError } from "@firebase/util";
 import { walletStore } from ".";
+import firebase from "firebase/compat/app";
 
 class AuthStoreImplementation {
   user: User | null = null;
   auth_modal: boolean = false;
+  db_user_data: firebase.firestore.DocumentReference | null = null;
 
   constructor() {
     makeObservable(this, {
       user: observable,
+      db_user_data: observable,
       auth_modal: observable,
       setUser: action.bound,
       signOut: action.bound,
       setAuthModal: action.bound,
-
+      setDbUserData: action.bound,
       reset: action.bound,
     });
 
     const user_data = Cookies.get("crypthub_user");
 
     this.setUser(user_data ? JSON.parse(user_data) : null);
+
+    user_data && this.setDbUserData(JSON.parse(user_data).id);
+  }
+
+  setDbUserData(id: string) {
+    runInAction(() => {
+      this.db_user_data = db.collection("user_data").doc(id);
+    });
   }
 
   reset() {
     runInAction(() => {
       this.user = null;
       this.auth_modal = true;
+      walletStore.setUserWallet({ BTC: 0, ETH: 0, USD: 0 });
     });
 
     Cookies.remove("crypthub_user");
@@ -114,6 +126,7 @@ class AuthStoreImplementation {
       Cookies.set("crypthub_user", JSON.stringify(details), { expires: 1 });
 
       this.setUser(details);
+      this.setDbUserData(details.id);
 
       toast.update(id, {
         render: `Welcome ${displayName}`,

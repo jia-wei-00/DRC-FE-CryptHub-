@@ -1,4 +1,10 @@
-import { action, makeObservable, observable, runInAction } from "mobx";
+import {
+  action,
+  makeObservable,
+  observable,
+  reaction,
+  runInAction,
+} from "mobx";
 import { PriceT, Wallet } from "../types";
 import { makePersistable } from "mobx-persist-store";
 import { authStore, historyStore } from ".";
@@ -10,8 +16,6 @@ import firebase from "firebase/compat/app";
 
 class WalletStoreImplementation {
   wallet: Wallet = { BTC: 0, ETH: 0, USD: 0 };
-
-  user_data = db.collection("user_data").doc(authStore.user?.id);
 
   constructor() {
     makeObservable(this, {
@@ -39,7 +43,7 @@ class WalletStoreImplementation {
 
   async fetchWallet(): Promise<void> {
     try {
-      this.user_data.onSnapshot((snapshot) => {
+      authStore.db_user_data!.onSnapshot((snapshot) => {
         this.setUserWallet(snapshot.data()!.wallet as Wallet);
       });
     } catch (error: unknown) {
@@ -55,7 +59,7 @@ class WalletStoreImplementation {
 
     try {
       await Promise.race([
-        this.user_data.update({
+        authStore.db_user_data!.update({
           wallet: {
             ...this.wallet,
             USD: this.wallet.USD + values.price,
@@ -92,7 +96,7 @@ class WalletStoreImplementation {
       }
 
       await Promise.race([
-        this.user_data.update({
+        authStore.db_user_data!.update({
           wallet: {
             ...this.wallet,
             USD: this.wallet.USD - values.price,
@@ -131,7 +135,7 @@ class WalletStoreImplementation {
         created_at: firebase.firestore.Timestamp.now().seconds,
       };
 
-      await this.user_data.update({
+      await authStore.db_user_data!.update({
         wallet_record: union(record),
       });
 

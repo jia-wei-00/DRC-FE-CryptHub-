@@ -124,7 +124,7 @@ function Nav() {
     if (authStore.user !== null) {
       walletStore.fetchWallet();
     }
-  }, []);
+  }, [authStore.user]);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);

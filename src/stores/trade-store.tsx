@@ -1,16 +1,11 @@
-import axios, { AxiosError } from "axios";
 import { action, makeObservable } from "mobx";
 import { toast } from "react-toastify";
-import { domain, headers } from "../constant";
 import { authStore, walletStore, websocketStore } from ".";
-import {
-  createTimeoutPromise,
-  errorChecking,
-  handleSuccess,
-} from "../functions";
+import { errorChecking, firebaseError } from "../functions";
 import { ErrorResponse, Wallet } from "../types";
-import db, { union } from "../firebase";
+import { union } from "../firebase";
 import firebase from "firebase/compat/app";
+import { FirebaseError } from "@firebase/util";
 
 class TradeStoreImplementation {
   constructor() {
@@ -18,8 +13,6 @@ class TradeStoreImplementation {
       buyToken: action.bound,
     });
   }
-
-  user_data = db.collection("user_data").doc(authStore.user?.id);
 
   async buyToken(input: number, coin_amount: number): Promise<void> {
     const id = toast.loading("Please wait...");
@@ -35,7 +28,7 @@ class TradeStoreImplementation {
     }
 
     try {
-      await this.user_data.update({
+      await authStore.db_user_data!.update({
         wallet: {
           ...walletStore.wallet,
           USD: walletStore.wallet.USD - input,
@@ -56,10 +49,8 @@ class TradeStoreImplementation {
         closeButton: null,
       });
     } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
       toast.update(id, {
-        render: message,
+        render: firebaseError(error as FirebaseError),
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -75,7 +66,7 @@ class TradeStoreImplementation {
     const id = toast.loading("Please wait...");
 
     try {
-      await this.user_data.update({
+      await authStore.db_user_data!.update({
         wallet: {
           ...walletStore.wallet,
           USD: walletStore.wallet.USD + coin_amount * current_selling_price,
@@ -99,10 +90,8 @@ class TradeStoreImplementation {
         closeButton: null,
       });
     } catch (error: unknown) {
-      const message = errorChecking(error as AxiosError<ErrorResponse>);
-
       toast.update(id, {
-        render: message,
+        render: firebaseError(error as FirebaseError),
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -118,7 +107,7 @@ class TradeStoreImplementation {
   ): Promise<void> {
     const commission = type === "buy" ? 0 : (transaction_amount * 5) / 100;
 
-    await this.user_data.update({
+    await authStore.db_user_data!.update({
       crypthub_trader_record: union({
         trade_type: type,
         currency: websocketStore.subscribe_currency,

@@ -1,29 +1,21 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
 import {
-  ErrorResponse,
   P2PCompletedHistoryT,
   Transaction,
   TransactionDateFromAPI,
   WalletHistoryT,
 } from "../types";
 import { authStore, loadingStore } from ".";
-import {
-  createTimeoutPromise,
-  errorChecking,
-  firebaseError,
-} from "../functions";
+import { createTimeoutPromise, firebaseError } from "../functions";
 import { toast } from "react-toastify";
 import axios, { AxiosError } from "axios";
 import { domain, headers } from "../constant";
-import db from "../firebase";
 import { FirebaseError } from "@firebase/util";
 
 class HistoryStoreImplementation {
   transaction: Transaction[] = [];
   wallet_history: WalletHistoryT[] = [];
   p2p_completed_history: P2PCompletedHistoryT[] = [];
-
-  db_transaction_history = db.collection("user_data").doc(authStore.user?.id);
 
   constructor() {
     makeObservable(this, {
@@ -63,7 +55,7 @@ class HistoryStoreImplementation {
 
     try {
       const res = await Promise.race([
-        this.db_transaction_history.get(),
+        authStore.db_user_data!.get(),
         createTimeoutPromise(10000),
       ]);
 
@@ -112,7 +104,7 @@ class HistoryStoreImplementation {
     loadingStore.setHistoryLoading(true);
     try {
       const res = await Promise.race([
-        this.db_transaction_history.get(),
+        authStore.db_user_data!.get(),
         createTimeoutPromise(10000),
       ]);
 
