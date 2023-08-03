@@ -41,8 +41,8 @@ const columns: readonly P2PCompletedHistoryColumn[] = [
     minWidth: 170,
     align: "right",
     format: (value: number) => {
-      const date = new Date(value);
-      return date.toLocaleString("eu-US");
+      const date = dayjs.unix(value).format("YYYY/MM/DD h:mm:ss A");
+      return date.toLocaleString();
     },
   },
   {

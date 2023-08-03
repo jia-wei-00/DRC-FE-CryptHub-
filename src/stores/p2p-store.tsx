@@ -23,6 +23,7 @@ class P2PStoreImplementation {
       fetchP2PMarket: action.bound,
       setP2POngoingContracts: action.bound,
       updateSeller: action.bound,
+      updateP2PHistory: action.bound,
     });
   }
 
@@ -103,17 +104,7 @@ class P2PStoreImplementation {
         },
       });
 
-      await authStore.db_user_data!.update({
-        p2p_trader_record: union({
-          contract_id: values.contract_id,
-          currency: values.currency,
-          coin_amount: values.coin_amount,
-          selling_price: values.selling_price,
-          created_at: values.created_at,
-          completed_at: firebase.firestore.Timestamp.now().seconds,
-          transaction_type: "bought",
-        }),
-      });
+      this.updateP2PHistory(values, "bought");
 
       toast.update(id, {
         render: "Buy contract successful",
@@ -146,6 +137,8 @@ class P2PStoreImplementation {
             values.coin_amount,
         },
       });
+
+      this.updateP2PHistory(values, "deleted");
 
       toast.update(id, {
         render: "Contract deleted successfully",
@@ -239,6 +232,20 @@ class P2PStoreImplementation {
         created_at: values.created_at,
         completed_at: firebase.firestore.Timestamp.now().seconds,
         transaction_type: "sold",
+      }),
+    });
+  }
+
+  async updateP2PHistory(values: P2PContractsT, type: string) {
+    await authStore.db_user_data!.update({
+      p2p_trader_record: union({
+        contract_id: values.contract_id,
+        currency: values.currency,
+        coin_amount: values.coin_amount,
+        selling_price: values.selling_price,
+        created_at: values.created_at,
+        completed_at: firebase.firestore.Timestamp.now().seconds,
+        transaction_type: type,
       }),
     });
   }
