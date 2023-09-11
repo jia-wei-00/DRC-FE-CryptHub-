@@ -12,6 +12,32 @@ import { authStore, modalStore, p2pStore } from "../../stores";
 import { observer } from "mobx-react-lite";
 
 const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
+  const buyContract = () => {
+    if (authStore.user !== null) {
+      active === "market"
+        ? modalStore.setConfirmationModal(
+            () => p2pStore.buyContract(contract),
+            "buy_p2p",
+            null,
+            "USD",
+            contract.currency,
+            contract.coin_amount,
+            contract.selling_price
+          )
+        : modalStore.setConfirmationModal(
+            () => p2pStore.withdrawContract(contract),
+            "delete",
+            null,
+            null,
+            contract.currency,
+            contract.coin_amount,
+            null
+          );
+    } else {
+      authStore.setAuthModal(true);
+    }
+  };
+
   return (
     <>
       <Card className="market-card">
@@ -42,17 +68,7 @@ const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
           {active === "market" ? (
             <Button
               size="small"
-              onClick={() =>
-                modalStore.setConfirmationModal(
-                  () => p2pStore.buyContract(contract),
-                  "buy_p2p",
-                  null,
-                  "USD",
-                  contract.currency,
-                  contract.coin_amount,
-                  contract.selling_price
-                )
-              }
+              onClick={buyContract}
               disabled={
                 authStore.user !== null &&
                 authStore.user.id === contract.seller_id
@@ -61,20 +77,7 @@ const ItemCard: React.FC<ItemCardT> = ({ active, contract }) => {
               BUY
             </Button>
           ) : (
-            <Button
-              size="small"
-              onClick={() =>
-                modalStore.setConfirmationModal(
-                  () => p2pStore.withdrawContract(contract),
-                  "delete",
-                  null,
-                  null,
-                  contract.currency,
-                  contract.coin_amount,
-                  null
-                )
-              }
-            >
+            <Button size="small" onClick={buyContract}>
               Delete
             </Button>
           )}
